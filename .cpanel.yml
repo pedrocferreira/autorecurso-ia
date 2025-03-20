@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/allsegte/public_html/
+    - /bin/cp -R * $DEPLOYPATH
+  
+  # IMPORTANTE: Entre em contato com o suporte da hospedagem 
+  # para configurar o Document Root para o diretório public:
+  # /home/allsegte/public_html/public 
