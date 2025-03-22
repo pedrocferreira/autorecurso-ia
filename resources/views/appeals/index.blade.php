@@ -13,11 +13,11 @@
                 </button>
                 <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu" aria-orientation="vertical" aria-labelledby="dropdown-button">
                     <div class="py-1" role="none">
-                        <a href="{{ route('appeals.create') }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
-                            Gerar de uma multa existente
+                        <a href="{{ route('tickets.index') }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                            <i class="fas fa-search mr-2 text-green-500"></i> Gerar de uma multa existente
                         </a>
                         <a href="{{ route('appeals.create_new') }}" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
-                            Cadastrar nova multa e recurso
+                            <i class="fas fa-plus mr-2 text-green-500"></i> Cadastrar nova multa e recurso
                         </a>
                     </div>
                 </div>

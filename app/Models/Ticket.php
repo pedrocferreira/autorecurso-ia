@@ -17,17 +17,26 @@ class Ticket extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'infraction_type_id',
+        'name',
+        'cpf',
+        'driver_license',
+        'driver_license_category',
+        'address',
+        'phone',
+        'email',
         'plate',
-        'date',
-        'location',
-        'reason',
-        'amount',
-        'citation_number',
         'vehicle_model',
         'vehicle_year',
-        'driver_license',
+        'vehicle_color',
+        'vehicle_chassi',
+        'vehicle_renavam',
+        'date',
+        'amount',
+        'points',
+        'reason',
+        'user_id',
+        'infraction_type_id',
+        'status'
     ];
 
     /**
@@ -36,8 +45,10 @@ class Ticket extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime',
         'amount' => 'decimal:2',
+        'points' => 'integer',
+        'vehicle_year' => 'integer'
     ];
 
     /**

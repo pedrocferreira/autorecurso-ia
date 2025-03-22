@@ -59,4 +59,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/appeals', [AdminController::class, 'appeals'])->name('appeals');
 });
 
+Route::middleware(['auth'])->group(function () {
+    // Rotas de multas
+    Route::resource('tickets', TicketController::class);
+    
+    // Rotas de recursos
+    Route::get('tickets/{ticket}/appeal', [AppealController::class, 'create'])->name('appeals.create');
+    Route::post('appeals', [AppealController::class, 'store'])->name('appeals.store');
+    Route::get('appeals/{appeal}', [AppealController::class, 'show'])->name('appeals.show');
+});
+
 require __DIR__.'/auth.php';

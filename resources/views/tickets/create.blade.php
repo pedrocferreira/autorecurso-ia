@@ -2,11 +2,16 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Cadastrar Nova Multa') }}
+                {{ __('Nova Multa') }}
             </h2>
-            <a href="{{ route('tickets.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded text-sm">
-                Voltar
-            </a>
+            <div class="flex space-x-2">
+                <button type="button" onclick="fillFormWithTestData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm">
+                    Preencher com Dados de Teste
+                </button>
+                <a href="{{ route('tickets.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded text-sm">
+                    Voltar
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -28,145 +33,226 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <form action="{{ route('tickets.store') }}" method="POST" class="space-y-6">
+                <div class="p-6 text-gray-900">
+                    <form method="POST" action="{{ route('tickets.store') }}" class="space-y-6">
                         @csrf
 
-                        <!-- Alertas -->
-                        <div class="bg-blue-50 p-4 rounded mb-6">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <h3 class="text-sm font-medium text-blue-800">Informações importantes</h3>
-                                    <div class="mt-2 text-sm text-blue-700">
-                                        <p>Cadastre os dados da multa para posterior consulta ou geração de recurso.</p>
-                                        <p>Preencha todos os dados corretamente para garantir registros precisos.</p>
-                                    </div>
-                                </div>
+                        <!-- Dados Pessoais -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-medium text-gray-900">Dados Pessoais</h3>
+                            
+                            <div>
+                                <x-input-label for="name" :value="__('Nome Completo')" />
+                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required autofocus />
+                                <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="cpf" :value="__('CPF')" />
+                                <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" :value="old('cpf')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('cpf')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="driver_license" :value="__('Número da CNH')" />
+                                <x-text-input id="driver_license" name="driver_license" type="text" class="mt-1 block w-full" :value="old('driver_license')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('driver_license')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="driver_license_category" :value="__('Categoria da CNH')" />
+                                <x-text-input id="driver_license_category" name="driver_license_category" type="text" class="mt-1 block w-full" :value="old('driver_license_category')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('driver_license_category')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="address" :value="__('Endereço Completo')" />
+                                <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('address')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="phone" :value="__('Telefone')" />
+                                <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="email" :value="__('E-mail')" />
+                                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('email')" />
                             </div>
                         </div>
 
                         <!-- Dados do Veículo -->
-                        <div class="border-b pb-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Dados do Veículo</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label for="plate" class="block text-sm font-medium text-gray-700 mb-1">Placa do Veículo</label>
-                                    <input type="text" id="plate" name="plate" value="{{ old('plate') }}" placeholder="AAA0000" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('plate')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div>
-                                    <label for="vehicle_model" class="block text-sm font-medium text-gray-700 mb-1">Modelo do Veículo</label>
-                                    <input type="text" id="vehicle_model" name="vehicle_model" value="{{ old('vehicle_model') }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('vehicle_model')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div>
-                                    <label for="vehicle_year" class="block text-sm font-medium text-gray-700 mb-1">Ano do Veículo</label>
-                                    <input type="number" id="vehicle_year" name="vehicle_year" value="{{ old('vehicle_year') }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('vehicle_year')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-medium text-gray-900">Dados do Veículo</h3>
+                            
+                            <div>
+                                <x-input-label for="plate" :value="__('Placa do Veículo')" />
+                                <x-text-input id="plate" name="plate" type="text" class="mt-1 block w-full" :value="old('plate')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('plate')" />
                             </div>
 
-                            <div class="mt-4">
-                                <label for="driver_license" class="block text-sm font-medium text-gray-700 mb-1">CNH do Motorista</label>
-                                <input type="text" id="driver_license" name="driver_license" value="{{ old('driver_license') }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                @error('driver_license')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
+                            <div>
+                                <x-input-label for="vehicle_model" :value="__('Modelo do Veículo')" />
+                                <x-text-input id="vehicle_model" name="vehicle_model" type="text" class="mt-1 block w-full" :value="old('vehicle_model')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('vehicle_model')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="vehicle_year" :value="__('Ano do Veículo')" />
+                                <x-text-input id="vehicle_year" name="vehicle_year" type="number" class="mt-1 block w-full" :value="old('vehicle_year')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('vehicle_year')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="vehicle_color" :value="__('Cor do Veículo')" />
+                                <x-text-input id="vehicle_color" name="vehicle_color" type="text" class="mt-1 block w-full" :value="old('vehicle_color')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('vehicle_color')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="vehicle_chassi" :value="__('Chassi do Veículo')" />
+                                <x-text-input id="vehicle_chassi" name="vehicle_chassi" type="text" class="mt-1 block w-full" :value="old('vehicle_chassi')" maxlength="17" required />
+                                <p class="text-xs text-gray-500 mt-1">O chassi deve ter até 17 caracteres.</p>
+                                <x-input-error class="mt-2" :messages="$errors->get('vehicle_chassi')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="vehicle_renavam" :value="__('RENAVAM')" />
+                                <x-text-input id="vehicle_renavam" name="vehicle_renavam" type="text" class="mt-1 block w-full" :value="old('vehicle_renavam')" maxlength="11" required />
+                                <p class="text-xs text-gray-500 mt-1">O RENAVAM deve ter até 11 caracteres.</p>
+                                <x-input-error class="mt-2" :messages="$errors->get('vehicle_renavam')" />
                             </div>
                         </div>
 
                         <!-- Dados da Multa -->
-                        <div class="border-b pb-6 pt-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Dados da Multa</h3>
-
-                            <div class="mb-4">
-                                <label for="infraction_type_id" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Infração</label>
-                                <select id="infraction_type_id" name="infraction_type_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-medium text-gray-900">Dados da Multa</h3>
+                            
+                            <div>
+                                <x-input-label for="infraction_type_id" :value="__('Tipo de Infração')" />
+                                <select id="infraction_type_id" name="infraction_type_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                     <option value="">Selecione o tipo de infração</option>
-                                    @foreach($infractionTypes as $type)
+                                    @foreach(\App\Models\InfractionType::where('active', true)->orderBy('code')->get() as $type)
                                         <option value="{{ $type->id }}" {{ old('infraction_type_id') == $type->id ? 'selected' : '' }}>
                                             {{ $type->code }} - {{ $type->description }} (R$ {{ number_format($type->base_amount, 2, ',', '.') }})
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('infraction_type_id')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
+                                <x-input-error class="mt-2" :messages="$errors->get('infraction_type_id')" />
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label for="citation_number" class="block text-sm font-medium text-gray-700 mb-1">Número da Autuação</label>
-                                    <input type="text" id="citation_number" name="citation_number" value="{{ old('citation_number') }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('citation_number')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div>
-                                    <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Data da Infração</label>
-                                    <input type="date" id="date" name="date" value="{{ old('date') }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('date')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div>
-                                    <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Local da Infração</label>
-                                    <input type="text" id="location" name="location" value="{{ old('location') }}" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('location')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="mt-4">
-                                <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Valor da Multa (R$)</label>
-                                <input type="number" id="amount" name="amount" value="{{ old('amount') }}" step="0.01" min="0" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                @error('amount')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- Motivo -->
-                        <div class="pt-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Informações Adicionais</h3>
                             <div>
-                                <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Descrição/Motivo da Multa</label>
-                                <textarea id="reason" name="reason" rows="4" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">{{ old('reason') }}</textarea>
-                                <p class="text-sm text-gray-500 mt-1">Descreva detalhes adicionais sobre a infração, condições do local, etc.</p>
-                                @error('reason')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
+                                <x-input-label for="date" :value="__('Data da Infração')" />
+                                <x-text-input id="date" name="date" type="date" class="mt-1 block w-full" :value="old('date')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('date')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="amount" :value="__('Valor da Multa')" />
+                                <x-text-input id="amount" name="amount" type="number" step="0.01" class="mt-1 block w-full" :value="old('amount')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('amount')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="points" :value="__('Pontos na CNH')" />
+                                <x-text-input id="points" name="points" type="number" class="mt-1 block w-full" :value="old('points')" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('points')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="reason" :value="__('Observações (opcional)')" />
+                                <textarea id="reason" name="reason" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3">{{ old('reason') }}</textarea>
+                                <p class="text-xs text-gray-500 mt-1">Descreva o que aconteceu, circunstâncias ou detalhes relevantes sobre a infração.</p>
+                                <x-input-error class="mt-2" :messages="$errors->get('reason')" />
                             </div>
                         </div>
 
-                        <!-- Botões de Ação -->
-                        <div class="flex justify-end pt-6">
-                            <a href="{{ route('tickets.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded mr-2">
-                                Cancelar
-                            </a>
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                Cadastrar Multa
-                            </button>
+                        <div class="flex items-center justify-end mt-4">
+                            <x-primary-button class="ml-4">
+                                {{ __('Cadastrar Multa') }}
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mapeamento de infrações com seus respectivos pontos e valores
+            const infractionData = {
+                @foreach(\App\Models\InfractionType::where('active', true)->get() as $type)
+                    "{{ $type->id }}": { 
+                        points: {{ $type->points }}, 
+                        amount: {{ $type->base_amount }} 
+                    },
+                @endforeach
+            };
+
+            // Elementos do formulário
+            const infractionTypeSelect = document.getElementById('infraction_type_id');
+            const pointsInput = document.getElementById('points');
+            const amountInput = document.getElementById('amount');
+
+            // Atualiza os campos quando um tipo de infração é selecionado
+            if (infractionTypeSelect) {
+                infractionTypeSelect.addEventListener('change', function() {
+                    const selectedInfractionId = this.value;
+                    
+                    if (selectedInfractionId && infractionData[selectedInfractionId]) {
+                        // Preenche os pontos
+                        if (pointsInput) {
+                            pointsInput.value = infractionData[selectedInfractionId].points;
+                        }
+                        
+                        // Preenche o valor da multa
+                        if (amountInput) {
+                            amountInput.value = infractionData[selectedInfractionId].amount.toFixed(2);
+                        }
+                    }
+                });
+            }
+
+            // Código existente para preencher o formulário com dados de teste
+            const fillTestDataBtn = document.getElementById('fill-test-data');
+            if (fillTestDataBtn) {
+                fillTestDataBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    fillFormWithTestData();
+                });
+            }
+
+            function fillFormWithTestData() {
+                // Dados pessoais
+                document.getElementById('name').value = 'João da Silva';
+                document.getElementById('cpf').value = '123.456.789-00';
+                document.getElementById('driver_license').value = '12345678900';
+                document.getElementById('driver_license_category').value = 'B';
+                document.getElementById('address').value = 'Rua das Flores, 123 - Centro';
+                document.getElementById('phone').value = '(11) 99999-9999';
+                document.getElementById('email').value = 'joao@email.com';
+
+                // Dados do veículo
+                document.getElementById('plate').value = 'ABC1234';
+                document.getElementById('vehicle_model').value = 'Fiat Uno';
+                document.getElementById('vehicle_year').value = '2020';
+                document.getElementById('vehicle_color').value = 'Prata';
+                document.getElementById('vehicle_chassi').value = '9BWZZZ377VT004251';
+                document.getElementById('vehicle_renavam').value = '12345678901';
+
+                // Dados da multa
+                document.getElementById('infraction_type_id').value = '1'; // Primeira infração da lista
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('amount').value = '293.47';
+                document.getElementById('points').value = '7';
+                document.getElementById('reason').value = 'O semáforo estava com problemas de temporização e mudou muito rápido. Não tive tempo de frear com segurança.';
+            }
+        });
+    </script>
+    @endpush
 </x-app-layout>

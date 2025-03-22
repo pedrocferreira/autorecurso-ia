@@ -16,12 +16,12 @@ class InfractionType extends Model
      */
     protected $fillable = [
         'code',
+        'name',
         'description',
-        'law_article',
+        'article',
         'base_amount',
         'points',
-        'severity',
-        'active',
+        'active'
     ];
 
     /**
@@ -30,9 +30,9 @@ class InfractionType extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'base_amount' => 'decimal:2',
+        'base_amount' => 'float',
         'points' => 'integer',
-        'active' => 'boolean',
+        'active' => 'boolean'
     ];
 
     /**
@@ -40,6 +40,6 @@ class InfractionType extends Model
      */
     public function tickets()
     {
-        return $this->hasMany(Ticket::class, 'infraction_type_id');
+        return $this->hasMany(Ticket::class);
     }
 }

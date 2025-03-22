@@ -1,1 +1,0 @@
-[20-Mar-2025 03:46:16 UTC] PHP Fatal error:  Declaration of Monolog\Logger::emergency(Stringable|string $message, array $context = []): void must be compatible with PsrExt\Log\LoggerInterface::emergency($message, array $context = []) in /home/allsegte/public_html/vendor/monolog/monolog/src/Monolog/Logger.php on line 683

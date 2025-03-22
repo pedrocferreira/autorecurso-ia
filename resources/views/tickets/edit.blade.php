@@ -2,11 +2,13 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Gerar Recurso') }}
+                {{ __('Editar Multa') }}
             </h2>
-            <a href="{{ route('tickets.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded text-sm">
-                Voltar
-            </a>
+            <div class="flex space-x-2">
+                <a href="{{ route('tickets.show', $ticket->id) }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded text-sm">
+                    Voltar
+                </a>
+            </div>
         </div>
     </x-slot>
 
@@ -14,22 +16,24 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Mensagem de sucesso ou erro -->
             @if (session('success'))
-                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                    {{ session('success') }}
+                <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-sm flex items-center">
+                    <i class="fas fa-check-circle mr-3 text-green-500"></i>
+                    <span>{{ session('success') }}</span>
                 </div>
             @endif
 
             @if (session('error'))
-                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    {{ session('error') }}
+                <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm flex items-center">
+                    <i class="fas fa-exclamation-circle mr-3 text-red-500"></i>
+                    <span>{{ session('error') }}</span>
                 </div>
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('appeals.store') }}" class="space-y-6">
+                    <form method="POST" action="{{ route('tickets.update', $ticket->id) }}" class="space-y-6">
                         @csrf
-                        <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                        @method('PUT')
 
                         <!-- Dados Pessoais -->
                         <div class="space-y-4">
@@ -37,7 +41,7 @@
                             
                             <div>
                                 <x-input-label for="name" :value="__('Nome Completo')" />
-                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $ticket->name)" required />
+                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $ticket->name)" required autofocus />
                                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
                             </div>
 
@@ -130,7 +134,7 @@
                                 <select id="infraction_type_id" name="infraction_type_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                     <option value="">Selecione o tipo de infração</option>
                                     @foreach(\App\Models\InfractionType::where('active', true)->orderBy('code')->get() as $type)
-                                        <option value="{{ $type->id }}" {{ old('infraction_type_id', $ticket->infraction_type_id) == $type->id ? 'selected' : '' }}>
+                                        <option value="{{ $type->id }}" {{ (old('infraction_type_id', $ticket->infraction_type_id) == $type->id) ? 'selected' : '' }}>
                                             {{ $type->code }} - {{ $type->description }} (R$ {{ number_format($type->base_amount, 2, ',', '.') }})
                                         </option>
                                     @endforeach
@@ -140,8 +144,7 @@
 
                             <div>
                                 <x-input-label for="date" :value="__('Data da Infração')" />
-                                <x-text-input id="date" name="date" type="date" class="mt-1 block w-full" 
-                                    :value="old('date', $ticket->date ? $ticket->date->format('Y-m-d') : '')" required />
+                                <x-text-input id="date" name="date" type="date" class="mt-1 block w-full" :value="old('date', $ticket->date ? $ticket->date->format('Y-m-d') : '')" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('date')" />
                             </div>
 
@@ -158,97 +161,64 @@
                             </div>
 
                             <div>
-                                <x-input-label for="reason" :value="__('Descrição da Infração')" />
-                                <textarea id="reason" name="reason" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3" required>{{ old('reason', $ticket->reason) }}</textarea>
+                                <x-input-label for="reason" :value="__('Observações (opcional)')" />
+                                <textarea id="reason" name="reason" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3">{{ old('reason', $ticket->reason) }}</textarea>
+                                <p class="text-xs text-gray-500 mt-1">Descreva o que aconteceu, circunstâncias ou detalhes relevantes sobre a infração.</p>
                                 <x-input-error class="mt-2" :messages="$errors->get('reason')" />
                             </div>
                         </div>
 
-                        <div class="mt-6 flex justify-end">
-                            <a href="{{ route('tickets.show', $ticket) }}" class="inline-flex items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-400 active:bg-gray-500 focus:outline-none focus:border-gray-500 focus:ring ring-gray-300 disabled:opacity-25 transition mr-2">
-                                Cancelar
-                            </a>
-                            <button type="submit" id="submit-btn" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition">
-                                <i class="fas fa-file-alt mr-2"></i>
-                                Gerar Recurso
-                            </button>
+                        <div class="flex items-center justify-end mt-4">
+                            <x-primary-button class="ml-4">
+                                {{ __('Atualizar Multa') }}
+                            </x-primary-button>
                         </div>
-
-                        <!-- Loading Overlay -->
-                        <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex-col items-center justify-center hidden">
-                            <div class="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto mt-20 text-center">
-                                <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500 mx-auto mb-4"></div>
-                                <h3 class="text-xl font-bold mb-2">Gerando Recurso</h3>
-                                <p class="mb-4">Estamos elaborando um recurso personalizado com base nos dados fornecidos.</p>
-                                <div id="loading-status" class="text-sm text-gray-600">
-                                    <p class="mb-2" id="status-message">Analisando os detalhes da infração...</p>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                                        <div id="progress-bar" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const submitBtn = document.getElementById('submit-btn');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const progressBar = document.getElementById('progress-bar');
-        const statusMessage = document.getElementById('status-message');
-        
-        const messages = [
-            "Analisando os detalhes da infração...",
-            "Consultando a legislação de trânsito...",
-            "Identificando fundamentos jurídicos...",
-            "Elaborando argumentação técnica...",
-            "Verificando jurisprudência aplicável...",
-            "Estruturando a defesa administrativa...",
-            "Aplicando formatação jurídica...",
-            "Finalizando a redação do recurso...",
-            "Gerando o documento PDF..."
-        ];
-        
-        let currentStep = 0;
-        let interval;
-        
-        form.addEventListener('submit', function(e) {
-            // Mostrar a overlay de carregamento
-            loadingOverlay.classList.remove('hidden');
-            loadingOverlay.classList.add('flex');
-            
-            // Desabilitar o botão de submit
-            submitBtn.disabled = true;
-            
-            // Iniciar a animação de progresso
-            currentStep = 0;
-            updateStatus();
-            
-            interval = setInterval(function() {
-                currentStep++;
-                if (currentStep >= messages.length) {
-                    clearInterval(interval);
-                    return;
-                }
-                updateStatus();
-            }, 3000);
-            
-            // O formulário continua normalmente
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mapeamento de infrações com seus respectivos pontos e valores
+            const infractionData = {
+                @foreach(\App\Models\InfractionType::where('active', true)->get() as $type)
+                    "{{ $type->id }}": { 
+                        points: {{ $type->points }}, 
+                        amount: {{ $type->base_amount }}, 
+                        description: "{{ $type->description }}",
+                        article: "{{ $type->article }}",
+                        code: "{{ $type->code }}"
+                    },
+                @endforeach
+            };
+
+            // Elementos do formulário
+            const infractionTypeSelect = document.getElementById('infraction_type_id');
+            const pointsInput = document.getElementById('points');
+            const amountInput = document.getElementById('amount');
+
+            // Atualiza os campos quando um tipo de infração é selecionado
+            if (infractionTypeSelect) {
+                infractionTypeSelect.addEventListener('change', function() {
+                    const selectedInfractionId = this.value;
+                    
+                    if (selectedInfractionId && infractionData[selectedInfractionId]) {
+                        // Preenche os pontos
+                        if (pointsInput) {
+                            pointsInput.value = infractionData[selectedInfractionId].points;
+                        }
+                        
+                        // Preenche o valor da multa
+                        if (amountInput) {
+                            amountInput.value = infractionData[selectedInfractionId].amount.toFixed(2);
+                        }
+                    }
+                });
+            }
         });
-        
-        function updateStatus() {
-            statusMessage.textContent = messages[currentStep];
-            const progress = Math.min(100, Math.round((currentStep + 1) / messages.length * 100));
-            progressBar.style.width = progress + '%';
-        }
-    });
-</script>
-@endpush
+    </script>
+    @endpush
+</x-app-layout> 

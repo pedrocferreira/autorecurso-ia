@@ -4,6 +4,11 @@ use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
+use Monolog\Processor\UidProcessor;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Log\LogManager;
+use Monolog\Logger as Monolog;
 
 return [
 
@@ -18,7 +23,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'custom'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,6 +57,13 @@ return [
     */
 
     'channels' => [
+        'custom' => [
+            'driver' => 'custom',
+            'via' => function () {
+                return Log::channel('custom');
+            },
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

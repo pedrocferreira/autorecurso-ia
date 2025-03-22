@@ -13,16 +13,30 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
+            // Dados pessoais
+            $table->string('name');
+            $table->string('cpf', 14);
+            $table->string('driver_license');
+            $table->string('driver_license_category');
+            $table->string('address');
+            $table->string('phone');
+            $table->string('email');
+            
+            // Dados do veículo
+            $table->string('plate');
+            $table->string('vehicle_model');
+            $table->integer('vehicle_year');
+            $table->string('vehicle_color');
+            $table->string('vehicle_chassi', 17);
+            $table->string('vehicle_renavam', 11);
+            
+            // Dados da multa
+            $table->string('date');
+            $table->decimal('amount', 10, 2);
+            $table->integer('points');
+            $table->string('status')->default('pending');
+            $table->text('reason')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('plate', 10); // Placa do veículo
-            $table->date('date'); // Data da multa
-            $table->string('location'); // Local da infração
-            $table->text('reason'); // Motivo/descrição da multa
-            $table->decimal('amount', 10, 2); // Valor da multa
-            $table->string('citation_number')->nullable(); // Número da autuação/multa
-            $table->string('vehicle_model')->nullable(); // Modelo do veículo
-            $table->string('vehicle_year')->nullable(); // Ano do veículo
-            $table->string('driver_license')->nullable(); // CNH do motorista
             $table->timestamps();
         });
     }

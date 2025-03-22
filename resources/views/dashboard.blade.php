@@ -233,7 +233,7 @@
                                             <div class="px-4 py-2 text-xs font-medium text-gray-500 bg-gray-50 border-b">
                                                 Cada recurso custa 1 crédito
                                             </div>
-                                            <a href="{{ route('appeals.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <a href="{{ route('tickets.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                 <i class="fas fa-search mr-2 text-green-500"></i> A partir de multa existente
                                             </a>
                                             <a href="{{ route('appeals.create_new') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -320,7 +320,7 @@
                                 </div>
                                 <p class="text-gray-600 mb-4">Nenhum recurso gerado ainda.</p>
                                 @if(($stats['tickets_count'] ?? 0) > 0)
-                                    <a href="{{ route('appeals.create') }}" class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition shadow-sm">
+                                    <a href="{{ route('tickets.index') }}" class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition shadow-sm">
                                         <i class="fas fa-plus mr-1"></i> Gerar primeiro recurso
                                     </a>
                                 @else

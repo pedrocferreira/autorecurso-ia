@@ -12,7 +12,8 @@
                     Editar
                 </a>
                 @if($ticket->appeals->count() == 0)
-                    <a href="{{ route('appeals.create', ['ticket_id' => $ticket->id]) }}" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
+                    <a href="{{ route('appeals.create', $ticket) }}" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition">
+                        <i class="fas fa-file-alt mr-2"></i>
                         Gerar Recurso
                     </a>
                 @endif
@@ -156,7 +157,8 @@
                     @else
                         <div class="text-gray-500 text-center py-6">
                             <p class="mb-2">Nenhum recurso foi gerado para esta multa ainda.</p>
-                            <a href="{{ route('appeals.create', ['ticket_id' => $ticket->id]) }}" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
+                            <a href="{{ route('appeals.create', $ticket) }}" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition">
+                                <i class="fas fa-file-alt mr-2"></i>
                                 Gerar Recurso Agora
                             </a>
                         </div>
