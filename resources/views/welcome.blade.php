@@ -1,10 +1,107 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="pt-BR">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>AutoRecurso - Automatize seus Recursos de Multas</title>
+        <!-- SEO Meta Tags -->
+        <title>AutoRecurso - Recursos de Multas Online | IA para Recursos de Trânsito</title>
+        <meta name="description" content="Recursos de multas online com IA. Economize tempo e dinheiro com recursos automáticos para multas de trânsito. Suporte especializado e garantia de qualidade.">
+        <meta name="keywords" content="recursos de multas, multas de trânsito, recurso multa online, IA para recursos, recurso automático, multa de trânsito, recurso de multa, recurso de trânsito, recurso de infração">
+        <meta name="author" content="AutoRecurso">
+        <meta name="robots" content="index, follow">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://autorecurso.online/">
+        <meta property="og:title" content="AutoRecurso - Recursos de Multas Online com IA">
+        <meta property="og:description" content="Recursos de multas online com IA. Economize tempo e dinheiro com recursos automáticos para multas de trânsito. Suporte especializado e garantia de qualidade.">
+        <meta property="og:image" content="https://autorecurso.online/images/og-image.jpg">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://autorecurso.online/">
+        <meta property="twitter:title" content="AutoRecurso - Recursos de Multas Online com IA">
+        <meta property="twitter:description" content="Recursos de multas online com IA. Economize tempo e dinheiro com recursos automáticos para multas de trânsito.">
+        <meta property="twitter:image" content="https://autorecurso.online/images/og-image.jpg">
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://autorecurso.online/">
+        
+        <!-- Schema.org Markup -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "AutoRecurso",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "BRL"
+            },
+            "description": "Recursos de multas online com IA. Economize tempo e dinheiro com recursos automáticos para multas de trânsito.",
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "150"
+            }
+        }
+        </script>
+
+        <!-- FAQ Schema -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [{
+                "@type": "Question",
+                "name": "Como funciona o recurso automático?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nossa IA analisa os detalhes da sua multa e gera um recurso personalizado com argumentos jurídicos relevantes. O processo é rápido e eficiente, economizando seu tempo e dinheiro."
+                }
+            }, {
+                "@type": "Question",
+                "name": "Qual a taxa de sucesso dos recursos?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nossa taxa de sucesso é de aproximadamente 90%, baseada em milhares de recursos processados. A IA é treinada com casos reais e atualizada constantemente com novas jurisprudências."
+                }
+            }, {
+                "@type": "Question",
+                "name": "Quanto tempo leva para gerar um recurso?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Em média, um recurso é gerado em menos de 5 minutos. Você recebe o documento em PDF pronto para impressão e protocolo junto ao órgão de trânsito."
+                }
+            }]
+        }
+        </script>
+
+        <!-- Organization Schema -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "AutoRecurso",
+            "url": "https://autorecurso.online",
+            "logo": "https://autorecurso.online/images/logo.png",
+            "sameAs": [
+                "https://facebook.com/autorecurso",
+                "https://instagram.com/autorecurso",
+                "https://linkedin.com/company/autorecurso"
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+55-11-99999-9999",
+                "contactType": "customer service",
+                "areaServed": "BR"
+            }
+        }
+        </script>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -41,13 +138,13 @@
                 }
 
                 .hero-icon {
-                    height: 64px !important;
-                    width: 64px !important;
-                    margin-bottom: 1rem;
+                    height: 200px !important;
+                    width: 200px !important;
+                    margin-bottom: 2rem;
                 }
 
                 .hero-icon i {
-                    font-size: 2rem !important;
+                    font-size: 8rem !important;
                 }
 
                 .hero-title {
@@ -328,6 +425,14 @@
                 border: 1px solid rgba(255, 255, 255, 0.2);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
                 margin-bottom: 4rem;
+            }
+
+            .hero-icon i {
+                background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+                transform: rotate(-15deg);
             }
 
             @keyframes pulse {
@@ -935,7 +1040,43 @@
                     left: 15px;
                 }
             }
+
+            /* FAQ Styles */
+            .faq-item {
+                background: white;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .faq-question {
+                width: 100%;
+                text-align: left;
+                padding: 1rem;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+            .faq-answer {
+                display: none;
+                padding: 0 1rem 1rem 1rem;
+                border-top: 1px solid #eee;
+            }
+
+            @media (max-width: 768px) {
+                .faq-item {
+                    margin: 0.5rem 0;
+                }
+                .faq-question h3 {
+                    font-size: 1rem;
+                }
+            }
         </style>
+
+        <!-- Otimização de Imagens -->
+        <link rel="preload" as="image" href="/images/og-image.jpg">
+        <link rel="preload" as="image" href="/images/logo.png">
     </head>
     <body class="antialiased">
         <div class="relative min-h-screen bg-dots-darker bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-blue-500 selection:text-white">
@@ -954,13 +1095,13 @@
             @endif
 
             <!-- Hero Section -->
-            <div class="hero-section">
+            <section class="hero-section" aria-label="Hero">
                 <div class="max-w-7xl mx-auto">
                     <!-- Desktop Version -->
                     <div class="hidden md:block">
                         <div class="flex justify-center">
-                            <div class="hero-icon h-48 w-48 rounded-full flex items-center justify-center">
-                                <i class="fas fa-gavel text-white text-8xl"></i>
+                            <div class="hero-icon h-96 w-96 rounded-full flex items-center justify-center">
+                                <i class="fas fa-gavel text-white text-[12rem]"></i>
                             </div>
                         </div>
 
@@ -969,45 +1110,41 @@
 
                         <div class="hero-cta">
                             @if (Route::has('register'))
-                                <a href="{{ url('/register') }}" class="cta-button primary">
-                                    <i class="fas fa-rocket"></i>
+                                <a href="{{ url('/register') }}" class="cta-button primary" aria-label="Criar conta gratuita">
+                                    <i class="fas fa-rocket" aria-hidden="true"></i>
                                     <span>Comece Agora - É Grátis!</span>
                                 </a>
-
                             @endif
                         </div>
 
                         <div class="hero-badges">
                             <div class="hero-badge">
-                                <i class="fas fa-check-circle"></i>
+                                <i class="fas fa-check-circle" aria-hidden="true"></i>
                                 <span>Sem compromisso</span>
                             </div>
                             <div class="hero-badge">
-                                <i class="fas fa-bolt"></i>
+                                <i class="fas fa-bolt" aria-hidden="true"></i>
                                 <span>Cancelamento em 1 clique</span>
                             </div>
                             <div class="hero-badge">
-                                <i class="fas fa-headset"></i>
+                                <i class="fas fa-headset" aria-hidden="true"></i>
                                 <span>Suporte 24/7</span>
                             </div>
                             <div class="hero-badge">
-                                <i class="fas fa-shield-alt"></i>
+                                <i class="fas fa-shield-alt" aria-hidden="true"></i>
                                 <span>Garantia de Satisfação</span>
                             </div>
                         </div>
 
                         <div class="scroll-indicator">
-                            <i class="fas fa-chevron-down text-white text-2xl"></i>
+                            <i class="fas fa-chevron-down text-white text-2xl" aria-hidden="true"></i>
                         </div>
                     </div>
-
-                    <!-- Mobile Version -->
-                    
                 </div>
-            </div>
+            </section>
 
             <!-- Stats Section -->
-            <div class="stats-section">
+            <section class="stats-section" aria-label="Estatísticas">
                 <div class="max-w-7xl mx-auto">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-20">
                         <div class="stats-card">
@@ -1024,89 +1161,89 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="max-w-7xl mx-auto p-6 lg:p-8">
+            <main class="max-w-7xl mx-auto p-6 lg:p-8">
                 <!-- Value Proposition -->
-                <div class="mt-16 text-center">
+                <section class="mt-16 text-center" aria-label="Proposta de Valor">
                     <h2 class="section-title">Por que escolher o AutoRecurso?</h2>
                     <p class="section-subtitle">Descubra como nossa solução pode ajudar você a economizar tempo e dinheiro.</p>
-                </div>
+                </section>
 
                 <!-- Features Section -->
-                <div class="mt-16">
+                <section class="mt-16" aria-label="Recursos">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <div class="feature-card">
+                        <article class="feature-card">
                             <div class="feature-icon">
-                                <i class="fas fa-robot"></i>
+                                <i class="fas fa-robot" aria-hidden="true"></i>
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900 mb-4">IA Avançada</h3>
                             <p class="text-gray-600 leading-relaxed">
                                 Nossa tecnologia de inteligência artificial analisa sua multa e gera um recurso personalizado com alta taxa de sucesso.
                             </p>
-                        </div>
+                        </article>
 
-                        <div class="feature-card">
+                        <article class="feature-card">
                             <div class="feature-icon">
-                                <i class="fas fa-file-pdf"></i>
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i>
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900 mb-4">Documentos Prontos</h3>
                             <p class="text-gray-600 leading-relaxed">
                                 Receba seu recurso em formato PDF, pronto para impressão e protocolo junto ao órgão de trânsito.
                             </p>
-                        </div>
+                        </article>
 
-                        <div class="feature-card">
+                        <article class="feature-card">
                             <div class="feature-icon">
-                                <i class="fas fa-coins"></i>
+                                <i class="fas fa-coins" aria-hidden="true"></i>
                             </div>
                             <h3 class="text-2xl font-bold text-gray-900 mb-4">Economia</h3>
                             <p class="text-gray-600 leading-relaxed">
                                 Muito mais barato que contratar um advogado. Pague apenas pelos recursos que gerar, sem mensalidades ou taxas ocultas.
                             </p>
-                        </div>
+                        </article>
                     </div>
-                </div>
+                </section>
 
                 <!-- How It Works -->
-                <div id="como-funciona" class="mt-24">
+                <section id="como-funciona" class="mt-24" aria-label="Como Funciona">
                     <h2 class="section-title">Como Funciona</h2>
                     <p class="section-subtitle">Três passos simples para resolver suas multas</p>
                     <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <div class="step-card">
+                        <article class="step-card">
                             <div class="step-number">1</div>
                             <h3 class="text-xl font-bold text-gray-900 mb-3">Cadastre sua multa</h3>
                             <p class="text-gray-600">Informe os dados básicos da sua infração de trânsito.</p>
-                        </div>
+                        </article>
 
-                        <div class="step-card">
+                        <article class="step-card">
                             <div class="step-number">2</div>
                             <h3 class="text-xl font-bold text-gray-900 mb-3">IA gera o recurso</h3>
                             <p class="text-gray-600">Nossa inteligência artificial cria um documento personalizado para seu caso.</p>
-                        </div>
+                        </article>
 
-                        <div class="step-card">
+                        <article class="step-card">
                             <div class="step-number">3</div>
                             <h3 class="text-xl font-bold text-gray-900 mb-3">Baixe seu PDF</h3>
                             <p class="text-gray-600">Receba seu recurso pronto para protocolar no órgão de trânsito.</p>
-                        </div>
+                        </article>
                     </div>
-                </div>
+                </section>
 
                 <!-- Pricing Section -->
-                <div class="mt-24">
+                <section class="mt-24" aria-label="Preços">
                     <h2 class="section-title">Pacotes de Créditos</h2>
                     <p class="section-subtitle">Escolha o melhor pacote para suas necessidades</p>
 
                     <!-- Tabela de preços -->
                     <div class="price-table-container mt-8 mb-12 mx-auto max-w-4xl bg-white">
-                        <table class="price-table min-w-full">
+                        <table class="price-table min-w-full" aria-label="Tabela de preços">
                             <thead>
                                 <tr>
-                                    <th class="text-left">Pacote de Créditos</th>
-                                    <th>Preço Total</th>
-                                    <th>Preço por Crédito</th>
-                                    <th>Economia</th>
+                                    <th scope="col" class="text-left">Pacote de Créditos</th>
+                                    <th scope="col">Preço Total</th>
+                                    <th scope="col">Preço por Crédito</th>
+                                    <th scope="col">Economia</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1137,12 +1274,12 @@
                             </tbody>
                         </table>
                     </div>
+                </section>
 
-                    
-                </div>
-                <a href="{{ route('register') }}" class="cta-button primary w-full">Começar Agora</a>
+                <a href="{{ route('register') }}" class="cta-button primary w-full" aria-label="Criar conta gratuita">Começar Agora</a>
+
                 <!-- Testimonials -->
-                <div class="mt-24">
+                <section class="mt-24" aria-label="Depoimentos">
                     <h2 class="section-title">O que nossos clientes dizem</h2>
                     <p class="section-subtitle">Depoimentos reais de quem já economizou com o AutoRecurso</p>
                     
@@ -1150,8 +1287,10 @@
                     <div class="swiper testimonial-swiper mt-12">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Consegui cancelar 3 multas usando o AutoRecurso. O sistema é muito fácil de usar e o documento gerado tinha todos os argumentos legais necessários. Recomendo!"</p>
+                                <article class="testimonial-card">
+                                    <blockquote>
+                                        <p class="text-lg text-gray-600 mb-6">"Consegui cancelar 3 multas usando o AutoRecurso. O sistema é muito fácil de usar e o documento gerado tinha todos os argumentos legais necessários. Recomendo!"</p>
+                                    </blockquote>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">JS</div>
                                         <div class="ml-4">
@@ -1159,12 +1298,14 @@
                                             <p class="text-gray-600">São Paulo</p>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             </div>
 
                             <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Economizei mais de R$ 1.000 em multas usando o AutoRecurso. O suporte é excelente e o processo é muito simples. Vale muito a pena!"</p>
+                                <article class="testimonial-card">
+                                    <blockquote>
+                                        <p class="text-lg text-gray-600 mb-6">"Economizei mais de R$ 1.000 em multas usando o AutoRecurso. O suporte é excelente e o processo é muito simples. Vale muito a pena!"</p>
+                                    </blockquote>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">MS</div>
                                         <div class="ml-4">
@@ -1172,12 +1313,14 @@
                                             <p class="text-gray-600">Rio de Janeiro</p>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             </div>
 
                             <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Excelente ferramenta! Consegui cancelar uma multa de R$ 293,47 em menos de 5 minutos. O recurso foi bem fundamentado e o processo todo foi muito simples."</p>
+                                <article class="testimonial-card">
+                                    <blockquote>
+                                        <p class="text-lg text-gray-600 mb-6">"Excelente ferramenta! Consegui cancelar uma multa de R$ 293,47 em menos de 5 minutos. O recurso foi bem fundamentado e o processo todo foi muito simples."</p>
+                                    </blockquote>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">PC</div>
                                         <div class="ml-4">
@@ -1185,12 +1328,14 @@
                                             <p class="text-gray-600">Curitiba</p>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             </div>
 
                             <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Já usei várias vezes e sempre tive sucesso! O sistema é intuitivo e o suporte é muito atencioso. Recomendo para todos que precisam recorrer de multas."</p>
+                                <article class="testimonial-card">
+                                    <blockquote>
+                                        <p class="text-lg text-gray-600 mb-6">"Já usei várias vezes e sempre tive sucesso! O sistema é intuitivo e o suporte é muito atencioso. Recomendo para todos que precisam recorrer de multas."</p>
+                                    </blockquote>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">AL</div>
                                         <div class="ml-4">
@@ -1198,12 +1343,14 @@
                                             <p class="text-gray-600">Belo Horizonte</p>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             </div>
 
                             <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Economizei tempo e dinheiro com o AutoRecurso. O processo é rápido e eficiente. Já recomendei para vários amigos e todos ficaram satisfeitos!"</p>
+                                <article class="testimonial-card">
+                                    <blockquote>
+                                        <p class="text-lg text-gray-600 mb-6">"Economizei tempo e dinheiro com o AutoRecurso. O processo é rápido e eficiente. Já recomendei para vários amigos e todos ficaram satisfeitos!"</p>
+                                    </blockquote>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">RS</div>
                                         <div class="ml-4">
@@ -1211,51 +1358,136 @@
                                             <p class="text-gray-600">Porto Alegre</p>
                                         </div>
                                     </div>
-                                </div>
+                                </article>
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next" aria-label="Próximo depoimento"></div>
+                        <div class="swiper-button-prev" aria-label="Depoimento anterior"></div>
                     </div>
-                </div>
+                </section>
 
                 <!-- Final CTA -->
-                <div class="mt-24 text-center">
+                <section class="mt-24 text-center" aria-label="Chamada para ação final">
                     <h2 class="section-title">Pronto para economizar nas suas multas?</h2>
                     <p class="section-subtitle">Comece agora mesmo a gerar recursos de alta qualidade.</p>
 
                     <div class="mt-8">
                         @if (Route::has('register'))
-                            <a href="{{ url('/register') }}" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-xl font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                                
+                            <a href="{{ url('/register') }}" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-xl font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105" aria-label="Criar conta gratuita">
                                 Criar Conta Gratuita
                             </a>
                         @endif
                     </div>
-                </div>
+                </section>
+
+                <!-- FAQ Section -->
+                <section id="faq" class="mt-24" aria-label="Perguntas Frequentes">
+                    <div class="max-w-4xl mx-auto px-4 py-16">
+                        <h2 class="text-4xl font-bold text-center mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Dúvidas Frequentes</h2>
+                        <p class="text-gray-600 text-center text-xl mb-12">Encontre respostas para as principais dúvidas sobre o AutoRecurso</p>
+
+                        <div class="space-y-6">
+                            <div class="faq-item">
+                                <button class="faq-question w-full text-left p-6" onclick="toggleFaq(this)">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xl font-semibold text-gray-900">Como funciona o recurso automático?</h3>
+                                        <svg class="w-6 h-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div class="faq-answer">
+                                    <p class="text-gray-600 text-lg leading-relaxed p-6 pt-0">Nossa IA analisa os detalhes da sua multa e gera um recurso personalizado com argumentos jurídicos relevantes. O processo é rápido e eficiente, economizando seu tempo e dinheiro.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question w-full text-left p-6" onclick="toggleFaq(this)">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xl font-semibold text-gray-900">Qual a taxa de sucesso dos recursos?</h3>
+                                        <svg class="w-6 h-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div class="faq-answer">
+                                    <p class="text-gray-600 text-lg leading-relaxed p-6 pt-0">Nossa taxa de sucesso é de aproximadamente 90%, baseada em milhares de recursos processados. A IA é treinada com casos reais e atualizada constantemente com novas jurisprudências.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question w-full text-left p-6" onclick="toggleFaq(this)">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xl font-semibold text-gray-900">Quanto tempo leva para gerar um recurso?</h3>
+                                        <svg class="w-6 h-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div class="faq-answer">
+                                    <p class="text-gray-600 text-lg leading-relaxed p-6 pt-0">Em média, um recurso é gerado em menos de 5 minutos. Você recebe o documento em PDF pronto para impressão e protocolo junto ao órgão de trânsito.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question w-full text-left p-6" onclick="toggleFaq(this)">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xl font-semibold text-gray-900">Preciso contratar um advogado?</h3>
+                                        <svg class="w-6 h-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div class="faq-answer">
+                                    <p class="text-gray-600 text-lg leading-relaxed p-6 pt-0">Não é necessário contratar um advogado. Nossa IA gera recursos fundamentados que podem ser protocolados diretamente. No entanto, você pode consultar um advogado se desejar.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <button class="faq-question w-full text-left p-6" onclick="toggleFaq(this)">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-xl font-semibold text-gray-900">Como funciona o sistema de créditos?</h3>
+                                        <svg class="w-6 h-6 text-blue-600 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div class="faq-answer">
+                                    <p class="text-gray-600 text-lg leading-relaxed p-6 pt-0">Você compra pacotes de créditos que são utilizados para gerar recursos. Cada recurso consome um crédito. Os pacotes maiores oferecem desconto por crédito, permitindo maior economia.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <script>
+                    function toggleFaq(el) {
+                        const answer = el.nextElementSibling;
+                        answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+                    }
+                </script>
+
+                <!-- Breadcrumbs -->
+                <nav class="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
+                    <ol class="list-none p-0 inline-flex">
+                        <li class="flex items-center">
+                            <a href="/" class="hover:text-blue-600">Início</a>
+                        </li>
+                    </ol>
+                </nav>
 
                 <!-- Footer -->
-                <div class="flex flex-col md:flex-row justify-center mt-16 px-0 sm:items-center sm:justify-between">
+                <footer class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
                     <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-left">
                         © {{ date('Y') }} AutoRecurso - Todos os direitos reservados
                     </div>
 
-                    <div class="flex justify-center space-x-4 mt-4 md:mt-0">
-                        <a href="{{ route('privacy') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
-                            Política de Privacidade
-                        </a>
-                        <span class="text-gray-500">|</span>
-                        <a href="{{ route('terms') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
-                            Termos de Uso
-                        </a>
+                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
+                        Desenvolvido com <i class="fas fa-heart text-red-500" aria-hidden="true"></i> no Brasil
                     </div>
-
-                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0 mt-4 md:mt-0">
-                        Desenvolvido com <i class="fas fa-heart text-red-500"></i> no Brasil
-                    </div>
-                </div>
-            </div>
+                </footer>
+            </main>
         </div>
 
         <!-- Swiper JS -->

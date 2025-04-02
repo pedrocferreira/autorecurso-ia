@@ -5,7 +5,7 @@
                 {{ __('Nova Multa') }}
             </h2>
             <div class="flex flex-wrap gap-2 items-center">
-                <button type="button" onclick="fillFormWithTestData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm flex items-center">
+               <!--  <button type="button" onclick="fillFormWithTestData()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm flex items-center">
                     <i class="fas fa-clipboard-list mr-1" style="display: none;"></i> Preencher Dados
                 </button>
                 <button type="button" onclick="testQuickSubmit()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded text-sm flex items-center">
@@ -22,7 +22,7 @@
                 </button>
                 <button type="button" onclick="showInfractionTable()" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded text-sm flex items-center">
                     <i class="fas fa-table mr-1" style="display: none;"></i> Ver Tabela
-                </button>
+                </button> -->
                 <a href="{{ route('tickets.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded text-sm flex items-center">
                     <i class="fas fa-arrow-left mr-1"></i> Voltar
                 </a>

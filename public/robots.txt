@@ -1,14 +1,10 @@
 User-agent: *
 Allow: /
-Allow: /terms
-Allow: /privacy
-
-Disallow: /dashboard
+Allow: /sitemap.xml
+Disallow: /admin/
+Disallow: /dashboard/
 Disallow: /login
 Disallow: /register
-Disallow: /password
-Disallow: /email
-Disallow: /profile
 
 # Cache-Control: public, max-age=31536000
 # X-Content-Type-Options: nosniff
