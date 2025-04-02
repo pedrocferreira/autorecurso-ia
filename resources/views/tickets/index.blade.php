@@ -35,7 +35,8 @@
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Placa</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Data</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Local</th>
-                                        <th class="p-3 text-left text-xs font-medium text-gray-500">Motivo</th>
+                                        <th class="p-3 text-left text-xs font-medium text-gray-500">Infração</th>
+                                        <th class="p-3 text-left text-xs font-medium text-gray-500">Gravidade</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Valor</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Recursos</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Ações</th>
@@ -47,8 +48,29 @@
                                             <td class="p-3 text-sm">{{ $ticket->plate }}</td>
                                             <td class="p-3 text-sm">{{ $ticket->date->format('d/m/Y') }}</td>
                                             <td class="p-3 text-sm">{{ Str::limit($ticket->location, 30) }}</td>
-                                            <td class="p-3 text-sm">{{ Str::limit($ticket->reason, 30) }}</td>
-                                            <td class="p-3 text-sm">R$ {{ number_format($ticket->amount, 2, ',', '.') }}</td>
+                                            <td class="p-3 text-sm">
+                                                <div>
+                                                    <span class="font-semibold">{{ $ticket->infractionType->code }}</span>
+                                                    <div class="text-gray-600 text-xs mt-1">
+                                                        {{ Str::limit($ticket->infractionType->description, 50) }}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="p-3 text-sm">
+                                                @php
+                                                    $severityColors = [
+                                                        'light' => 'bg-yellow-100 text-yellow-800',
+                                                        'medium' => 'bg-orange-100 text-orange-800',
+                                                        'serious' => 'bg-red-100 text-red-800',
+                                                        'very_serious' => 'bg-red-200 text-red-900'
+                                                    ];
+                                                    $severityColor = $severityColors[$ticket->infractionType->severity] ?? 'bg-gray-100 text-gray-800';
+                                                @endphp
+                                                <span class="px-2 py-1 rounded-full text-xs {{ $severityColor }}">
+                                                    {{ $ticket->infractionType->severity_text }}
+                                                </span>
+                                            </td>
+                                            <td class="p-3 text-sm">{{ $ticket->infractionType->formatted_amount }}</td>
                                             <td class="p-3 text-sm">{{ $ticket->appeals->count() }}</td>
                                             <td class="p-3 text-sm">
                                                 <div class="flex items-center justify-end space-x-2">

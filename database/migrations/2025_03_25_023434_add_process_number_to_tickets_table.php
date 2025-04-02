@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->foreignId('infraction_type_id')->after('reason')->constrained()->onDelete('cascade');
+            $table->string('process_number')->nullable()->after('infraction_amount');
         });
     }
 
@@ -22,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->dropForeign(['infraction_type_id']);
-            $table->dropColumn('infraction_type_id');
+            $table->dropColumn('process_number');
         });
     }
 };

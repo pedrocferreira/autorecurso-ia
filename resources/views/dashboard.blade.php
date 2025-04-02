@@ -49,7 +49,7 @@
                         <div class="flex space-x-3">
                             <a href="{{ route('appeals.create_new') }}" class="inline-block px-4 py-2 bg-white text-blue-600 rounded-lg font-medium shadow-sm hover:bg-gray-100 transition flex flex-col items-center">
                                 <span><i class="fas fa-file-alt mr-1"></i> Gerar Recurso</span>
-                                <span class="text-xs text-blue-400 mt-1">Custo: 1 crédito</span>
+                                
                             </a>
                             <a href="{{ route('credits.packages') }}" class="inline-block px-4 py-2 bg-blue-700 text-white rounded-lg font-medium shadow-sm hover:bg-blue-800 transition">
                                 <i class="fas fa-coins mr-1"></i> Comprar Créditos
@@ -77,7 +77,7 @@
                                 <i class="fas fa-ticket-alt text-blue-600 text-xl"></i>
                             </div>
                             <div>
-                                <div class="text-3xl font-bold text-blue-600">{{ $stats['tickets_count'] ?? 0 }}</div>
+                                <div class="text-3xl font-bold text-blue-600">{{ $stats['tickets_count'] }}</div>
                                 <div class="text-sm text-gray-600">Multas Cadastradas</div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                                 <i class="fas fa-file-alt text-green-600 text-xl"></i>
                             </div>
                             <div>
-                                <div class="text-3xl font-bold text-green-600">{{ $stats['appeals_count'] ?? 0 }}</div>
+                                <div class="text-3xl font-bold text-green-600">{{ $stats['appeals_count'] }}</div>
                                 <div class="text-sm text-gray-600">Recursos Gerados</div>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                                 <i class="fas fa-check-circle text-purple-600 text-xl"></i>
                             </div>
                             <div>
-                                <div class="text-3xl font-bold text-purple-600">{{ $stats['appeals_successful'] ?? 0 }}</div>
+                                <div class="text-3xl font-bold text-purple-600">{{ $stats['appeals_successful'] }}</div>
                                 <div class="text-sm text-gray-600">Recursos com Sucesso</div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                                 </div>
                                 <div>
                                     <span class="font-medium text-green-800 block">Gerar Novo Recurso</span>
-                                    <span class="text-xs text-green-600">Custo: 1 crédito por recurso</span>
+                                    
                                 </div>
                             </div>
                             <i class="fas fa-chevron-right text-green-300 group-hover:text-green-500 transition"></i>
@@ -184,11 +184,11 @@
                                                 <td class="p-3 text-sm font-medium">
                                                     <a href="{{ route('tickets.show', $ticket->id) }}" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center">
                                                         <i class="fas fa-car-side mr-1 text-gray-400"></i>
-                                                        {{ $ticket->plate }}
+                                                        {{ $ticket->vehicle_plate ?? $ticket->plate ?? 'N/A' }}
                                                     </a>
                                                 </td>
-                                                <td class="p-3 text-sm text-gray-600">{{ $ticket->date->format('d/m/Y') }}</td>
-                                                <td class="p-3 text-sm font-medium text-gray-800">R$ {{ number_format($ticket->amount, 2, ',', '.') }}</td>
+                                                <td class="p-3 text-sm text-gray-600">{{ isset($ticket->infraction_date) ? ($ticket->infraction_date instanceof \DateTime ? $ticket->infraction_date->format('d/m/Y') : $ticket->infraction_date) : (isset($ticket->date) ? $ticket->date : 'N/A') }}</td>
+                                                <td class="p-3 text-sm font-medium text-gray-800">R$ {{ number_format($ticket->infraction_amount ?? $ticket->amount ?? 0, 2, ',', '.') }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -276,31 +276,42 @@
                                     <tbody>
                                         @foreach($recent_appeals as $appeal)
                                             <tr class="border-b hover:bg-gray-50">
-                                                <td class="p-3 text-sm font-medium">
+                                                <td class="p-3 text-sm">
                                                     <a href="{{ route('appeals.show', $appeal->id) }}" class="text-blue-600 hover:text-blue-800 hover:underline flex items-center">
                                                         <i class="fas fa-file-alt mr-1 text-gray-400"></i>
-                                                        {{ $appeal->ticket->plate }}
+                                                        #{{ $appeal->id }}
                                                     </a>
                                                 </td>
-                                                <td class="p-3 text-sm text-gray-600">{{ $appeal->created_at->format('d/m/Y') }}</td>
                                                 <td class="p-3 text-sm">
-                                                    @if($appeal->status == 'pending')
-                                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs flex items-center w-fit">
-                                                            <i class="fas fa-clock mr-1"></i> Pendente
-                                                        </span>
-                                                    @elseif($appeal->status == 'sent')
-                                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs flex items-center w-fit">
-                                                            <i class="fas fa-paper-plane mr-1"></i> Enviado
-                                                        </span>
-                                                    @elseif($appeal->status == 'successful')
-                                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs flex items-center w-fit">
-                                                            <i class="fas fa-check-circle mr-1"></i> Deferido
-                                                        </span>
-                                                    @elseif($appeal->status == 'rejected')
-                                                        <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs flex items-center w-fit">
-                                                            <i class="fas fa-times-circle mr-1"></i> Indeferido
-                                                        </span>
+                                                    @if(isset($appeal->ticket))
+                                                        <a href="{{ route('tickets.show', $appeal->ticket->id) }}" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                                            {{ $appeal->ticket->vehicle_plate ?? $appeal->ticket->plate ?? 'N/A' }}
+                                                        </a>
+                                                    @elseif(isset($appeal->ticket_id))
+                                                        <span class="text-gray-600">ID: {{ $appeal->ticket_id }}</span>
+                                                    @else
+                                                        <span class="text-gray-400">Não disponível</span>
                                                     @endif
+                                                </td>
+                                                <td class="p-3 text-sm">
+                                                    @php
+                                                        $status = $appeal->status ?? 'pending';
+                                                        $statusClasses = [
+                                                            'pending' => 'bg-yellow-100 text-yellow-800',
+                                                            'sent' => 'bg-blue-100 text-blue-800',
+                                                            'successful' => 'bg-green-100 text-green-800',
+                                                            'rejected' => 'bg-red-100 text-red-800'
+                                                        ];
+                                                        $statusLabels = [
+                                                            'pending' => 'Pendente',
+                                                            'sent' => 'Enviado',
+                                                            'successful' => 'Aprovado',
+                                                            'rejected' => 'Rejeitado'
+                                                        ];
+                                                    @endphp
+                                                    <span class="px-2 py-1 rounded-full text-xs font-medium {{ $statusClasses[$status] ?? 'bg-gray-100 text-gray-800' }}">
+                                                        {{ $statusLabels[$status] ?? ucfirst($status) }}
+                                                    </span>
                                                 </td>
                                             </tr>
                                         @endforeach

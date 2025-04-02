@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CreditPackage;
 use App\Models\CreditTransaction;
 use App\Services\CreditService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
+use Stripe\Exception\ApiErrorException;
+use App\Models\Transaction;
 
 class CreditController extends Controller
 {
@@ -18,6 +24,13 @@ class CreditController extends Controller
     {
         $this->middleware('auth');
         $this->creditService = $creditService;
+        
+        // Configura o Stripe com a chave apropriada baseada no ambiente
+        $stripeKey = app()->environment('production') 
+            ? config('services.stripe.secret')
+            : config('services.stripe.secret');
+            
+        Stripe::setApiKey($stripeKey);
     }
 
     /**
@@ -38,37 +51,7 @@ class CreditController extends Controller
      */
     public function packages()
     {
-        $packages = [
-            [
-                'id' => '5_credits',
-                'amount' => 5,
-                'price' => 19.90,
-                'discount' => 0,
-                'recommended' => false,
-            ],
-            [
-                'id' => '10_credits',
-                'amount' => 10,
-                'price' => 34.90,
-                'discount' => 12,
-                'recommended' => true,
-            ],
-            [
-                'id' => '20_credits',
-                'amount' => 20,
-                'price' => 59.90,
-                'discount' => 25,
-                'recommended' => false,
-            ],
-            [
-                'id' => '50_credits',
-                'amount' => 50,
-                'price' => 129.90,
-                'discount' => 35,
-                'recommended' => false,
-            ],
-        ];
-
+        $packages = CreditPackage::where('active', true)->get();
         return view('credits.packages', compact('packages'));
     }
 
@@ -77,43 +60,78 @@ class CreditController extends Controller
      */
     public function purchase(Request $request)
     {
-        $validated = $request->validate([
-            'package_id' => 'required|string',
-            'payment_method' => 'required|in:credit_card,pix,boleto',
-        ]);
-
-        $packages = [
-            '5_credits' => ['amount' => 5, 'price' => 19.90],
-            '10_credits' => ['amount' => 10, 'price' => 34.90],
-            '20_credits' => ['amount' => 20, 'price' => 59.90],
-            '50_credits' => ['amount' => 50, 'price' => 129.90],
-        ];
-
-        if (!isset($packages[$validated['package_id']])) {
-            return back()->withErrors(['package_id' => 'Pacote inválido.']);
-        }
-
-        $package = $packages[$validated['package_id']];
-        $user = Auth::user();
-
-        // Em um ambiente real, aqui seria feita a integração com o gateway de pagamento
-        // Por enquanto, apenas simulamos a compra
         try {
-            $transaction = $this->creditService->addCredits(
-                $user,
-                $package['amount'],
-                "Compra de pacote de {$package['amount']} créditos",
-                [
-                    'payment_method' => $validated['payment_method'],
-                    'price' => $package['price'],
-                    'package_id' => $validated['package_id'],
-                ]
-            );
+            $package = CreditPackage::findOrFail($request->package_id);
+            
+            // Cria uma transação pendente
+            $transaction = Transaction::create([
+                'user_id' => auth()->id(),
+                'amount' => $package->price,
+                'credits' => $package->credits,
+                'status' => 'pending',
+                'payment_method' => $request->payment_method,
+                'payment_id' => null
+            ]);
 
-            return redirect()->route('credits.index')
-                ->with('success', "Você adquiriu {$package['amount']} créditos com sucesso!");
+            // Cria a sessão do Stripe
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'brl',
+                        'product_data' => [
+                            'name' => "{$package->credits} Créditos",
+                            'description' => "Pacote de {$package->credits} créditos"
+                        ],
+                        'unit_amount' => (int)($package->price * 100), // Stripe trabalha com centavos
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('credits.success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('credits.packages'),
+                'metadata' => [
+                    'user_id' => auth()->id(),
+                    'transaction_id' => $transaction->id,
+                    'package_id' => $package->id,
+                    'credits' => $package->credits
+                ]
+            ]);
+
+            // Atualiza a transação com o ID da sessão
+            $transaction->update([
+                'payment_id' => $session->id
+            ]);
+
+            // Redireciona diretamente para a URL do Stripe
+            return redirect($session->url);
+
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Erro ao processar o pagamento: ' . $e->getMessage()]);
+            Log::error('Erro ao criar sessão do Stripe: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Erro ao processar o pagamento. Por favor, tente novamente.');
+        }
+    }
+
+    public function success(Request $request)
+    {
+        try {
+            $session = Session::retrieve($request->session_id);
+            
+            if ($session->payment_status === 'paid') {
+                $transaction = Transaction::where('payment_id', $session->id)->first();
+                
+                if ($transaction && $transaction->status === 'pending') {
+                    $transaction->update(['status' => 'completed']);
+                    
+                    $user = $transaction->user;
+                    $user->increment('credits', $transaction->credits);
+                }
+            }
+
+            return view('credits.success');
+        } catch (\Exception $e) {
+            Log::error('Erro ao processar sucesso do pagamento: ' . $e->getMessage());
+            return redirect()->route('credits.packages')->with('error', 'Erro ao processar o pagamento.');
         }
     }
 
@@ -145,5 +163,14 @@ class CreditController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Erro ao adicionar créditos: ' . $e->getMessage()]);
         }
+    }
+
+    public function history()
+    {
+        $transactions = auth()->user()->creditTransactions()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('credits.history', compact('transactions'));
     }
 }

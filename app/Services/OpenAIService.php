@@ -42,7 +42,7 @@ class OpenAIService
             $result = \OpenAI\Laravel\Facades\OpenAI::chat()->create([
                 'model' => 'gpt-3.5-turbo',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'Você é um especialista em legislação de trânsito e redação de recursos contra multas. Seu objetivo é gerar um recurso formal, respeitoso e convincente para contestar uma multa de trânsito no Brasil.'],
+                    ['role' => 'system', 'content' => 'Você é um especialista em legislação de trânsito e redação de recursos contra multas. Seu objetivo é gerar um recurso formal, respeitoso e convincente para contestar uma multa de trânsito no Brasil. Lembre-se de que o recurso deve ser escrito em português brasileiro. O recruso nao  pode ter nenhum campo nao preenchido. '],
                     ['role' => 'user', 'content' => $prompt],
                 ],
                 'temperature' => 0.7,
@@ -82,10 +82,18 @@ class OpenAIService
         $cpf = $additionalData['cpf'] ?? '(informação não disponível)';
         $address = $additionalData['address'] ?? '(endereço não disponível)';
         $customDetails = $additionalData['custom_details'] ?? '';
+        $processNumber = $ticket->process_number ?? '';
+        $clientJustification = $ticket->client_justification ?? '';
 
         // Obter o tipo de infração, se disponível
         $infractionType = $ticket->infractionType;
         $lawArticle = $infractionType ? $infractionType->law_article : '';
+
+        // Extrair a cidade do endereço do cliente
+        $city = '';
+        if (preg_match('/,\s*([^,]+)\s*-\s*[A-Z]{2}/', $address, $matches)) {
+            $city = trim($matches[1]);
+        }
 
         $prompt = "Por favor, gere um recurso formal contra uma multa de trânsito com base nas seguintes informações:
 
@@ -93,9 +101,14 @@ class OpenAIService
         - Nome: {$name}
         - CPF: {$cpf}
         - CNH: {$ticket->driver_license}
-        - Endereço: {$address}
+        - Endereço: {$address}";
 
-        DADOS DO VEÍCULO:
+        // Adiciona número do processo se disponível
+        if ($processNumber) {
+            $prompt .= "\n        - Número do Processo: {$processNumber}";
+        }
+
+        $prompt .= "\n\n        DADOS DO VEÍCULO:
         - Placa: {$ticket->plate}
         - Modelo: {$ticket->vehicle_model}
         - Ano: {$ticket->vehicle_year}
@@ -112,6 +125,12 @@ class OpenAIService
             $prompt .= "\n        - Artigo da lei: {$lawArticle}";
         }
 
+        // Adiciona a justificativa do cliente, se disponível
+        if ($clientJustification) {
+            $prompt .= "\n\n        JUSTIFICATIVA DO CONDUTOR:
+        {$clientJustification}";
+        }
+
         // Adiciona detalhes personalizados, se disponíveis
         if ($customDetails) {
             $prompt .= "\n\n        DETALHES ADICIONAIS FORNECIDOS PELO CONDUTOR:
@@ -124,7 +143,10 @@ class OpenAIService
         3. Citar artigos relevantes do Código de Trânsito Brasileiro;
         4. Incluir pedido de cancelamento da multa;
         5. Solicitar, alternativamente, caso o cancelamento não seja possível, a conversão da penalidade em advertência;
-        6. Apresentar saudação formal e local para assinatura.
+        6. Apresentar saudação formal e local para assinatura;
+        7. Usar a cidade do condutor ({$city}) e a data atual como local e data do documento;
+        8. Não incluir referências a advogados ou OAB;
+        9. Se houver justificativa do condutor, usar seus argumentos como base principal para a defesa, expandindo-os com fundamentos jurídicos apropriados.
 
         O texto deve estar pronto para impressão no formato de um documento oficial.";
 

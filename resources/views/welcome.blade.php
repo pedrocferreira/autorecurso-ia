@@ -716,6 +716,225 @@
                     display: none;
                 }
             }
+
+            /* Estilos da tabela de preços */
+            .price-table-container {
+                overflow-x: auto;
+                margin-bottom: 2rem;
+                border-radius: 1rem;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            }
+
+            .price-table {
+                width: 100%;
+                border-collapse: collapse;
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+
+            .price-table th, .price-table td {
+                padding: 1.25rem;
+                text-align: center;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .price-table th {
+                background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+                color: white;
+                font-weight: 600;
+                font-size: 1.1rem;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+
+            .price-table th:first-child {
+                text-align: left;
+            }
+
+            .price-table td:first-child {
+                text-align: left;
+                font-weight: 600;
+                color: #1e3a8a;
+            }
+
+            .price-table tr:last-child td {
+                border-bottom: none;
+            }
+
+            .price-table tr:hover {
+                background-color: #f0f9ff;
+                transition: background-color 0.3s ease;
+            }
+
+            .price-table .recommended {
+                background-color: rgba(59, 130, 246, 0.05);
+            }
+
+            .price-table .recommended td {
+                font-weight: 600;
+                border-bottom: 1px solid #dbeafe;
+            }
+
+            .price-table .discount {
+                color: #ef4444;
+                font-weight: 700;
+                background: #fee2e2;
+                padding: 0.3rem 0.6rem;
+                border-radius: 0.5rem;
+                display: inline-block;
+            }
+            
+            .price-badge {
+                background: #ef4444;
+                color: white;
+                font-size: 0.7rem;
+                padding: 0.25rem 0.5rem;
+                border-radius: 0.25rem;
+                letter-spacing: 0.5px;
+                vertical-align: middle;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            @media (max-width: 768px) {
+                .price-table th, .price-table td {
+                    padding: 0.75rem 0.5rem;
+                    font-size: 0.875rem;
+                }
+                
+                .price-table th {
+                    font-size: 0.8rem;
+                }
+                
+                .price-badge {
+                    font-size: 0.65rem;
+                    padding: 0.15rem 0.35rem;
+                }
+                
+                .price-table .discount {
+                    padding: 0.2rem 0.4rem;
+                    font-size: 0.8rem;
+                }
+            }
+
+            @media (max-width: 640px) {
+                .price-table th, .price-table td {
+                    padding: 0.5rem 0.35rem;
+                    font-size: 0.75rem;
+                }
+            }
+            
+            /* Estilo dos cards de preço */
+            .price-card {
+                background: white;
+                border-radius: 1rem;
+                padding: 2.5rem 2rem;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            }
+            
+            .price-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 6px;
+                background: linear-gradient(90deg, #3b82f6, #1e40af);
+            }
+            
+            .price-card.popular {
+                transform: scale(1.05);
+                border: 1px solid rgba(59, 130, 246, 0.3);
+                box-shadow: 0 15px 35px rgba(59, 130, 246, 0.15);
+                z-index: 1;
+            }
+            
+            .price-card.popular::before {
+                height: 8px;
+                background: linear-gradient(90deg, #ef4444, #f97316);
+            }
+            
+            .price-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            }
+            
+            .price-card.popular:hover {
+                transform: scale(1.05) translateY(-10px);
+            }
+            
+            .cta-button.primary {
+                background: linear-gradient(135deg, #3b82f6, #1e40af);
+                color: white;
+                padding: 0.75rem 1.5rem;
+                border-radius: 0.5rem;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                transition: all 0.3s ease;
+                text-align: center;
+                justify-content: center;
+                box-shadow: 0 4px 6px rgba(59, 130, 246, 0.25);
+            }
+            
+            .cta-button.primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+            }
+            
+            /* Ribbons e badges */
+            .ribbon-container {
+                position: relative;
+                width: 100%;
+                height: 0;
+            }
+            
+            .recommended-ribbon {
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                background-color: #ef4444;
+                color: white;
+                font-size: 0.75rem;
+                font-weight: 600;
+                padding: 0.25rem 0.75rem;
+                border-radius: 0.25rem;
+                z-index: 10;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                letter-spacing: 0.5px;
+                transform: rotate(5deg);
+            }
+            
+            .economy-badge {
+                position: absolute;
+                top: -32px;
+                left: 20px;
+                background: linear-gradient(135deg, #ef4444, #f97316);
+                color: white;
+                font-size: 0.8rem;
+                font-weight: 600;
+                padding: 0.3rem 0.8rem;
+                border-radius: 0.25rem;
+                z-index: 10;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                transform: rotate(-5deg);
+            }
+            
+            @media (max-width: 768px) {
+                .recommended-ribbon, .economy-badge {
+                    font-size: 0.7rem;
+                    padding: 0.2rem 0.5rem;
+                }
+                
+                .economy-badge {
+                    top: -28px;
+                    left: 15px;
+                }
+            }
         </style>
     </head>
     <body class="antialiased">
@@ -754,10 +973,7 @@
                                     <i class="fas fa-rocket"></i>
                                     <span>Comece Agora - É Grátis!</span>
                                 </a>
-                                <a href="#como-funciona" class="cta-button secondary">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>Veja Como Funciona</span>
-                                </a>
+
                             @endif
                         </div>
 
@@ -795,7 +1011,7 @@
                 <div class="max-w-7xl mx-auto">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-20">
                         <div class="stats-card">
-                            <div class="stats-number">+50.000</div>
+                            <div class="stats-number">+5.000</div>
                             <div class="stats-label">Recursos Gerados</div>
                         </div>
                         <div class="stats-card">
@@ -803,7 +1019,7 @@
                             <div class="stats-label">Taxa de Sucesso</div>
                         </div>
                         <div class="stats-card">
-                            <div class="stats-number">R$ 2.000.000+</div>
+                            <div class="stats-number">R$ 200.000+</div>
                             <div class="stats-label">Economia Total</div>
                         </div>
                     </div>
@@ -879,81 +1095,52 @@
 
                 <!-- Pricing Section -->
                 <div class="mt-24">
-                    <h2 class="section-title">Planos e Preços</h2>
-                    <p class="section-subtitle">Escolha o plano ideal para suas necessidades</p>
+                    <h2 class="section-title">Pacotes de Créditos</h2>
+                    <p class="section-subtitle">Escolha o melhor pacote para suas necessidades</p>
 
-                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <div class="price-card">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Básico</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 29</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>1 recurso por vez</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte por email</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
-
-                        <div class="price-card popular">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Pro</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 24</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>5 recursos por vez</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte prioritário</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
-
-                        <div class="price-card">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Enterprise</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 19</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Recursos ilimitados</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte VIP 24/7</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
+                    <!-- Tabela de preços -->
+                    <div class="price-table-container mt-8 mb-12 mx-auto max-w-4xl bg-white">
+                        <table class="price-table min-w-full">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Pacote de Créditos</th>
+                                    <th>Preço Total</th>
+                                    <th>Preço por Crédito</th>
+                                    <th>Economia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-left">10 créditos</td>
+                                    <td class="font-medium">R$ 35,00</td>
+                                    <td class="font-medium">R$ 3,50</td>
+                                    <td class="font-medium">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">30 créditos</td>
+                                    <td class="font-medium">R$ 95,00</td>
+                                    <td class="font-medium">R$ 3,17</td>
+                                    <td><span class="discount">10% OFF</span></td>
+                                </tr>
+                                <tr class="recommended">
+                                    <td class="text-left">50 créditos <span class="ml-2 price-badge">RECOMENDADO</span></td>
+                                    <td class="font-bold">R$ 150,00</td>
+                                    <td class="font-bold">R$ 3,00</td>
+                                    <td><span class="discount">15% OFF</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">100 créditos</td>
+                                    <td class="font-medium">R$ 280,00</td>
+                                    <td class="font-medium">R$ 2,80</td>
+                                    <td><span class="discount">20% OFF</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </div>
 
+                    
+                </div>
+                <a href="{{ route('register') }}" class="cta-button primary w-full">Começar Agora</a>
                 <!-- Testimonials -->
                 <div class="mt-24">
                     <h2 class="section-title">O que nossos clientes dizem</h2>
@@ -1049,12 +1236,22 @@
                 </div>
 
                 <!-- Footer -->
-                <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
+                <div class="flex flex-col md:flex-row justify-center mt-16 px-0 sm:items-center sm:justify-between">
                     <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-left">
                         © {{ date('Y') }} AutoRecurso - Todos os direitos reservados
                     </div>
 
-                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
+                    <div class="flex justify-center space-x-4 mt-4 md:mt-0">
+                        <a href="{{ route('privacy') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+                            Política de Privacidade
+                        </a>
+                        <span class="text-gray-500">|</span>
+                        <a href="{{ route('terms') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+                            Termos de Uso
+                        </a>
+                    </div>
+
+                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0 mt-4 md:mt-0">
                         Desenvolvido com <i class="fas fa-heart text-red-500"></i> no Brasil
                     </div>
                 </div>

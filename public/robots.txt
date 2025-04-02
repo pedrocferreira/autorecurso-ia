@@ -1,2 +1,18 @@
 User-agent: *
-Disallow:
+Allow: /
+Allow: /terms
+Allow: /privacy
+
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
+Disallow: /password
+Disallow: /email
+Disallow: /profile
+
+# Cache-Control: public, max-age=31536000
+# X-Content-Type-Options: nosniff
+# X-Frame-Options: DENY
+# X-XSS-Protection: 1; mode=block
+
+Sitemap: https://autorecurso.online/sitemap.xml

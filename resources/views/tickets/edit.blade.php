@@ -41,13 +41,13 @@
                             
                             <div>
                                 <x-input-label for="name" :value="__('Nome Completo')" />
-                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $ticket->name)" required autofocus />
+                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $ticket->name)" required autofocus placeholder="Ex: João Silva" />
                                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
                             </div>
 
                             <div>
                                 <x-input-label for="cpf" :value="__('CPF')" />
-                                <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" :value="old('cpf', $ticket->cpf)" required />
+                                <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" :value="old('cpf', $ticket->cpf)" required placeholder="Ex: 123.456.789-00" />
                                 <x-input-error class="mt-2" :messages="$errors->get('cpf')" />
                             </div>
 
@@ -65,7 +65,7 @@
 
                             <div>
                                 <x-input-label for="address" :value="__('Endereço Completo')" />
-                                <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $ticket->address)" required />
+                                <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $ticket->address)" required placeholder="Ex: Rua das Flores, 123, Apto 45, Centro, São Paulo - SP" />
                                 <x-input-error class="mt-2" :messages="$errors->get('address')" />
                             </div>
 
@@ -88,7 +88,7 @@
                             
                             <div>
                                 <x-input-label for="plate" :value="__('Placa do Veículo')" />
-                                <x-text-input id="plate" name="plate" type="text" class="mt-1 block w-full" :value="old('plate', $ticket->plate)" required />
+                                <x-text-input id="plate" name="plate" type="text" class="mt-1 block w-full" :value="old('plate', $ticket->plate)" required placeholder="Ex: ABC1234" />
                                 <x-input-error class="mt-2" :messages="$errors->get('plate')" />
                             </div>
 
@@ -129,6 +129,25 @@
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900">Dados da Multa</h3>
                             
+                            <!-- Detalhes da Multa Atual -->
+                            @if($ticket->infraction_type)
+                            <div class="bg-blue-50 p-4 rounded-md border border-blue-200 mb-4">
+                                <h4 class="font-medium text-blue-800 mb-2">Detalhes da Infração Atual:</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Código:</span> {{ $ticket->infraction_type->code }}</p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Descrição:</span> {{ $ticket->infraction_type->description }}</p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Artigo CTB:</span> {{ $ticket->infraction_type->article }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Valor da Multa:</span> R$ {{ number_format($ticket->amount, 2, ',', '.') }}</p>
+                                        <p class="text-sm text-gray-700 font-bold text-red-600"><span class="font-semibold">Pontos na CNH:</span> {{ $ticket->points }}</p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Data da Infração:</span> {{ $ticket->date ? $ticket->date->format('d/m/Y') : 'N/A' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            
                             <div>
                                 <x-input-label for="infraction_type_id" :value="__('Tipo de Infração')" />
                                 <select id="infraction_type_id" name="infraction_type_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
@@ -140,6 +159,22 @@
                                     @endforeach
                                 </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('infraction_type_id')" />
+                            </div>
+
+                            <!-- Detalhes da Infração Selecionada -->
+                            <div id="infraction-details" class="bg-blue-50 p-4 rounded-md border border-blue-200 mt-2 hidden">
+                                <h4 class="font-medium text-blue-800 mb-2">Detalhes da Infração Selecionada:</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Código:</span> <span id="infraction-code">-</span></p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Descrição:</span> <span id="infraction-description">-</span></p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Artigo CTB:</span> <span id="infraction-article">-</span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Valor da Multa:</span> R$ <span id="infraction-amount">-</span></p>
+                                        <p class="text-sm text-gray-700 font-bold text-red-600"><span class="font-semibold">Pontos na CNH:</span> <span id="infraction-points">-</span></p>
+                                    </div>
+                                </div>
                             </div>
 
                             <div>
@@ -161,10 +196,23 @@
                             </div>
 
                             <div>
-                                <x-input-label for="reason" :value="__('Observações (opcional)')" />
-                                <textarea id="reason" name="reason" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3">{{ old('reason', $ticket->reason) }}</textarea>
-                                <p class="text-xs text-gray-500 mt-1">Descreva o que aconteceu, circunstâncias ou detalhes relevantes sobre a infração.</p>
+                                <x-input-label for="reason" :value="__('Descrição da Infração')" />
+                                <textarea id="reason" name="reason" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3" required>{{ old('reason', $ticket->reason) }}</textarea>
                                 <x-input-error class="mt-2" :messages="$errors->get('reason')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="client_justification" :value="__('Sua Justificativa / Versão dos Fatos')" />
+                                <textarea id="client_justification" name="client_justification" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="4">{{ old('client_justification', $ticket->client_justification) }}</textarea>
+                                <p class="mt-1 text-sm text-gray-500">Descreva sua versão dos fatos e argumentos que justificam a contestação da multa. Esta informação será usada como base para a geração do recurso.</p>
+                                <x-input-error class="mt-2" :messages="$errors->get('client_justification')" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="process_number" :value="__('Número do Processo')" />
+                                <x-text-input id="process_number" name="process_number" type="text" class="mt-1 block w-full" :value="old('process_number', $ticket->process_number)" />
+                                <p class="mt-1 text-sm text-gray-500">Se houver um número de processo relacionado à multa, informe-o aqui.</p>
+                                <x-input-error class="mt-2" :messages="$errors->get('process_number')" />
                             </div>
                         </div>
 
@@ -189,7 +237,7 @@
                         points: {{ $type->points }}, 
                         amount: {{ $type->base_amount }}, 
                         description: "{{ $type->description }}",
-                        article: "{{ $type->article }}",
+                        article: "{{ $type->article ?? 'N/A' }}",
                         code: "{{ $type->code }}"
                     },
                 @endforeach
@@ -199,6 +247,12 @@
             const infractionTypeSelect = document.getElementById('infraction_type_id');
             const pointsInput = document.getElementById('points');
             const amountInput = document.getElementById('amount');
+            const infractionDetails = document.getElementById('infraction-details');
+            const infractionCode = document.getElementById('infraction-code');
+            const infractionDescription = document.getElementById('infraction-description');
+            const infractionArticle = document.getElementById('infraction-article');
+            const infractionAmount = document.getElementById('infraction-amount');
+            const infractionPoints = document.getElementById('infraction-points');
 
             // Atualiza os campos quando um tipo de infração é selecionado
             if (infractionTypeSelect) {
@@ -206,7 +260,7 @@
                     const selectedInfractionId = this.value;
                     
                     if (selectedInfractionId && infractionData[selectedInfractionId]) {
-                        // Preenche os pontos
+                        // Preenche os pontos e valor da multa
                         if (pointsInput) {
                             pointsInput.value = infractionData[selectedInfractionId].points;
                         }
@@ -215,8 +269,29 @@
                         if (amountInput) {
                             amountInput.value = infractionData[selectedInfractionId].amount.toFixed(2);
                         }
+                        
+                        // Atualiza e mostra os detalhes da infração
+                        infractionCode.textContent = infractionData[selectedInfractionId].code;
+                        infractionDescription.textContent = infractionData[selectedInfractionId].description;
+                        infractionArticle.textContent = infractionData[selectedInfractionId].article;
+                        infractionAmount.textContent = infractionData[selectedInfractionId].amount.toFixed(2).replace('.', ',');
+                        infractionPoints.textContent = infractionData[selectedInfractionId].points;
+                        infractionDetails.classList.remove('hidden');
+                    } else {
+                        // Esconde os detalhes se nenhuma infração estiver selecionada
+                        infractionDetails.classList.add('hidden');
                     }
                 });
+                
+                // Verifica se já há uma infração selecionada ao carregar a página
+                if (infractionTypeSelect.value && infractionData[infractionTypeSelect.value]) {
+                    infractionCode.textContent = infractionData[infractionTypeSelect.value].code;
+                    infractionDescription.textContent = infractionData[infractionTypeSelect.value].description;
+                    infractionArticle.textContent = infractionData[infractionTypeSelect.value].article;
+                    infractionAmount.textContent = infractionData[infractionTypeSelect.value].amount.toFixed(2).replace('.', ',');
+                    infractionPoints.textContent = infractionData[infractionTypeSelect.value].points;
+                    infractionDetails.classList.remove('hidden');
+                }
             }
         });
     </script>

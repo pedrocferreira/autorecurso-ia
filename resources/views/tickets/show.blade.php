@@ -45,28 +45,92 @@
 
                             <div class="mb-4">
                                 <div class="text-sm font-medium text-gray-500">Placa do Veículo</div>
-                                <div class="mt-1 text-lg">{{ $ticket->plate }}</div>
+                                <div class="mt-1 text-lg">{{ $ticket->vehicle_plate }}</div>
                             </div>
 
                             <div class="mb-4">
                                 <div class="text-sm font-medium text-gray-500">Data da Multa</div>
-                                <div class="mt-1 text-lg">{{ $ticket->date->format('d/m/Y') }}</div>
+                                <div class="mt-1 text-lg">{{ $ticket->infraction_date ? $ticket->infraction_date->format('d/m/Y') : 'N/A' }}</div>
                             </div>
 
                             <div class="mb-4">
                                 <div class="text-sm font-medium text-gray-500">Local da Infração</div>
-                                <div class="mt-1 text-lg">{{ $ticket->location }}</div>
+                                <div class="mt-1 text-lg">{{ $ticket->infraction_location ?? $ticket->location ?? 'N/A' }}</div>
+                            </div>
+
+                            <!-- Informações do Tipo de Infração -->
+                            <div class="mb-4">
+                                <div class="text-sm font-medium text-gray-500">Tipo de Infração</div>
+                                <div class="mt-1 text-lg">
+                                    <span class="font-semibold">{{ $ticket->infractionType->code }}</span> - 
+                                    {{ $ticket->infractionType->description }}
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="text-sm font-medium text-gray-500">Artigo da Lei</div>
+                                <div class="mt-1 text-lg">{{ $ticket->infractionType->law_article }}</div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="text-sm font-medium text-gray-500">Gravidade</div>
+                                <div class="mt-1 text-lg">
+                                    @php
+                                        $severityColors = [
+                                            'light' => 'bg-yellow-100 text-yellow-800',
+                                            'medium' => 'bg-orange-100 text-orange-800',
+                                            'serious' => 'bg-red-100 text-red-800',
+                                            'very_serious' => 'bg-red-200 text-red-900'
+                                        ];
+                                        $severityColor = $severityColors[$ticket->infractionType->severity] ?? 'bg-gray-100 text-gray-800';
+                                    @endphp
+                                    <span class="px-2 py-1 rounded-full text-sm {{ $severityColor }}">
+                                        {{ $ticket->infractionType->severity_text }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="text-sm font-medium text-gray-500">Pontos na CNH</div>
+                                <div class="mt-1 text-lg font-semibold">{{ $ticket->infraction_points ?? $ticket->points ?? $ticket->infractionType->points ?? 0 }} pontos</div>
                             </div>
 
                             <div class="mb-4">
                                 <div class="text-sm font-medium text-gray-500">Valor da Multa</div>
-                                <div class="mt-1 text-lg font-semibold text-red-600">R$ {{ number_format($ticket->amount, 2, ',', '.') }}</div>
+                                <div class="mt-1 text-lg font-semibold text-red-600">
+                                    @if ($ticket->infraction_amount)
+                                        R$ {{ number_format($ticket->infraction_amount, 2, ',', '.') }}
+                                    @else
+                                        {{ $ticket->infractionType->formatted_amount ?? 'Não informado' }}
+                                    @endif
+                                </div>
                             </div>
 
                             <div class="mb-4">
                                 <div class="text-sm font-medium text-gray-500">Motivo da Autuação</div>
                                 <div class="mt-1 text-lg">{{ $ticket->reason }}</div>
                             </div>
+
+                            <div class="mb-4">
+                                <div class="text-sm font-medium text-gray-500">Descrição da Infração</div>
+                                <div class="mt-1 text-lg">{{ $ticket->reason ?: 'Não informado' }}</div>
+                            </div>
+
+                            @if($ticket->client_justification)
+                            <div class="mb-4">
+                                <div class="text-sm font-medium text-gray-500">Justificativa do Condutor</div>
+                                <div class="mt-1 text-lg bg-blue-50 p-4 rounded-lg border border-blue-200">
+                                    {{ $ticket->client_justification }}
+                                </div>
+                            </div>
+                            @endif
+
+                            @if($ticket->process_number)
+                            <div class="mb-4">
+                                <div class="text-sm font-medium text-gray-500">Número do Processo</div>
+                                <div class="mt-1 text-lg">{{ $ticket->process_number }}</div>
+                            </div>
+                            @endif
                         </div>
 
                         <!-- Informações Complementares -->
@@ -90,7 +154,7 @@
 
                             <div class="mb-4">
                                 <div class="text-sm font-medium text-gray-500">CNH do Motorista</div>
-                                <div class="mt-1 text-lg">{{ $ticket->driver_license ?: 'Não informado' }}</div>
+                                <div class="mt-1 text-lg">{{ $ticket->cnh_number ?? $ticket->driver_license ?? 'Não informado' }}</div>
                             </div>
 
                             <div class="mb-4">
@@ -142,15 +206,11 @@
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                         </svg>
                                                     </a>
-                                                    <a href="{{ route('appeals.download', $appeal->id) }}" class="text-green-600 hover:text-green-900" title="Baixar PDF">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                        </svg>
-                                                    </a>
+
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endforeach 
                                 </tbody>
                             </table>
                         </div>

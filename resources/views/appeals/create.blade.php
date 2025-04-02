@@ -27,7 +27,7 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('appeals.store') }}" class="space-y-6">
+                    <form id="appealForm" method="POST" action="{{ route('appeals.store') }}" class="space-y-6">
                         @csrf
                         <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
 
@@ -125,6 +125,25 @@
                         <div class="space-y-4">
                             <h3 class="text-lg font-medium text-gray-900">Dados da Multa</h3>
                             
+                            <!-- Detalhes da Multa -->
+                            @if($ticket->infraction_type)
+                            <div class="bg-blue-50 p-4 rounded-md border border-blue-200 mb-4">
+                                <h4 class="font-medium text-blue-800 mb-2">Detalhes da Infração:</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Código:</span> {{ $ticket->infraction_type->code }}</p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Descrição:</span> {{ $ticket->infraction_type->description }}</p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Artigo CTB:</span> {{ $ticket->infraction_type->article }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Valor da Multa:</span> R$ {{ number_format($ticket->amount, 2, ',', '.') }}</p>
+                                        <p class="text-sm text-gray-700 font-bold text-red-600"><span class="font-semibold">Pontos na CNH:</span> {{ $ticket->points }}</p>
+                                        <p class="text-sm text-gray-700"><span class="font-semibold">Data da Infração:</span> {{ $ticket->date ? $ticket->date->format('d/m/Y') : 'N/A' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            
                             <div>
                                 <x-input-label for="infraction_type_id" :value="__('Tipo de Infração')" />
                                 <select id="infraction_type_id" name="infraction_type_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
@@ -158,9 +177,9 @@
                             </div>
 
                             <div>
-                                <x-input-label for="reason" :value="__('Descrição da Infração')" />
-                                <textarea id="reason" name="reason" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3" required>{{ old('reason', $ticket->reason) }}</textarea>
-                                <x-input-error class="mt-2" :messages="$errors->get('reason')" />
+                                <x-input-label for="client_justification" :value="__('Descrição da Infração')" />
+                                <textarea id="client_justification" name="client_justification" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3" required>{{ old('client_justification', $ticket->client_justification) }}</textarea>
+                                <x-input-error class="mt-2" :messages="$errors->get('client_justification')" />
                             </div>
                         </div>
 
@@ -168,87 +187,308 @@
                             <a href="{{ route('tickets.show', $ticket) }}" class="inline-flex items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-400 active:bg-gray-500 focus:outline-none focus:border-gray-500 focus:ring ring-gray-300 disabled:opacity-25 transition mr-2">
                                 Cancelar
                             </a>
+
                             <button type="submit" id="submit-btn" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition">
                                 <i class="fas fa-file-alt mr-2"></i>
                                 Gerar Recurso
                             </button>
                         </div>
-
-                        <!-- Loading Overlay -->
-                        <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex-col items-center justify-center hidden">
-                            <div class="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto mt-20 text-center">
-                                <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-500 mx-auto mb-4"></div>
-                                <h3 class="text-xl font-bold mb-2">Gerando Recurso</h3>
-                                <p class="mb-4">Estamos elaborando um recurso personalizado com base nos dados fornecidos.</p>
-                                <div id="loading-status" class="text-sm text-gray-600">
-                                    <p class="mb-2" id="status-message">Analisando os detalhes da infração...</p>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                                        <div id="progress-bar" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const submitBtn = document.getElementById('submit-btn');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const progressBar = document.getElementById('progress-bar');
-        const statusMessage = document.getElementById('status-message');
-        
-        const messages = [
-            "Analisando os detalhes da infração...",
-            "Consultando a legislação de trânsito...",
-            "Identificando fundamentos jurídicos...",
-            "Elaborando argumentação técnica...",
-            "Verificando jurisprudência aplicável...",
-            "Estruturando a defesa administrativa...",
-            "Aplicando formatação jurídica...",
-            "Finalizando a redação do recurso...",
-            "Gerando o documento PDF..."
-        ];
-        
-        let currentStep = 0;
-        let interval;
-        
-        form.addEventListener('submit', function(e) {
-            // Mostrar a overlay de carregamento
-            loadingOverlay.classList.remove('hidden');
-            loadingOverlay.classList.add('flex');
-            
-            // Desabilitar o botão de submit
-            submitBtn.disabled = true;
-            
-            // Iniciar a animação de progresso
-            currentStep = 0;
-            updateStatus();
-            
-            interval = setInterval(function() {
-                currentStep++;
-                if (currentStep >= messages.length) {
-                    clearInterval(interval);
+    
+
+    <!-- Overlay de Carregamento -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-animation">
+                <div class="loading-circle"></div>
+                <div class="loading-circle"></div>
+                <div class="loading-circle"></div>
+            </div>
+            <h4>Gerando seu recurso...</h4>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text">Processando...</div>
+            </div>
+            <div class="loading-steps">
+                <div class="step active">
+                    <i class="fas fa-search"></i>
+                    <span>Analisando os detalhes da infração</span>
+                </div>
+                <div class="step">
+                    <i class="fas fa-book"></i>
+                    <span>Consultando a legislação</span>
+                </div>
+                <div class="step">
+                    <i class="fas fa-gavel"></i>
+                    <span>Elaborando argumentação</span>
+                </div>
+                <div class="step">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Gerando documento</span>
+                </div>
+            </div>
+            <div class="alert alert-info mt-4">
+                <h6><i class="fas fa-info-circle"></i> Informações sobre a entrega:</h6>
+                <p>Após a geração, você receberá um PDF com todas as informações necessárias. O endereço para entrega do recurso está disponível na notificação da multa.</p>
+                <p>Documentos necessários para anexar:</p>
+                <ul>
+                    <li>Cópia da CNH</li>
+                    <li>Cópia do documento do veículo</li>
+                    <li>Cópia do comprovante de endereço</li>
+                    <li>Cópia da notificação da multa</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(5px);
+    }
+
+    .loading-content {
+        text-align: center;
+        max-width: 600px;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .loading-animation {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .loading-circle {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #4F46E5;
+        margin: 0 8px;
+        animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .loading-circle:nth-child(1) { animation-delay: -0.32s; }
+    .loading-circle:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+    }
+
+    .loading-content h4 {
+        color: #1F2937;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .loading-progress {
+        margin-bottom: 2rem;
+    }
+
+    .progress-bar {
+        height: 6px;
+        background-color: #E5E7EB;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background-color: #4F46E5;
+        width: 0%;
+        animation: progress 2s ease-in-out infinite;
+    }
+
+    @keyframes progress {
+        0% { width: 0%; }
+        50% { width: 100%; }
+        100% { width: 0%; }
+    }
+
+    .progress-text {
+        color: #6B7280;
+        font-size: 0.875rem;
+    }
+
+    .loading-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        background-color: #F3F4F6;
+        transition: all 0.3s ease;
+    }
+
+    .step.active {
+        background-color: #EEF2FF;
+        color: #4F46E5;
+    }
+
+    .step i {
+        font-size: 1.25rem;
+    }
+
+    .step span {
+        font-size: 0.875rem;
+    }
+
+    .alert {
+        background-color: #F0F9FF;
+        border: 1px solid #BAE6FD;
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: left;
+    }
+
+    .alert h6 {
+        color: #0369A1;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .alert p {
+        color: #0369A1;
+        margin-bottom: 0.5rem;
+    }
+
+    .alert ul {
+        color: #0369A1;
+        margin-bottom: 0;
+        padding-left: 1.5rem;
+    }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('appealForm');
+            const submitBtn = document.getElementById('submit-btn');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const progressFill = document.querySelector('.progress-fill');
+            const progressText = document.querySelector('.progress-text');
+            const steps = document.querySelectorAll('.loading-steps .step');
+            let currentStep = 0;
+
+            // Função para atualizar o progresso
+            function updateProgress(step) {
+                const progress = (step / steps.length) * 100;
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `Processando... ${Math.round(progress)}%`;
+                
+                // Atualiza os passos
+                steps.forEach((s, index) => {
+                    if (index < step) {
+                        s.classList.add('active');
+                        s.classList.add('completed');
+                    } else if (index === step) {
+                        s.classList.add('active');
+                        s.classList.remove('completed');
+                    } else {
+                        s.classList.remove('active');
+                        s.classList.remove('completed');
+                    }
+                });
+            }
+
+            // Função para simular o processamento
+            function simulateProcessing() {
+                const steps = [
+                    { text: 'Analisando os detalhes da infração...', duration: 2000 },
+                    { text: 'Consultando a legislação...', duration: 2500 },
+                    { text: 'Elaborando argumentação...', duration: 3000 },
+                    { text: 'Gerando documento...', duration: 2000 }
+                ];
+
+                let currentStep = 0;
+                const totalSteps = steps.length;
+
+                function processNextStep() {
+                    if (currentStep < totalSteps) {
+                        const step = steps[currentStep];
+                        progressText.textContent = step.text;
+                        updateProgress(currentStep + 1);
+
+                        setTimeout(() => {
+                            currentStep++;
+                            processNextStep();
+                        }, step.duration);
+                    } else {
+                        progressText.textContent = 'Processamento concluído!';
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                            submitBtn.disabled = false;
+                        }, 1000);
+                    }
+                }
+
+                processNextStep();
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Validação básica dos campos obrigatórios
+                const requiredFields = [
+                    'name', 'cpf', 'driver_license', 'driver_license_category',
+                    'address', 'phone', 'email', 'plate', 'vehicle_model',
+                    'vehicle_year', 'vehicle_color', 'vehicle_chassi', 'vehicle_renavam',
+                    'date', 'amount', 'points', 'client_justification', 'infraction_type_id'
+                ];
+
+                let missingFields = [];
+                requiredFields.forEach(field => {
+                    const input = form.querySelector(`[name="${field}"]`);
+                    if (!input || !input.value.trim()) {
+                        missingFields.push(field);
+                    }
+                });
+
+                if (missingFields.length > 0) {
+                    alert('Por favor, preencha todos os campos obrigatórios:\n' + missingFields.join('\n'));
                     return;
                 }
-                updateStatus();
-            }, 3000);
-            
-            // O formulário continua normalmente
+
+                // Desabilita o botão e mostra o overlay
+                submitBtn.disabled = true;
+                loadingOverlay.style.display = 'flex';
+                updateProgress(0);
+
+                // Simula o processamento
+                simulateProcessing();
+
+                // Envia o formulário
+                form.submit();
+            });
         });
-        
-        function updateStatus() {
-            statusMessage.textContent = messages[currentStep];
-            const progress = Math.min(100, Math.round((currentStep + 1) / messages.length * 100));
-            progressBar.style.width = progress + '%';
-        }
-    });
-</script>
-@endpush
+    </script>
+</x-app-layout>

@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeEmail;
+use Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
 {
@@ -50,6 +53,27 @@ class RegisteredUserController extends Controller
             ]);
     
             event(new Registered($user));
+    
+            // Envia email de boas-vindas
+            try {
+                Log::channel('email')->info('Tentando enviar email de boas-vindas', [
+                    'user_id' => $user->id,
+                    'user_email' => $user->email
+                ]);
+
+                Mail::to($user->email)->send(new WelcomeEmail($user));
+
+                Log::channel('email')->info('Email de boas-vindas enviado com sucesso', [
+                    'user_id' => $user->id
+                ]);
+            } catch (\Exception $e) {
+                Log::channel('email')->error('Erro ao enviar email de boas-vindas', [
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                // Não interrompe o fluxo, apenas registra o erro
+            }
     
             Auth::login($user);
     

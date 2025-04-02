@@ -36,7 +36,10 @@ class TicketController extends Controller
      */
     public function create(): View
     {
-        return view('tickets.create');
+        $infractionTypes = InfractionType::where('active', true)
+            ->orderBy('code')
+            ->get();
+        return view('tickets.create', compact('infractionTypes'));
     }
 
     /**
@@ -45,30 +48,96 @@ class TicketController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
+            // Dados Pessoais
             'name' => 'required|string|max:255',
             'cpf' => 'required|string|max:14',
-            'driver_license' => 'required|string|max:255',
-            'driver_license_category' => 'required|string|max:5',
-            'address' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
-            'plate' => 'required|string|max:10',
-            'vehicle_model' => 'required|string|max:255',
-            'vehicle_year' => 'required|integer',
-            'vehicle_color' => 'required|string|max:50',
+            'address' => 'required|string|max:255',
+            'birth_date' => 'required|date',
+            'cnh_number' => 'required|string|max:11',
+            'cnh_category' => 'required|string|max:2',
+            'cnh_expiration' => 'required|date',
+
+            // Dados do Veículo
+            'vehicle_plate' => 'required|string|max:7',
             'vehicle_chassi' => 'required|string|max:17',
             'vehicle_renavam' => 'required|string|max:11',
-            'date' => 'required|date',
-            'amount' => 'required|numeric|min:0',
-            'points' => 'required|integer|min:0',
-            'reason' => 'nullable|string|max:1000',
-            'infraction_type_id' => 'required|exists:infraction_types,id'
+            'vehicle_brand' => 'required|string|max:100',
+            'vehicle_model' => 'required|string|max:255',
+            'vehicle_year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'vehicle_color' => 'required|string|max:50',
+            'vehicle_owner' => 'required|string|max:255',
+
+            // Dados da Infração
+            'infraction_type_id' => 'required|exists:infraction_types,id',
+            'infraction_date' => 'required|date',
+            'infraction_location' => 'required|string|max:255',
+            'infraction_agent' => 'required|string|max:100',
+            'infraction_equipment' => 'nullable|string|max:100',
+            'infraction_points' => 'required|integer|min:0',
+            'infraction_amount' => 'required|numeric|min:0',
+            'client_justification' => 'required|string|max:5000',
+            'process_number' => 'nullable|string|max:100',
         ], [
             'vehicle_chassi.max' => 'O campo chassi deve ter no máximo 17 caracteres.',
-            'vehicle_renavam.max' => 'O campo RENAVAM deve ter no máximo 11 caracteres.'
+            'vehicle_renavam.max' => 'O campo RENAVAM deve ter no máximo 11 caracteres.',
+            'client_justification.max' => 'A justificativa não pode exceder 5000 caracteres.'
         ]);
 
+        // Obter os detalhes da infração
+        $infractionType = InfractionType::findOrFail($request->infraction_type_id);
+        
+        // Se os pontos ou valor estiverem vazios, use os valores do tipo de infração
+        if (empty($validated['infraction_points']) || $validated['infraction_points'] == 0) {
+            $validated['infraction_points'] = $infractionType->points;
+        }
+        
+        // Garantir que o valor da infração nunca seja nulo
+        if (!isset($validated['infraction_amount']) || $validated['infraction_amount'] === null || $validated['infraction_amount'] === '' || floatval($validated['infraction_amount']) == 0) {
+            // Usar base_amount em vez de amount
+            $validated['infraction_amount'] = $infractionType->base_amount;
+        } else {
+            // Converter para float para garantir que seja um número válido
+            $validated['infraction_amount'] = floatval($validated['infraction_amount']);
+        }
+
         $ticket = Auth::user()->tickets()->create($validated);
+
+        // Gerar recurso automaticamente
+        if ($ticket) {
+            try {
+                // Extrair cidade do endereço do usuário
+                $address = $validated['address'];
+                $cityMatch = [];
+                preg_match('/([A-Za-zÀ-ÿ\s]+)(?:\s*-\s*[A-Z]{2})?(?:\s*-\s*CEP:?.*)?$/', $address, $cityMatch);
+                $city = !empty($cityMatch[1]) ? trim($cityMatch[1]) : 'São Paulo';
+                
+                // Dados para o recurso
+                $appealData = [
+                    'ticket_id' => $ticket->id,
+                    'user_id' => Auth::id(),
+                    'status' => 'pending',
+                    'text' => null, // Será gerado pelo serviço
+                    'location' => $city, // Cidade extraída do endereço
+                    'generated_at' => now(),
+                ];
+                
+                // Criar o recurso
+                $appeal = \App\Models\Appeal::create($appealData);
+                
+                // Gerar o texto e PDF do recurso via AppealController
+                $appealController = app()->make(\App\Http\Controllers\AppealController::class);
+                $appeal = $appealController->generateAppealForTicket($ticket, $appeal);
+                
+                return redirect()->route('appeals.show', $appeal->id)
+                    ->with('success', 'Multa cadastrada e recurso gerado com sucesso!');
+            } catch (\Exception $e) {
+                \Log::error('Erro ao gerar recurso automático: ' . $e->getMessage());
+                return redirect()->route('tickets.show', $ticket->id)
+                    ->with('warning', 'Multa cadastrada com sucesso, mas houve um erro ao gerar o recurso automático. Por favor, gere o recurso manualmente.');
+            }
+        }
 
         return redirect()->route('tickets.show', $ticket->id)
             ->with('success', 'Multa cadastrada com sucesso!');
@@ -106,7 +175,7 @@ class TicketController extends Controller
             'plate' => 'required|string|max:10',
             'date' => 'required|date',
             'location' => 'required|string|max:255',
-            'reason' => 'nullable|string|max:1000',
+            'client_justification' => 'required|string|max:5000',
             'amount' => 'required|numeric|min:0',
             'citation_number' => 'nullable|string|max:255',
             'vehicle_model' => 'nullable|string|max:255',
@@ -115,9 +184,12 @@ class TicketController extends Controller
             'vehicle_chassi' => 'nullable|string|max:17',
             'vehicle_renavam' => 'nullable|string|max:11',
             'infraction_type_id' => 'nullable|exists:infraction_types,id',
+            'infraction_equipment' => 'nullable|string|max:100',
+            'process_number' => 'nullable|string|max:100',
         ], [
             'vehicle_chassi.max' => 'O campo chassi deve ter no máximo 17 caracteres.',
-            'vehicle_renavam.max' => 'O campo RENAVAM deve ter no máximo 11 caracteres.'
+            'vehicle_renavam.max' => 'O campo RENAVAM deve ter no máximo 11 caracteres.',
+            'client_justification.max' => 'A justificativa não pode exceder 5000 caracteres.'
         ]);
 
         $ticket->update($validated);

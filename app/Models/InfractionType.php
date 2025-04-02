@@ -16,11 +16,11 @@ class InfractionType extends Model
      */
     protected $fillable = [
         'code',
-        'name',
+        'law_article',
         'description',
-        'article',
         'base_amount',
         'points',
+        'severity',
         'active'
     ];
 
@@ -30,7 +30,7 @@ class InfractionType extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'base_amount' => 'float',
+        'base_amount' => 'decimal:2',
         'points' => 'integer',
         'active' => 'boolean'
     ];
@@ -41,5 +41,43 @@ class InfractionType extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    /**
+     * Scope para infrações ativas
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+
+    /**
+     * Scope para filtrar por gravidade
+     */
+    public function scopeBySeverity($query, $severity)
+    {
+        return $query->where('severity', $severity);
+    }
+
+    /**
+     * Retorna o texto da gravidade formatado
+     */
+    public function getSeverityTextAttribute()
+    {
+        return match($this->severity) {
+            'light' => 'Leve',
+            'medium' => 'Média',
+            'serious' => 'Grave',
+            'very_serious' => 'Gravíssima',
+            default => $this->severity
+        };
+    }
+
+    /**
+     * Retorna o valor formatado em reais
+     */
+    public function getFormattedAmountAttribute()
+    {
+        return 'R$ ' . number_format($this->base_amount, 2, ',', '.');
     }
 }

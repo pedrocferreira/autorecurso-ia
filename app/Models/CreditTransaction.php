@@ -22,7 +22,7 @@ class CreditTransaction extends Model
         'balance_after',
         'description',
         'metadata',
-        'appeal_id',
+        'appeal_id'
     ];
 
     /**
@@ -33,7 +33,7 @@ class CreditTransaction extends Model
     protected $casts = [
         'amount' => 'integer',
         'balance_after' => 'integer',
-        'metadata' => 'json',
+        'metadata' => 'array'
     ];
 
     /**

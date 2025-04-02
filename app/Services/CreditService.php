@@ -5,13 +5,24 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\Appeal;
 use App\Models\CreditTransaction;
+use App\Exceptions\InsufficientCreditsException;
 
 class CreditService
 {
     /**
-     * Custo em créditos para gerar um recurso
+     * Custo em créditos para gerar um recurso (valor padrão, caso não seja possível determinar o tipo da infração)
      */
     const APPEAL_GENERATION_COST = 1;
+
+    /**
+     * Custo em créditos para cada tipo de gravidade
+     */
+    const CREDIT_COST_BY_SEVERITY = [
+        'light' => 1,      // Leve - 1 crédito
+        'medium' => 3,     // Média - 3 créditos
+        'serious' => 5,    // Grave - 5 créditos
+        'very_serious' => 8, // Gravíssima - 8 créditos
+    ];
 
     /**
      * Adiciona créditos a um usuário e registra a transação
@@ -42,24 +53,50 @@ class CreditService
      * @param User $user Usuário que terá os créditos consumidos
      * @param Appeal $appeal Recurso gerado
      * @return CreditTransaction
-     * @throws \Exception Se o usuário não tiver créditos suficientes
+     * @throws \App\Exceptions\InsufficientCreditsException Se o usuário não tiver créditos suficientes
      */
     public function consumeCreditsForAppeal(User $user, Appeal $appeal): CreditTransaction
     {
-        if (!$user->hasEnoughCredits(self::APPEAL_GENERATION_COST)) {
-            throw new \Exception('Créditos insuficientes para gerar o recurso');
+        // Obtém a gravidade da infração
+        $ticket = $appeal->ticket;
+        $infractionType = $ticket->infractionType;
+        
+        // Determina o custo em créditos com base na gravidade
+        $creditCost = $this->getAppealCreditCost($infractionType);
+        
+        if (!$user->hasEnoughCredits($creditCost)) {
+            $severityText = $infractionType ? ucfirst($infractionType->severity_text) : 'Não identificada';
+            throw new \App\Exceptions\InsufficientCreditsException(
+                "Você não possui créditos suficientes para gerar um recurso para esta infração. 
+                Gravidade: {$severityText}. Custo: {$creditCost} créditos."
+            );
         }
 
-        $user->removeCredits(self::APPEAL_GENERATION_COST);
+        $user->removeCredits($creditCost);
 
         return CreditTransaction::create([
             'user_id' => $user->id,
             'type' => 'consumption',
-            'amount' => -self::APPEAL_GENERATION_COST,
+            'amount' => -$creditCost,
             'balance_after' => $user->credits,
-            'description' => 'Geração de recurso #' . $appeal->id,
+            'description' => 'Geração de recurso #' . $appeal->id . ' - ' . ($infractionType ? $infractionType->severity_text : 'Infração'),
             'appeal_id' => $appeal->id,
         ]);
+    }
+
+    /**
+     * Determina o custo em créditos com base no tipo de infração
+     * 
+     * @param \App\Models\InfractionType|null $infractionType Tipo de infração
+     * @return int Custo em créditos
+     */
+    public function getAppealCreditCost($infractionType): int
+    {
+        if (!$infractionType) {
+            return self::APPEAL_GENERATION_COST;
+        }
+
+        return self::CREDIT_COST_BY_SEVERITY[$infractionType->severity] ?? self::APPEAL_GENERATION_COST;
     }
 
     /**
@@ -72,12 +109,18 @@ class CreditService
     public function refundAppealCredits(Appeal $appeal, string $reason): CreditTransaction
     {
         $user = $appeal->user;
-        $user->addCredits(self::APPEAL_GENERATION_COST);
+        $ticket = $appeal->ticket;
+        $infractionType = $ticket ? $ticket->infractionType : null;
+        
+        // Determina o custo original que foi cobrado
+        $creditCost = $this->getAppealCreditCost($infractionType);
+        
+        $user->addCredits($creditCost);
 
         return CreditTransaction::create([
             'user_id' => $user->id,
             'type' => 'refund',
-            'amount' => self::APPEAL_GENERATION_COST,
+            'amount' => $creditCost,
             'balance_after' => $user->credits,
             'description' => 'Reembolso do recurso #' . $appeal->id . ': ' . $reason,
             'appeal_id' => $appeal->id,

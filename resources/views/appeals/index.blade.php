@@ -86,11 +86,29 @@
                                                             </svg>
                                                         </a>
                                                     @endif
-                                                    <a href="{{ route('appeals.download', $appeal->id) }}" class="text-green-600 hover:text-green-900" title="Baixar PDF">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                        </svg>
-                                                    </a>
+                                                    <div class="relative inline-block text-left" x-data="{ open: false }">
+                                                        <button @click="open = !open" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                                            <i class="fas fa-download mr-2"></i>
+                                                            Baixar
+                                                        </button>
+                                                        <div x-show="open" 
+                                                             @click.away="open = false"
+                                                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+                                                             x-cloak>
+                                                            <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'pdf']) }}" 
+                                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                <i class="fas fa-file-pdf mr-2"></i> PDF
+                                                            </a>
+                                                            <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'docx']) }}" 
+                                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                <i class="fas fa-file-word mr-2"></i> Word (DOCX)
+                                                            </a>
+                                                            <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'txt']) }}" 
+                                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                                <i class="fas fa-file-alt mr-2"></i> Texto (TXT)
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
