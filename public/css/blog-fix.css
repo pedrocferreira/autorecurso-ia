@@ -1,0 +1,124 @@
+/* Estilos de correção para garantir legibilidade no blog */
+
+/* Garantir que o conteúdo do post tenha fundo branco e texto preto */
+.post-content {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* Estilos para todos os elementos no conteúdo do post */
+.post-content * {
+    color: #000000 !important;
+    background-color: transparent !important;
+    text-shadow: none !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* Estilos específicos para cada tipo de elemento */
+.post-content h1, 
+.post-content h2, 
+.post-content h3, 
+.post-content h4, 
+.post-content h5, 
+.post-content h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 700;
+    color: #000000 !important;
+    text-shadow: none !important;
+    background-color: transparent !important;
+}
+
+.post-content h1 { font-size: 2em; color: #000000 !important; }
+.post-content h2 { font-size: 1.75em; color: #000000 !important; }
+.post-content h3 { font-size: 1.5em; color: #000000 !important; }
+.post-content h4 { font-size: 1.25em; color: #000000 !important; }
+
+.post-content p,
+.post-content div,
+.post-content span,
+.post-content li {
+    color: #000000 !important;
+    line-height: 1.7;
+    background-color: transparent !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.post-content ul, 
+.post-content ol {
+    margin-left: 2em;
+    margin-bottom: 1.25em;
+    color: #000000 !important;
+}
+
+.post-content a {
+    color: #1d4ed8 !important;
+    text-decoration: underline !important;
+    font-weight: 500;
+}
+
+.post-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    color: #000000 !important;
+}
+
+.post-content th,
+.post-content td {
+    border: 1px solid #d1d5db;
+    padding: 0.5em;
+    color: #000000 !important;
+    background-color: transparent !important;
+}
+
+.post-content th {
+    background-color: #f3f4f6 !important;
+    font-weight: 600;
+    text-align: left;
+    color: #000000 !important;
+}
+
+/* Corrigir elementos específicos do TinyMCE */
+.post-content font { color: #000000 !important; }
+.post-content font[color] { color: #000000 !important; }
+.post-content span[style] { color: #000000 !important; }
+
+/* Sobrescrever classes utilitárias que podem afetar a legibilidade */
+.post-content [class*="text-white"], 
+.post-content [class*="text-gray"], 
+.post-content [class*="text-slate"] {
+    color: #000000 !important;
+}
+
+/* Remover quaisquer fontes de texto muito claras */
+.post-content [style*="color:#ffffff"],
+.post-content [style*="color: #ffffff"],
+.post-content [style*="color:#fff"],
+.post-content [style*="color: #fff"],
+.post-content [style*="color:white"],
+.post-content [style*="color: white"],
+.post-content [style*="color:rgb(255,255,255)"],
+.post-content [style*="color: rgb(255,255,255)"],
+.post-content [style*="color:rgba(255,255,255"],
+.post-content [style*="color: rgba(255,255,255"] {
+    color: #000000 !important;
+}
+
+/* Forçar fundo transparente para elementos com fundo personalizado */
+.post-content [style*="background"],
+.post-content [style*="background-color"] {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Remover sombras de texto que afetam a legibilidade */
+.post-content [style*="text-shadow"] {
+    text-shadow: none !important;
+}
+
+/* Garantir que todos os elementos sejam visíveis com bom contraste */
+.post-content * {
+    opacity: 1 !important;
+} 

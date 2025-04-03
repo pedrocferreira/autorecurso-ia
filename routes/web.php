@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CreditController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\Blog\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/tickets', [AdminController::class, 'tickets'])->name('tickets');
     Route::get('/appeals', [AdminController::class, 'appeals'])->name('appeals');
+    
+    // Rotas do Blog
+    Route::resource('posts', PostController::class);
+    Route::post('posts/{post}/publish', [PostController::class, 'publish'])->name('posts.publish');
+    Route::post('posts/{post}/unpublish', [PostController::class, 'unpublish'])->name('posts.unpublish');
+    Route::get('posts', [PostController::class, 'adminIndex'])->name('posts.index');
 });
 
 Route::post('/webhook/stripe', [WebhookController::class, 'handleStripeWebhook']);
@@ -74,5 +81,8 @@ Route::get('/terms', function () {
 Route::get('/privacy', function () {
     return view('privacy');
 })->name('privacy');
+
+Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post}', [PostController::class, 'show'])->name('blog.show');
 
 require __DIR__.'/auth.php';
