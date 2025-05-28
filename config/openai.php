@@ -4,16 +4,43 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | OpenAI API Key and Organization
+    | OpenAI API Key
     |--------------------------------------------------------------------------
     |
-    | Here you may specify your OpenAI API Key and organization. This will be
-    | used to authenticate with the OpenAI API - you can find your API key
-    | and organization on your OpenAI dashboard, at https://openai.com.
+    | Sua chave de API do OpenAI
+    |
     */
-
     'api_key' => env('OPENAI_API_KEY'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | OpenAI Organization ID
+    |--------------------------------------------------------------------------
+    |
+    | ID opcional da sua organização OpenAI
+    |
+    */
     'organization' => env('OPENAI_ORGANIZATION'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modelo padrão
+    |--------------------------------------------------------------------------
+    |
+    | O modelo padrão a ser usado nas requisições
+    |
+    */
+    'model' => env('OPENAI_MODEL', 'gpt-4-turbo-preview'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Temperatura
+    |--------------------------------------------------------------------------
+    |
+    | Controla a aleatoriedade das respostas (0 = determinístico, 1 = criativo)
+    |
+    */
+    'temperature' => env('OPENAI_TEMPERATURE', 0.7),
 
     /*
     |--------------------------------------------------------------------------
@@ -24,5 +51,5 @@ return [
     | for a response. By default, the client will time out after 30 seconds.
     */
 
-    'request_timeout' => env('OPENAI_REQUEST_TIMEOUT', 30),
+    'request_timeout' => env('OPENAI_REQUEST_TIMEOUT', 60),
 ];

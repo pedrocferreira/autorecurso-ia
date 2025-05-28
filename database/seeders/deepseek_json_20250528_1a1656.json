@@ -1,0 +1,895 @@
+{
+  "infraction_types": [
+    {
+      "code": "162-10",
+      "description": "Dirigir veículo sem possuir CNH",
+      "law_article": "Art. 162, I do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "162-20",
+      "description": "Dirigir veículo com CNH cassada ou suspensa",
+      "law_article": "Art. 162, II do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "162-30",
+      "description": "Dirigir com CNH de categoria errada",
+      "law_article": "Art. 162, III do CTB",
+      "base_amount": 586.94,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "162-60",
+      "description": "Dirigir sem usar lentes corretoras de visão",
+      "law_article": "Art. 162, VI do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "162-50",
+      "description": "Dirigir com a CNH vencida (+30 dias)",
+      "law_article": "Art. 162, V do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "164-00",
+      "description": "Permitir que pessoa nas condições do art. 162 dirija",
+      "law_article": "Art. 164 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "165-00",
+      "description": "Dirigir sob a influência de álcool",
+      "law_article": "Art. 165 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "165-A0",
+      "description": "Recusar o teste do bafômetro",
+      "law_article": "Art. 165-A do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "166-00",
+      "description": "Entregar a direção a pessoa habilitada sem condições de dirigir",
+      "law_article": "Art. 166 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "167-00",
+      "description": "Deixar o condutor ou passageiro de usar o cinto de segurança",
+      "law_article": "Art. 167 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "168-00",
+      "description": "Transportar crianças de forma irregular",
+      "law_article": "Art. 168 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "169-00",
+      "description": "Dirigir sem atenção ou sem os cuidados indispensáveis à segurança",
+      "law_article": "Art. 169 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "170-00",
+      "description": "Dirigir ameaçando os pedestres ou os demais veículos",
+      "law_article": "Art. 170 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "172-00",
+      "description": "Atirar do veículo ou abandonar na via objetos ou substâncias",
+      "law_article": "Art. 172 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "173-00",
+      "description": "Disputar corrida",
+      "law_article": "Art. 173 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "174-00",
+      "description": "Promover racha",
+      "law_article": "Art. 174 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "175-00",
+      "description": "Realizar manobra perigosa",
+      "law_article": "Art. 175 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "176-10",
+      "description": "Condutor envolvido em acidente deixar de prestar socorro",
+      "law_article": "Art. 176, I do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "176-20",
+      "description": "Condutor envolvido em acidente não adotar medidas de segurança no local",
+      "law_article": "Art. 176, II do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "176-30",
+      "description": "Condutor envolvido em acidente não facilitar o trabalho da perícia",
+      "law_article": "Art. 176, III do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "176-40",
+      "description": "Condutor envolvido em acidente se recusar a mover o veículo do local",
+      "law_article": "Art. 176, IV do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "176-50",
+      "description": "Condutor envolvido em acidente não prestar informações para B.O.",
+      "law_article": "Art. 176, V do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "177-00",
+      "description": "Deixar de prestar socorro à vítima de acidente quando solicitado",
+      "law_article": "Art. 177 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "178-00",
+      "description": "Deixar o condutor, envolvido em acidente sem vítima, de remover o veículo",
+      "law_article": "Art. 178 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "179-10",
+      "description": "Reparar veículo na faixa de rolamento quando for possível a remoção",
+      "law_article": "Art. 179, I do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "179-20",
+      "description": "Reparar veículo nas demais vias quando for possível a remoção",
+      "law_article": "Art. 179, II do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "181-10",
+      "description": "Estacionar o veículo nas esquinas",
+      "law_article": "Art. 181, I do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-20",
+      "description": "Estacionar o veículo afastado da guia da calçada (50cm a 1m)",
+      "law_article": "Art. 181, II do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "181-30",
+      "description": "Estacionar o veículo afastado da guia da calçada (+1m)",
+      "law_article": "Art. 181, III do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-40",
+      "description": "Estacionar o veículo em desacordo com o CTB",
+      "law_article": "Art. 181, IV do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-50",
+      "description": "Estacionar o veículo na pista",
+      "law_article": "Art. 181, V do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-60",
+      "description": "Estacionar o veículo sobre hidrantes de incêndio",
+      "law_article": "Art. 181, VI do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-70",
+      "description": "Estacionar o veículo nos acostamentos",
+      "law_article": "Art. 181, VII do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "181-80",
+      "description": "Estacionar o veículo no passeio, faixa de pedestre, ciclovia ou ciclofaixa",
+      "law_article": "Art. 181, VIII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-90",
+      "description": "Estacionar o veículo em garagem",
+      "law_article": "Art. 181, IX do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-100",
+      "description": "Estacionar o veículo impedindo a movimentação de outro veículo",
+      "law_article": "Art. 181, X do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-110",
+      "description": "Estacionar o veículo em fila dupla",
+      "law_article": "Art. 181, XI do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-120",
+      "description": "Estacionar o veículo em cruzamento",
+      "law_article": "Art. 181, XII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-130",
+      "description": "Estacionar o veículo em parada de ônibus",
+      "law_article": "Art. 181, XIII do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-140",
+      "description": "Estacionar o veículo nos viadutos, pontes e túneis",
+      "law_article": "Art. 181, XIV do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-150",
+      "description": "Estacionar o veículo na contramão de direção",
+      "law_article": "Art. 181, XV do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-160",
+      "description": "Estacionar o veículo pesado em aclive ou declive sem calço",
+      "law_article": "Art. 181, XVI do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-170",
+      "description": "Estacionar o veículo em desacordo com a sinalização",
+      "law_article": "Art. 181, XVII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-180",
+      "description": "Estacionar o veículo em locais proibidos (placa Proibido Estacionar)",
+      "law_article": "Art. 181, XVIII do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "181-190",
+      "description": "Estacionar o veículo em locais proibidos (placa Proibido Parar e Estacionar)",
+      "law_article": "Art. 181, XIX do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "181-200",
+      "description": "Estacionar nas vagas reservadas às pessoas com deficiência ou idosos, sem credencial",
+      "law_article": "Art. 181 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "182-10",
+      "description": "Parar o veículo nas esquinas",
+      "law_article": "Art. 182, I do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "182-20",
+      "description": "Parar o veículo afastado da guia da calçada (50cm a 1m)",
+      "law_article": "Art. 182, II do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "182-30",
+      "description": "Parar o veículo afastado da guia da calçada (+1m)",
+      "law_article": "Art. 182, III do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "182-40",
+      "description": "Parar o veículo em desacordo com o CTB",
+      "law_article": "Art. 182, IV do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "182-50",
+      "description": "Parar o veículo na pista",
+      "law_article": "Art. 182, V do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "182-60",
+      "description": "Parar o veículo na faixa de pedestres",
+      "law_article": "Art. 182, VI do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "182-70",
+      "description": "Parar o veículo na área de cruzamento",
+      "law_article": "Art. 182, VII do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "182-80",
+      "description": "Parar o veículo nos viadutos, pontes e túneis",
+      "law_article": "Art. 182, VIII do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "182-90",
+      "description": "Parar o veículo na contramão de direção",
+      "law_article": "Art. 182, IX do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "182-100",
+      "description": "Parar o veículo em locais proibidos (placa Proibido Parar)",
+      "law_article": "Art. 182, X do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "183-00",
+      "description": "Parar o veículo sobre a faixa de pedestres na mudança de sinal",
+      "law_article": "Art. 183 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "184-10",
+      "description": "Transitar na faixa da direita, exclusiva para um tipo de veículo",
+      "law_article": "Art. 184, I do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "184-20",
+      "description": "Transitar na faixa da esquerda, exclusiva para um tipo de veículo",
+      "law_article": "Art. 184, II do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "184-30",
+      "description": "Transitar na faixa exclusiva para um transporte coletivo",
+      "law_article": "Art. 184, III do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "185-10",
+      "description": "Deixar de conservar o veículo na faixa correta",
+      "law_article": "Art. 185, I do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "185-20",
+      "description": "Deixar de conservar o veículo lento na faixa da direita",
+      "law_article": "Art. 185, II do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "186-10",
+      "description": "Transitar pela contramão em via de mão dupla, salvo ultrapassagem",
+      "law_article": "Art. 186, I do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "186-20",
+      "description": "Transitar pela contramão em via de sentido único",
+      "law_article": "Art. 186, II do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "187-00",
+      "description": "Transitar em locais e horários não permitidos (rodízio)",
+      "law_article": "Art. 187 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "188-00",
+      "description": "Transitar ao lado de outro veículo perturbando o trânsito",
+      "law_article": "Art. 188 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "189-00",
+      "description": "Deixar de dar passagem a veículo em serviço de urgência",
+      "law_article": "Art. 189 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "190-00",
+      "description": "Seguir veículo em serviço de urgência",
+      "law_article": "Art. 190 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "191-00",
+      "description": "Forçar passagem entre veículos",
+      "law_article": "Art. 191 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "192-00",
+      "description": "Deixar de guardar distância de segurança",
+      "law_article": "Art. 192 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "193-00",
+      "description": "Transitar com o veículo em local proibido (calçadas, ciclovias etc.)",
+      "law_article": "Art. 193 do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "194-00",
+      "description": "Transitar em marcha à ré, salvo para pequenas manobras seguras",
+      "law_article": "Art. 194 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "195-00",
+      "description": "Desobedecer às ordens da autoridade competente de trânsito",
+      "law_article": "Art. 195 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "196-00",
+      "description": "Deixar de sinalizar a parada do veículo ou mudança de direção",
+      "law_article": "Art. 196 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "197-00",
+      "description": "Não mudar de pista com antecedência para dobrar",
+      "law_article": "Art. 197 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "198-00",
+      "description": "Deixar de dar passagem pela esquerda, quando solicitado",
+      "law_article": "Art. 198 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "199-00",
+      "description": "Ultrapassar pela direita",
+      "law_article": "Art. 199 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "200-00",
+      "description": "Ultrapassar pela direita veículo de transporte coletivo parado para embarque",
+      "law_article": "Art. 200 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "201-00",
+      "description": "Deixar de guardar a distância lateral (1,5m) ao ultrapassar bicicleta",
+      "law_article": "Art. 201 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "202-10",
+      "description": "Ultrapassar veículo pelo acostamento",
+      "law_article": "Art. 202, I do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "202-20",
+      "description": "Ultrapassar veículo em intersecções e passagens de nível",
+      "law_article": "Art. 202, II do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "203-00",
+      "description": "Ultrapassar pela contramão em curvas, aclives e declives",
+      "law_article": "Art. 203 do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "203-20",
+      "description": "Ultrapassar pela contramão veículo nas faixas de pedestre",
+      "law_article": "Art. 203, II do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "203-30",
+      "description": "Ultrapassar pela contramão veículo em pontes, viadutos ou túneis",
+      "law_article": "Art. 203, III do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "203-40",
+      "description": "Ultrapassar pela contramão veículo parado por impedimento à circulação",
+      "law_article": "Art. 203, IV do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "203-50",
+      "description": "Ultrapassar em faixa amarela contínua",
+      "law_article": "Art. 203, V do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "205-00",
+      "description": "Ultrapassar cortejo, préstito, desfile e formações militares sem autorização",
+      "law_article": "Art. 205 do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "206-10",
+      "description": "Executar operação de retorno em locais proibidos pela sinalização",
+      "law_article": "Art. 206, I do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "206-20",
+      "description": "Executar retorno nas curvas, aclives, declives, pontes, viadutos e túneis",
+      "law_article": "Art. 206, II do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "206-30",
+      "description": "Executar retorno passando por local proibido (calçadas, ciclovias etc.)",
+      "law_article": "Art. 206, III do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "206-40",
+      "description": "Executar retorno entrando na contramão da via transversal",
+      "law_article": "Art. 206, IV do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "206-50",
+      "description": "Executar retorno com prejuízo da circulação ou da segurança",
+      "law_article": "Art. 206, V do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "207-00",
+      "description": "Executar operação de conversão à direita ou à esquerda em locais proibidos",
+      "law_article": "Art. 207 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "208-00",
+      "description": "Avançar o sinal vermelho do semáforo ou o de parada obrigatória",
+      "law_article": "Art. 208 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "209-00",
+      "description": "Transpor bloqueio viário sem autorização",
+      "law_article": "Art. 209 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "210-00",
+      "description": "Transpor, sem autorização, bloqueio viário policial",
+      "law_article": "Art. 210 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "211-00",
+      "description": "Ultrapassar veículos em fila, parados em sinal luminoso, ou qualquer obstáculo",
+      "law_article": "Art. 211 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "212-00",
+      "description": "Deixar de parar o veículo antes de transpor linha férrea",
+      "law_article": "Art. 212 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "213-10",
+      "description": "Deixar de parar o veículo por agrupamento de pessoas (passeatas)",
+      "law_article": "Art. 213, I do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+     
