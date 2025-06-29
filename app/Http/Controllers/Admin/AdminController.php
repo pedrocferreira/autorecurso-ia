@@ -43,9 +43,20 @@ class AdminController extends Controller
             ->get();
 
         // Estatísticas mensais de recursos gerados
+        // Ajuste para compatibilidade: SQLite não possui funções MONTH/YEAR.
+        $driver = DB::getDriverName();
+
+        if ($driver === 'sqlite') {
+            $monthExpr = "strftime('%m', created_at)";
+            $yearExpr  = "strftime('%Y', created_at)";
+        } else {
+            $monthExpr = 'MONTH(created_at)';
+            $yearExpr  = 'YEAR(created_at)';
+        }
+
         $monthly_stats = Appeal::select(
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('YEAR(created_at) as year'),
+                DB::raw("{$monthExpr} as month"),
+                DB::raw("{$yearExpr} as year"),
                 DB::raw('COUNT(*) as total')
             )
             ->whereYear('created_at', date('Y'))

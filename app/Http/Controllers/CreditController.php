@@ -38,36 +38,14 @@ class CreditController extends Controller
      */
     public function packages()
     {
-        $packages = [
-            [
-                'id' => '5_credits',
-                'amount' => 5,
-                'price' => 19.90,
-                'discount' => 0,
-                'recommended' => false,
-            ],
-            [
-                'id' => '10_credits',
-                'amount' => 10,
-                'price' => 34.90,
-                'discount' => 12,
-                'recommended' => true,
-            ],
-            [
-                'id' => '20_credits',
-                'amount' => 20,
-                'price' => 59.90,
-                'discount' => 25,
-                'recommended' => false,
-            ],
-            [
-                'id' => '50_credits',
-                'amount' => 50,
-                'price' => 129.90,
-                'discount' => 35,
-                'recommended' => false,
-            ],
-        ];
+        // Carrega os pacotes a partir do arquivo de configuração
+        // e converte para um array numérico para a view.
+        $packages = collect(config('credits.packages'))
+            ->map(function ($pkg, $id) {
+                return array_merge($pkg, ['id' => $id]);
+            })
+            ->values()
+            ->all();
 
         return view('credits.packages', compact('packages'));
     }
@@ -82,12 +60,7 @@ class CreditController extends Controller
             'payment_method' => 'required|in:credit_card,pix,boleto',
         ]);
 
-        $packages = [
-            '5_credits' => ['amount' => 5, 'price' => 19.90],
-            '10_credits' => ['amount' => 10, 'price' => 34.90],
-            '20_credits' => ['amount' => 20, 'price' => 59.90],
-            '50_credits' => ['amount' => 50, 'price' => 129.90],
-        ];
+        $packages = config('credits.packages');
 
         if (!isset($packages[$validated['package_id']])) {
             return back()->withErrors(['package_id' => 'Pacote inválido.']);
@@ -114,36 +87,6 @@ class CreditController extends Controller
                 ->with('success', "Você adquiriu {$package['amount']} créditos com sucesso!");
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Erro ao processar o pagamento: ' . $e->getMessage()]);
-        }
-    }
-
-    /**
-     * Adiciona créditos gratuitos para testes (apenas em ambiente de desenvolvimento).
-     */
-    public function addFreeCredits()
-    {
-        if (!app()->environment(['local', 'development'])) {
-            abort(404);
-        }
-
-        $user = Auth::user();
-        $amount = 5;
-
-        try {
-            $transaction = $this->creditService->addCredits(
-                $user,
-                $amount,
-                "Créditos gratuitos para testes",
-                [
-                    'payment_method' => 'free',
-                    'price' => 0,
-                ]
-            );
-
-            return redirect()->route('dashboard')
-                ->with('success', "Você recebeu {$amount} créditos gratuitos para testes!");
-        } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Erro ao adicionar créditos: ' . $e->getMessage()]);
         }
     }
 }

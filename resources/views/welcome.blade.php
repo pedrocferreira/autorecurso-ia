@@ -3,1095 +3,656 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="AutoRecurso - A maneira mais inteligente de gerar recursos de multas de trânsito usando Inteligência Artificial. Economize tempo e aumente suas chances de sucesso.">
 
-        <title>AutoRecurso - Automatize seus Recursos de Multas</title>
+        <title>AutoRecurso - Recursos de Multas com Inteligência Artificial</title>
+
+        <!-- Favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4361ee">
+        <meta name="msapplication-TileColor" content="#4361ee">
+        <meta name="theme-color" content="#4361ee">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+        <!-- AOS Animations -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
         <!-- Swiper CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
         <!-- Styles -->
-        <style>
-            /* ! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Figtree, sans-serif;font-feature-settings:normal}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]{display:none}*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::-webkit-backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.relative{position:relative}.mx-auto{margin-left:auto;margin-right:auto}.mx-6{margin-left:1.5rem;margin-right:1.5rem}.ml-4{margin-left:1rem}.mt-16{margin-top:4rem}.mt-6{margin-top:1.5rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.-mt-px{margin-top:-1px}.mr-1{margin-right:0.25rem}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.h-16{height:4rem}.h-7{height:1.75rem}.h-6{height:1.5rem}.h-5{height:1.25rem}.min-h-screen{min-height:100vh}.w-auto{width:auto}.w-16{width:4rem}.w-7{width:1.75rem}.w-6{width:1.5rem}.w-5{width:1.25rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}.shrink-0{flex-shrink:0}.scale-100{--tw-scale-x:1;--tw-scale-y:1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-6{gap:1.5rem}.gap-4{gap:1rem}.self-center{align-self:center}.rounded-lg{border-radius:0.5rem}.rounded-full{border-radius:9999px}.rounded-md{border-radius:0.375rem}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-500{--tw-gradient-from:#3b82f6;--tw-gradient-to:rgb(59 130 246 / 0);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-indigo-600{--tw-gradient-to:#4f46e5}.bg-dots-darker{background-image:url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E")}.from-gray-700\/50{--tw-gradient-from:rgb(55 65 81 / 0.5);--tw-gradient-to:rgb(55 65 81 / 0);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-transparent{--tw-gradient-to:rgb(0 0 0 / 0);--tw-gradient-stops:var(--tw-gradient-from), transparent, var(--tw-gradient-to)}.bg-center{background-position:center}.stroke-red-500{stroke:#ef4444}.stroke-gray-400{stroke:#9ca3af}.p-6{padding:1.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.text-center{text-align:center}.text-right{text-align:right}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-5xl{font-size:3rem;line-height:1}.text-2xl{font-size:1.5rem;line-height:2rem}.font-semibold{font-weight:600}.font-bold{font-weight:700}.leading-relaxed{line-height:1.625}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-gray-500\/20{--tw-shadow-color:rgb(107 114 128 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.selection\:bg-blue-500 *::selection{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.selection\:bg-blue-500::selection{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.hover\:text-gray-900:hover{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity))}.hover\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity))}.focus\:rounded-sm:focus{border-radius:0.125rem}.focus\:outline:focus{outline-style:solid}.focus\:outline-2:focus{outline-width:2px}.focus\:outline-red-500:focus{outline-color:#ef4444}.group:hover .group-hover\:stroke-gray-600{stroke:#4b5563}.z-10{z-index: 10}@media (prefers-reduced-motion: no-preference){.motion-safe\:hover\:scale-\[1\.01\]:hover{--tw-scale-x:1.01;--tw-scale-y:1.01;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}}@media (prefers-color-scheme: dark){.dark\:bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity))}.dark\:bg-gray-800\/50{background-color:rgb(31 41 55 / 0.5)}.dark\:bg-red-800\/20{background-color:rgb(153 27 27 / 0.2)}.dark\:bg-dots-lighter{background-image:url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E")}.dark\:bg-gradient-to-bl{background-image:linear-gradient(to bottom left, var(--tw-gradient-stops))}.dark\:stroke-gray-600{stroke:#4b5563}.dark\:text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity))}.dark\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.dark\:shadow-none{--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.dark\:ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.dark\:ring-inset{--tw-ring-inset:inset}.dark\:ring-white\/5{--tw-ring-color:rgb(255 255 255 / 0.05)}.dark\:hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.group:hover .dark\:group-hover\:stroke-gray-400{stroke:#9ca3af}}@media (min-width: 640px){.sm\:fixed{position:fixed}.sm\:top-0{top:0px}.sm\:right-0{right:0px}.sm\:ml-0{margin-left:0px}.sm\:flex{display:flex}.sm\:items-center{align-items:center}.sm\:justify-center{justify-content:center}.sm\:justify-between{justify-content:space-between}.sm\:text-left{text-align:left}.sm\:text-right{text-align:right}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:gap-8{gap:2rem}.lg\:p-8{padding:2rem}}
-
-            .hero-section {
-                background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-                padding: 5rem 0 20rem;
-                color: white;
-                position: relative;
-                overflow: hidden;
-                clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-            }
-
-            @media (max-width: 768px) {
-                .hero-section {
-                    padding: 1rem 0;
-                    clip-path: none;
-                    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-                }
-
-                .hero-section .max-w-7xl {
-                    padding: 0 1rem;
-                }
-
-                .hero-icon {
-                    height: 64px !important;
-                    width: 64px !important;
-                    margin-bottom: 1rem;
-                }
-
-                .hero-icon i {
-                    font-size: 2rem !important;
-                }
-
-                .hero-title {
-                    font-size: 1.5rem;
-                    line-height: 1.3;
-                    margin-bottom: 1rem;
-                    padding: 0;
-                }
-
-                .hero-subtitle {
-                    font-size: 1rem;
-                    line-height: 1.5;
-                    margin-bottom: 1.5rem;
-                    padding: 0;
-                }
-
-                .hero-cta {
-                    flex-direction: column;
-                    gap: 0.75rem;
-                    width: 100%;
-                    margin: 1.5rem 0;
-                }
-
-                .hero-cta .cta-button {
-                    width: 100%;
-                    padding: 0.75rem 1rem;
-                    font-size: 1rem;
-                    justify-content: center;
-                }
-
-                .hero-badges {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 0.5rem;
-                    width: 100%;
-                    padding: 0;
-                    margin: 1rem 0;
-                }
-
-                .hero-badge {
-                    padding: 0.5rem;
-                    font-size: 0.875rem;
-                    justify-content: center;
-                    text-align: center;
-                }
-
-                .hero-badge i {
-                    font-size: 1rem;
-                    margin-right: 0.5rem;
-                }
-
-                .scroll-indicator {
-                    display: none;
-                }
-
-                .stats-section {
-                    margin-top: 0;
-                    padding: 1rem;
-                }
-
-                .stats-section .grid {
-                    grid-template-columns: 1fr;
-                    gap: 1rem;
-                    margin-top: 70%;
-                }
-
-                .stats-card {
-                    padding: 1rem;
-                    margin: 0;
-                }
-
-                .stats-number {
-                    font-size: 1.25rem;
-                    margin-bottom: 0.5rem;
-                }
-
-                .stats-label {
-                    font-size: 0.875rem;
-                }
-
-                .section-title {
-                    font-size: 2rem;
-                    line-height: 1.3;
-                    margin-bottom: 0.75rem;
-                }
-
-                .section-subtitle {
-                    font-size: 1rem;
-                    margin-bottom: 2rem;
-                }
-
-                .feature-card {
-                    padding: 1.5rem;
-                    margin: 0.5rem 0;
-                }
-
-                .feature-icon {
-                    font-size: 2.5rem;
-                    margin-bottom: 1rem;
-                }
-
-                .feature-card h3 {
-                    font-size: 1.25rem;
-                    margin-bottom: 0.75rem;
-                }
-
-                .feature-card p {
-                    font-size: 0.875rem;
-                }
-
-                .step-card {
-                    padding: 1.5rem;
-                    margin: 0.5rem 0;
-                }
-
-                .step-number {
-                    width: 3rem;
-                    height: 3rem;
-                    font-size: 1.25rem;
-                    margin-bottom: 1rem;
-                }
-
-                .step-card h3 {
-                    font-size: 1.125rem;
-                    margin-bottom: 0.5rem;
-                }
-
-                .step-card p {
-                    font-size: 0.875rem;
-                }
-
-                .price-card {
-                    padding: 1.5rem;
-                    margin: 0.5rem 0;
-                }
-
-                .price-card.popular {
-                    transform: none;
-                }
-
-                .price-card.popular::before {
-                    display: none;
-                }
-
-                .price-card h3 {
-                    font-size: 1.25rem;
-                    margin-bottom: 1rem;
-                }
-
-                .price-card .text-5xl {
-                    font-size: 2.5rem;
-                }
-
-                .price-card ul {
-                    margin-bottom: 1.5rem;
-                }
-
-                .price-card li {
-                    font-size: 0.875rem;
-                }
-
-                .testimonial-card {
-                    padding: 1.5rem;
-                    margin: 0.5rem 0;
-                }
-
-                .testimonial-card p {
-                    font-size: 0.875rem;
-                    margin-bottom: 1rem;
-                }
-
-                .testimonial-avatar {
-                    width: 3rem;
-                    height: 3rem;
-                    font-size: 1.25rem;
-                }
-
-                .testimonial-card .ml-4 p {
-                    font-size: 0.875rem;
-                }
-
-                .mt-16, .mt-24 {
-                    margin-top: 2rem;
-                }
-
-                .gap-16 {
-                    gap: 1rem;
-                }
-
-                .p-6 {
-                    padding: 1rem;
-                }
-            }
-
-            @media (max-width: 480px) {
-                .hero-section {
-                    padding: 0.75rem 0;
-                }
-
-                .hero-title {
-                    font-size: 1.25rem;
-                }
-
-                .hero-subtitle {
-                    font-size: 0.875rem;
-                }
-
-                .hero-badges {
-                    grid-template-columns: 1fr;
-                }
-
-                .hero-badge {
-                    font-size: 0.75rem;
-                }
-
-                .stats-number {
-                    font-size: 1.125rem;
-                }
-
-                .stats-label {
-                    font-size: 0.75rem;
-                }
-
-                .section-title {
-                    font-size: 1.75rem;
-                }
-
-                .section-subtitle {
-                    font-size: 0.875rem;
-                }
-
-                .feature-card, .step-card, .price-card, .testimonial-card {
-                    padding: 1rem;
-                }
-
-                .feature-icon {
-                    font-size: 2rem;
-                }
-
-                .feature-card h3, .step-card h3, .price-card h3 {
-                    font-size: 1.125rem;
-                }
-
-                .price-card .text-5xl {
-                    font-size: 2rem;
-                }
-
-                .testimonial-avatar {
-                    width: 2.5rem;
-                    height: 2.5rem;
-                    font-size: 1rem;
-                }
-            }
-
-            .hero-section::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4l-2-2V24h-2v4l-2 2v4h6zm0-30V0h-2v4h-2v2h2v4h2V6h2V4h-2zM6 34v-4l-2-2V24H2v4l-2 2v4h6zM6 4V0H4v4H2v2h2v4h2V6h2V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-                opacity: 0.1;
-                animation: float 20s linear infinite;
-            }
-
-            @keyframes float {
-                0% { background-position: 0 0; }
-                100% { background-position: 100% 100%; }
-            }
-
-            .hero-icon {
-                position: relative;
-                transition: all 0.3s ease;
-                animation: pulse 2s infinite;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-                margin-bottom: 4rem;
-            }
-
-            @keyframes pulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-                100% { transform: scale(1); }
-            }
-
-            .hero-icon::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 100%;
-                height: 100%;
-                background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-                border-radius: 50%;
-                opacity: 0;
-                transition: all 0.3s ease;
-            }
-
-            .hero-icon:hover::after {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-
-            .hero-title {
-                font-size: 5rem;
-                font-weight: 800;
-                line-height: 1.1;
-                margin-bottom: 2.5rem;
-                color: white;
-                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                animation: fadeInUp 0.8s ease-out;
-                max-width: 1000px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero-subtitle {
-                font-size: 2rem;
-                line-height: 1.4;
-                color: rgba(255,255,255,0.95);
-                max-width: 900px;
-                margin: 0 auto 4rem;
-                animation: fadeInUp 0.8s ease-out 0.2s backwards;
-            }
-
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .hero-cta {
-                display: flex;
-                gap: 2rem;
-                justify-content: center;
-                margin-top: 4rem;
-                margin-bottom: 5rem;
-            }
-
-            .hero-badges {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 2rem;
-                justify-content: center;
-                margin-top: 4rem;
-                padding: 0 2rem;
-            }
-
-            .hero-badge {
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                padding: 1rem 2rem;
-                border-radius: 9999px;
-                transition: all 0.3s ease;
-                font-size: 1.125rem;
-                backdrop-filter: blur(10px);
-                display: flex;
-                align-items: center;
-                gap: 0.75rem;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-
-            .hero-badge i {
-                font-size: 1.25rem;
-                color: #4ade80;
-            }
-
-            .hero-badge:hover {
-                background: rgba(255, 255, 255, 0.15);
-                transform: translateY(-2px);
-                border-color: rgba(255, 255, 255, 0.3);
-                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-            }
-
-            .stats-section {
-                margin-top: -12rem;
-                position: relative;
-                z-index: 10;
-                padding: 0 2rem;
-            }
-
-            .stats-card {
-                background: white;
-                border-radius: 1.5rem;
-                padding: 4rem;
-                box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
-                position: relative;
-                overflow: hidden;
-                transition: all 0.3s ease;
-                border: 1px solid rgba(0, 0, 0, 0.05);
-                margin: 0 1rem;
-                text-align: center;
-            }
-
-            .stats-number {
-                font-size: 2rem;
-                font-weight: 800;
-                line-height: 1;
-                margin-bottom: 1.5rem;
-                background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-
-            .stats-label {
-                font-size: 1.5rem;
-                color: #64748b;
-                font-weight: 500;
-            }
-
-            .section-title {
-                font-size: 3.5rem;
-                font-weight: 800;
-                line-height: 2.2;
-                margin-bottom: 1rem;
-                background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                position: relative;
-                display: inline-block;
-            }
-
-            .section-title::after {
-                content: '';
-                position: absolute;
-                bottom: -0.5rem;
-                left: 0;
-                width: 60px;
-                height: 4px;
-                background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-                border-radius: 2px;
-            }
-
-            .section-subtitle {
-                font-size: 1.25rem;
-                color: #ffffffd1;
-                max-width: 600px;
-                margin: 0 auto 3rem;
-                line-height: 1.6;
-            }
-
-            .feature-card {
-                background: white;
-                border-radius: 1.5rem;
-                padding: 3rem;
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-                border: 1px solid rgba(0, 0, 0, 0.05);
-                margin: 0 1rem;
-            }
-
-            .feature-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), transparent);
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-
-            .feature-card:hover::before {
-                opacity: 1;
-            }
-
-            .feature-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            }
-
-            .feature-icon {
-                font-size: 3.5rem;
-                margin-bottom: 1.5rem;
-                color: #3b82f6;
-                background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                transition: all 0.3s ease;
-            }
-
-            .feature-card:hover .feature-icon {
-                transform: scale(1.1);
-            }
-
-            .step-card {
-                position: relative;
-                padding: 3rem;
-                background: white;
-                border-radius: 1.5rem;
-                transition: all 0.3s ease;
-                border: 1px solid rgba(0, 0, 0, 0.05);
-                text-align: center;
-                margin: 0 1rem;
-            }
-
-            .step-number {
-                width: 4rem;
-                height: 4rem;
-                background: linear-gradient(135deg, #3b82f6, #1e40af);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: bold;
-                font-size: 1.75rem;
-                margin: 0 auto 1.5rem;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-            }
-
-            .step-card:hover .step-number {
-                transform: scale(1.1);
-                box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
-            }
-
-            .price-card {
-                background: white;
-                border-radius: 1.5rem;
-                padding: 3rem;
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-                border: 1px solid rgba(0, 0, 0, 0.05);
-                margin: 0 1rem;
-            }
-
-            .price-card.popular {
-                border: 2px solid #3b82f6;
-                transform: scale(1.05);
-                box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
-            }
-
-            .price-card.popular::before {
-                content: 'Mais Popular';
-                position: absolute;
-                top: 1rem;
-                right: -2rem;
-                background: linear-gradient(135deg, #3b82f6, #1e40af);
-                color: white;
-                padding: 0.5rem 2rem;
-                transform: rotate(45deg);
-                font-size: 0.875rem;
-                font-weight: 600;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            .price-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            }
-
-            .price-card.popular:hover {
-                transform: scale(1.05) translateY(-5px);
-            }
-
-            .testimonial-card {
-                background: white;
-                border-radius: 1.5rem;
-                padding: 3rem;
-                transition: all 0.3s ease;
-                position: relative;
-                border: 1px solid rgba(0, 0, 0, 0.05);
-                margin: 0 1rem;
-                height: 100%;
-            }
-
-            .testimonial-card::before {
-                content: '"';
-                position: absolute;
-                top: 1rem;
-                left: 1rem;
-                font-size: 4rem;
-                color: #3b82f6;
-                opacity: 0.1;
-                font-family: Georgia, serif;
-            }
-
-            .testimonial-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            }
-
-            .testimonial-avatar {
-                width: 4rem;
-                height: 4rem;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #3b82f6, #1e40af);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: bold;
-                font-size: 1.5rem;
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-            }
-
-            .scroll-indicator {
-                position: absolute;
-                bottom: 2rem;
-                left: 50%;
-                transform: translateX(-50%);
-                animation: bounce 2s infinite;
-            }
-
-            @keyframes bounce {
-                0%, 20%, 50%, 80%, 100% {
-                    transform: translateY(0);
-                }
-                40% {
-                    transform: translateY(-20px);
-                }
-                60% {
-                    transform: translateY(-10px);
-                }
-            }
-
-            /* Swiper Styles */
-            .testimonial-swiper {
-                padding: 2rem 0;
-            }
-
-            .swiper-button-next,
-            .swiper-button-prev {
-                color: #3b82f6;
-                background: white;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            .swiper-button-next:after,
-            .swiper-button-prev:after {
-                font-size: 1.25rem;
-            }
-
-            .swiper-pagination-bullet {
-                background: #3b82f6;
-                opacity: 0.5;
-            }
-
-            .swiper-pagination-bullet-active {
-                opacity: 1;
-            }
-
-            @media (max-width: 768px) {
-                .testimonial-swiper {
-                    padding: 1rem 0;
-                }
-
-                .swiper-button-next,
-                .swiper-button-prev {
-                    display: none;
-                }
-            }
-        </style>
+        @vite(['resources/css/landing.css'])
     </head>
     <body class="antialiased">
-        <div class="relative min-h-screen bg-dots-darker bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-blue-500 selection:text-white">
-            @if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                    @else
-                        <a href="{{ url('/login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Entrar</a>
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <a href="/" class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    AutoRecurso
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="nav-links">
+                    <a href="#como-funciona" class="nav-link">Como Funciona</a>
+                    <a href="#precos" class="nav-link">Preços</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+                    <a href="{{ route('login') }}" class="nav-link">Entrar</a>
+                    <a href="{{ route('register') }}" class="nav-link primary">Começar Grátis</a>
+                </nav>
 
-                        @if (Route::has('register'))
-                            <a href="{{ url('/register') }}" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Registrar</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <!-- Hero Section -->
-            <div class="hero-section">
-                <div class="max-w-7xl mx-auto">
-                    <!-- Desktop Version -->
-                    <div class="hidden md:block">
-                        <div class="flex justify-center">
-                            <div class="hero-icon h-48 w-48 rounded-full flex items-center justify-center">
-                                <i class="fas fa-gavel text-white text-8xl"></i>
-                            </div>
-                        </div>
-
-                        <h1 class="hero-title">Recursos de Multas com IA: Economize até 90% e Ganhe Tempo</h1>
-                        <p class="hero-subtitle">Gere recursos personalizados em minutos com nossa inteligência artificial. Mais rápido e econômico que contratar um advogado. Comece agora e economize!</p>
-
-                        <div class="hero-cta">
-                            @if (Route::has('register'))
-                                <a href="{{ url('/register') }}" class="cta-button primary">
-                                    <i class="fas fa-rocket"></i>
-                                    <span>Comece Agora - É Grátis!</span>
-                                </a>
-                                <a href="#como-funciona" class="cta-button secondary">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>Veja Como Funciona</span>
-                                </a>
-                            @endif
-                        </div>
-
-                        <div class="hero-badges">
-                            <div class="hero-badge">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Sem compromisso</span>
-                            </div>
-                            <div class="hero-badge">
-                                <i class="fas fa-bolt"></i>
-                                <span>Cancelamento em 1 clique</span>
-                            </div>
-                            <div class="hero-badge">
-                                <i class="fas fa-headset"></i>
-                                <span>Suporte 24/7</span>
-                            </div>
-                            <div class="hero-badge">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>Garantia de Satisfação</span>
-                            </div>
-                        </div>
-
-                        <div class="scroll-indicator">
-                            <i class="fas fa-chevron-down text-white text-2xl"></i>
-                        </div>
-                    </div>
-
-                    <!-- Mobile Version -->
-                    
+                <!-- Mobile Menu Toggle -->
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
 
-            <!-- Stats Section -->
-            <div class="stats-section">
-                <div class="max-w-7xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-20">
-                        <div class="stats-card">
-                            <div class="stats-number">+50.000</div>
-                            <div class="stats-label">Recursos Gerados</div>
+            <!-- Mobile Navigation -->
+            <div class="mobile-menu">
+                <nav class="mobile-nav-links">
+                    <a href="#como-funciona" class="mobile-nav-link">Como Funciona</a>
+                    <a href="#precos" class="mobile-nav-link">Preços</a>
+                    <a href="#faq" class="mobile-nav-link">FAQ</a>
+                    <a href="{{ route('login') }}" class="mobile-nav-link">Entrar</a>
+                    <a href="{{ route('register') }}" class="mobile-nav-link">Começar Grátis</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="max-w-7xl mx-auto px-4">
+                <!-- Trust Badge -->
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-lime-400/20 text-lime-100 rounded-full text-sm font-medium">
+                        <i class="fas fa-star text-lime-400"></i>
+                        Mais de 10.000 recursos aprovados
+                        <i class="fas fa-star text-lime-400"></i>
+                    </div>
+                </div>
+
+                <!-- Hero Content -->
+                <div class="text-center">
+                    <h1 class="hero-title" data-aos="fade-up">
+                        Cancele suas multas<br>
+                        <span class="bg-gradient-to-r from-lime-400 to-green-400 bg-clip-text text-transparent">sem sair de casa</span>
+                    </h1>
+                    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
+                        Gere recursos jurídicos personalizados em 5 minutos usando nossa IA especializada. 
+                        <strong>95% de taxa de aprovação</strong> comprovada por mais de 10.000 motoristas.
+                    </p>
+
+                    <!-- Social Proof -->
+                    <div class="flex justify-center items-center gap-6 mb-8" data-aos="fade-up" data-aos-delay="150">
+                        <div class="flex items-center gap-2 text-white/90">
+                            <div class="flex -space-x-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 border-2 border-white"></div>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-blue-500 border-2 border-white"></div>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 border-2 border-white"></div>
+                            </div>
+                            <span class="text-sm font-medium">+10.000 usuários</span>
                         </div>
-                        <div class="stats-card">
-                            <div class="stats-number">90%</div>
-                            <div class="stats-label">Taxa de Sucesso</div>
+                        <div class="flex items-center gap-1 text-lime-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="text-white/90 ml-1 text-sm">4.9/5 (2.847 avaliações)</span>
                         </div>
-                        <div class="stats-card">
-                            <div class="stats-number">R$ 2.000.000+</div>
-                            <div class="stats-label">Economia Total</div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8" data-aos="fade-up" data-aos-delay="200">
+                        <a href="{{ route('register') }}" class="cta-button cta-primary">
+                            <i class="fas fa-rocket"></i>
+                            Começar Agora - Grátis
+                        </a>
+                        <a href="#como-funciona" class="cta-button cta-secondary">
+                            <i class="fas fa-play"></i>
+                            Ver Demonstração
+                        </a>
+                    </div>
+
+                    <!-- Badges -->
+                    <div class="flex flex-wrap justify-center gap-3" data-aos="fade-up" data-aos-delay="250">
+                        <div class="hero-badge">
+                            <i class="fas fa-shield-check"></i>
+                            100% Seguro
+                        </div>
+                        <div class="hero-badge">
+                            <i class="fas fa-clock"></i>
+                            Resultado em 5min
+                        </div>
+                        <div class="hero-badge">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Garantia 7 dias
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="max-w-7xl mx-auto p-6 lg:p-8">
-                <!-- Value Proposition -->
-                <div class="mt-16 text-center">
-                    <h2 class="section-title">Por que escolher o AutoRecurso?</h2>
-                    <p class="section-subtitle">Descubra como nossa solução pode ajudar você a economizar tempo e dinheiro.</p>
+        <!-- Stats Section -->
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="stats-grid">
+                <div class="stat-card" data-aos="fade-up">
+                    <div class="stat-number">+10.000</div>
+                    <div class="stat-label">Recursos Gerados</div>
+                    <p class="text-sm text-gray-500 mt-2">Recursos aprovados nos últimos 12 meses</p>
                 </div>
-
-                <!-- Features Section -->
-                <div class="mt-16">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">IA Avançada</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Nossa tecnologia de inteligência artificial analisa sua multa e gera um recurso personalizado com alta taxa de sucesso.
-                            </p>
-                        </div>
-
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Documentos Prontos</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Receba seu recurso em formato PDF, pronto para impressão e protocolo junto ao órgão de trânsito.
-                            </p>
-                        </div>
-
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-coins"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Economia</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Muito mais barato que contratar um advogado. Pague apenas pelos recursos que gerar, sem mensalidades ou taxas ocultas.
-                            </p>
-                        </div>
-                    </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Taxa de Aprovação</div>
+                    <p class="text-sm text-gray-500 mt-2">Comprovado por dados reais de usuários</p>
                 </div>
-
-                <!-- How It Works -->
-                <div id="como-funciona" class="mt-24">
-                    <h2 class="section-title">Como Funciona</h2>
-                    <p class="section-subtitle">Três passos simples para resolver suas multas</p>
-                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <div class="step-card">
-                            <div class="step-number">1</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">Cadastre sua multa</h3>
-                            <p class="text-gray-600">Informe os dados básicos da sua infração de trânsito.</p>
-                        </div>
-
-                        <div class="step-card">
-                            <div class="step-number">2</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">IA gera o recurso</h3>
-                            <p class="text-gray-600">Nossa inteligência artificial cria um documento personalizado para seu caso.</p>
-                        </div>
-
-                        <div class="step-card">
-                            <div class="step-number">3</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">Baixe seu PDF</h3>
-                            <p class="text-gray-600">Receba seu recurso pronto para protocolar no órgão de trânsito.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pricing Section -->
-                <div class="mt-24">
-                    <h2 class="section-title">Planos e Preços</h2>
-                    <p class="section-subtitle">Escolha o plano ideal para suas necessidades</p>
-
-                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <div class="price-card">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Básico</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 29</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>1 recurso por vez</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte por email</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
-
-                        <div class="price-card popular">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Pro</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 24</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>5 recursos por vez</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte prioritário</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
-
-                        <div class="price-card">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Enterprise</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 19</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Recursos ilimitados</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte VIP 24/7</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonials -->
-                <div class="mt-24">
-                    <h2 class="section-title">O que nossos clientes dizem</h2>
-                    <p class="section-subtitle">Depoimentos reais de quem já economizou com o AutoRecurso</p>
-                    
-                    <!-- Swiper -->
-                    <div class="swiper testimonial-swiper mt-12">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Consegui cancelar 3 multas usando o AutoRecurso. O sistema é muito fácil de usar e o documento gerado tinha todos os argumentos legais necessários. Recomendo!"</p>
-                                    <div class="flex items-center">
-                                        <div class="testimonial-avatar">JS</div>
-                                        <div class="ml-4">
-                                            <p class="font-bold text-gray-900">João Silva</p>
-                                            <p class="text-gray-600">São Paulo</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Economizei mais de R$ 1.000 em multas usando o AutoRecurso. O suporte é excelente e o processo é muito simples. Vale muito a pena!"</p>
-                                    <div class="flex items-center">
-                                        <div class="testimonial-avatar">MS</div>
-                                        <div class="ml-4">
-                                            <p class="font-bold text-gray-900">Maria Santos</p>
-                                            <p class="text-gray-600">Rio de Janeiro</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Excelente ferramenta! Consegui cancelar uma multa de R$ 293,47 em menos de 5 minutos. O recurso foi bem fundamentado e o processo todo foi muito simples."</p>
-                                    <div class="flex items-center">
-                                        <div class="testimonial-avatar">PC</div>
-                                        <div class="ml-4">
-                                            <p class="font-bold text-gray-900">Pedro Costa</p>
-                                            <p class="text-gray-600">Curitiba</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Já usei várias vezes e sempre tive sucesso! O sistema é intuitivo e o suporte é muito atencioso. Recomendo para todos que precisam recorrer de multas."</p>
-                                    <div class="flex items-center">
-                                        <div class="testimonial-avatar">AL</div>
-                                        <div class="ml-4">
-                                            <p class="font-bold text-gray-900">Ana Lima</p>
-                                            <p class="text-gray-600">Belo Horizonte</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="swiper-slide">
-                                <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Economizei tempo e dinheiro com o AutoRecurso. O processo é rápido e eficiente. Já recomendei para vários amigos e todos ficaram satisfeitos!"</p>
-                                    <div class="flex items-center">
-                                        <div class="testimonial-avatar">RS</div>
-                                        <div class="ml-4">
-                                            <p class="font-bold text-gray-900">Roberto Santos</p>
-                                            <p class="text-gray-600">Porto Alegre</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                    </div>
-                </div>
-
-                <!-- Final CTA -->
-                <div class="mt-24 text-center">
-                    <h2 class="section-title">Pronto para economizar nas suas multas?</h2>
-                    <p class="section-subtitle">Comece agora mesmo a gerar recursos de alta qualidade.</p>
-
-                    <div class="mt-8">
-                        @if (Route::has('register'))
-                            <a href="{{ url('/register') }}" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-xl font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                                
-                                Criar Conta Gratuita
-                            </a>
-                        @endif
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between">
-                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-left">
-                        © {{ date('Y') }} AutoRecurso - Todos os direitos reservados
-                    </div>
-
-                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
-                        Desenvolvido com <i class="fas fa-heart text-red-500"></i> no Brasil
-                    </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-number">5 min</div>
+                    <div class="stat-label">Tempo Médio</div>
+                    <p class="text-sm text-gray-500 mt-2">Do cadastro ao recurso pronto para envio</p>
                 </div>
             </div>
         </div>
 
-        <!-- Swiper JS -->
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <!-- Como Funciona Section -->
+        <section id="como-funciona" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <div class="section-label">Processo Simples</div>
+                    <h2 class="section-heading">Como funciona em 3 passos</h2>
+                    <p class="section-subheading">
+                        Nosso processo foi otimizado para ser o mais rápido e eficiente possível
+                    </p>
+                </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center" data-aos="fade-up">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 shadow-lg">
+                            1
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Cadastre sua multa</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Insira os dados da sua multa em nosso formulário inteligente. Levam apenas 2 minutos.
+                        </p>
+                    </div>
+
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+                        <div class="w-16 h-16 bg-gradient-to-br from-lime-500 to-lime-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 shadow-lg">
+                            2
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">IA gera o recurso</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Nossa IA analisa seu caso e gera argumentos jurídicos personalizados e fundamentados.
+                        </p>
+                    </div>
+
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 shadow-lg">
+                            3
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Envie e aguarde</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Baixe o PDF pronto e envie para o órgão competente. Acompanhe o resultado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <div class="section-label">Nossa tecnologia</div>
+                    <h2 class="section-heading">Por que escolher o AutoRecurso?</h2>
+                    <p class="section-subheading">
+                        Combinamos inteligência artificial com conhecimento jurídico especializado
+                    </p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card" data-aos="fade-up">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="feature-title">IA Especializada</h3>
+                        <p class="feature-description">
+                            Nossa IA foi treinada com milhares de recursos bem-sucedidos e conhece profundamente o Código de Trânsito Brasileiro.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3 class="feature-title">Rápido e Preciso</h3>
+                        <p class="feature-description">
+                            Em menos de 5 minutos você tem um recurso completo, com argumentos técnicos e fundamentação jurídica sólida.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="feature-title">95% de Sucesso</h3>
+                        <p class="feature-description">
+                            Taxa de aprovação comprovada de 95%. Nossos recursos são aceitos pelos órgãos de trânsito em todo o Brasil.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="feature-title">100% Seguro</h3>
+                        <p class="feature-description">
+                            Seus dados são protegidos com criptografia de nível bancário. Nunca compartilhamos informações pessoais.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3 class="feature-title">Suporte Especializado</h3>
+                        <p class="feature-description">
+                            Equipe de suporte especializada em direito de trânsito disponível para esclarecer dúvidas.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                        <div class="feature-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h3 class="feature-title">Economia Garantida</h3>
+                        <p class="feature-description">
+                            Economize até 90% comparado a contratar um advogado. Preço justo e transparente.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="precos" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <div class="section-label">Preços Transparentes</div>
+                    <h2 class="section-heading">Escolha o plano ideal para você</h2>
+                    <p class="section-subheading">
+                        Sem mensalidades, sem surpresas. Pague apenas pelos recursos que usar.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <!-- Plano Básico -->
+                    <div class="pricing-card" data-aos="fade-up">
+                        <div class="pricing-header">
+                            <h3 class="pricing-title">Teste Grátis</h3>
+                            <div class="pricing-price">
+                                <span class="text-4xl font-bold">R$ 0</span>
+                                <span class="text-gray-500">/recurso</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check text-green-500"></i> 1 recurso gratuito</li>
+                            <li><i class="fas fa-check text-green-500"></i> IA básica</li>
+                            <li><i class="fas fa-check text-green-500"></i> PDF para download</li>
+                            <li><i class="fas fa-check text-green-500"></i> Suporte por email</li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="pricing-button pricing-button-secondary">
+                            Começar Grátis
+                        </a>
+                    </div>
+
+                    <!-- Plano Popular -->
+                    <div class="pricing-card pricing-card-popular" data-aos="fade-up" data-aos-delay="100">
+                        <div class="pricing-badge">Mais Popular</div>
+                        <div class="pricing-header">
+                            <h3 class="pricing-title">Pacote Pro</h3>
+                            <div class="pricing-price">
+                                <span class="text-4xl font-bold">R$ 29</span>
+                                <span class="text-gray-500">/5 recursos</span>
+                            </div>
+                            <div class="text-sm text-gray-500">R$ 5,80 por recurso</div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check text-green-500"></i> 5 recursos inclusos</li>
+                            <li><i class="fas fa-check text-green-500"></i> IA avançada</li>
+                            <li><i class="fas fa-check text-green-500"></i> Argumentos personalizados</li>
+                            <li><i class="fas fa-check text-green-500"></i> Suporte prioritário</li>
+                            <li><i class="fas fa-check text-green-500"></i> Garantia 30 dias</li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="pricing-button pricing-button-primary">
+                            Escolher Pro
+                        </a>
+                    </div>
+
+                    <!-- Plano Premium -->
+                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="pricing-header">
+                            <h3 class="pricing-title">Pacote Premium</h3>
+                            <div class="pricing-price">
+                                <span class="text-4xl font-bold">R$ 49</span>
+                                <span class="text-gray-500">/10 recursos</span>
+                            </div>
+                            <div class="text-sm text-gray-500">R$ 4,90 por recurso</div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check text-green-500"></i> 10 recursos inclusos</li>
+                            <li><i class="fas fa-check text-green-500"></i> IA premium</li>
+                            <li><i class="fas fa-check text-green-500"></i> Revisão jurídica</li>
+                            <li><i class="fas fa-check text-green-500"></i> Suporte WhatsApp</li>
+                            <li><i class="fas fa-check text-green-500"></i> Garantia 60 dias</li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="pricing-button pricing-button-secondary">
+                            Escolher Premium
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <p class="text-gray-600 mb-4">💳 Aceitamos PIX, cartão de crédito e débito</p>
+                    <p class="text-gray-600">🔒 Pagamento 100% seguro com criptografia SSL</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <div class="section-label">Depoimentos</div>
+                    <h2 class="section-heading">O que nossos clientes dizem</h2>
+                    <p class="section-subheading">
+                        Mais de 10.000 motoristas já economizaram tempo e dinheiro conosco
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="testimonial-card" data-aos="fade-up">
+                        <div class="flex items-center gap-1 text-yellow-400 mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-content">
+                            "Incrível! Consegui cancelar minha multa de R$ 293 em menos de 5 minutos. O recurso foi aprovado em 15 dias. Economizei tempo e dinheiro!"
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                CS
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name">Carlos Silva</div>
+                                <div class="author-location">São Paulo, SP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex items-center gap-1 text-yellow-400 mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-content">
+                            "A plataforma é muito fácil de usar e os argumentos gerados são extremamente bem fundamentados. Já usei 3 vezes e todas foram aprovadas!"
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                AS
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name">Ana Santos</div>
+                                <div class="author-location">Rio de Janeiro, RJ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="flex items-center gap-1 text-yellow-400 mb-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-content">
+                            "Recomendo para todos! Já economizei mais de R$ 800 em multas. O suporte é excelente e a taxa de aprovação é realmente alta."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                PO
+                            </div>
+                            <div class="author-info">
+                                <div class="author-name">Pedro Oliveira</div>
+                                <div class="author-location">Curitiba, PR</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <div class="section-label">Dúvidas Frequentes</div>
+                    <h2 class="section-heading">Perguntas e Respostas</h2>
+                    <p class="section-subheading">
+                        Esclarecemos as principais dúvidas sobre nosso serviço
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="faq-item" data-aos="fade-up">
+                        <button class="faq-question">
+                            <span>Como funciona a garantia de aprovação?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Nossa taxa de aprovação é de 95% baseada em dados reais dos últimos 12 meses. Caso seu recurso não seja aprovado por falha em nossa análise, devolvemos 100% do valor pago.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                        <button class="faq-question">
+                            <span>Quanto tempo demora para gerar o recurso?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>O processo completo leva em média 5 minutos. Você preenche os dados da multa e nossa IA gera instantaneamente um recurso personalizado pronto para envio.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                        <button class="faq-question">
+                            <span>É seguro compartilhar meus dados?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Sim, completamente seguro. Utilizamos criptografia de nível bancário e nunca compartilhamos seus dados com terceiros. Somos compliance com a LGPD.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                        <button class="faq-question">
+                            <span>Funciona para qualquer tipo de multa?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Nossa IA é especializada em multas de trânsito comuns como velocidade, estacionamento, semáforo, etc. Para infrações mais complexas, recomendamos consultar um advogado.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                        <button class="faq-question">
+                            <span>Preciso de conhecimento jurídico?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Não! Nossa plataforma foi criada para pessoas sem conhecimento jurídico. Você só precisa inserir os dados da multa e nós cuidamos de todo o resto.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="final-cta">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <h2 class="final-cta-title">
+                    Pronto para cancelar suas multas?
+                </h2>
+                <p class="final-cta-subtitle">
+                    Junte-se a mais de 10.000 motoristas que já economizaram tempo e dinheiro com nossa plataforma. 
+                    Comece gratuitamente agora mesmo!
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <div class="floating">
+                        <a href="{{ route('register') }}" class="cta-button cta-primary inline-flex">
+                            <i class="fas fa-rocket"></i>
+                            Começar Gratuitamente
+                        </a>
+                    </div>
+                    <a href="#precos" class="cta-button cta-secondary inline-flex">
+                        <i class="fas fa-tags"></i>
+                        Ver Preços
+                    </a>
+                </div>
+                
+                <!-- Trust Indicators -->
+                <div class="flex flex-wrap justify-center items-center gap-6 text-white/80 text-sm">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-shield-check"></i>
+                        <span>Pagamento Seguro</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-undo"></i>
+                        <span>Garantia 30 dias</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-headset"></i>
+                        <span>Suporte Especializado</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="fas fa-shield-alt text-2xl"></i>
+                            <span class="text-xl font-bold">AutoRecurso</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">
+                            A maneira mais inteligente de gerar recursos de multas de trânsito usando Inteligência Artificial.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-4">Produto</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="#como-funciona" class="hover:text-white">Como Funciona</a></li>
+                            <li><a href="#precos" class="hover:text-white">Preços</a></li>
+                            <li><a href="#faq" class="hover:text-white">FAQ</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-4">Empresa</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="#" class="hover:text-white">Sobre Nós</a></li>
+                            <li><a href="#" class="hover:text-white">Contato</a></li>
+                            <li><a href="#" class="hover:text-white">Blog</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-4">Legal</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="#" class="hover:text-white">Termos de Uso</a></li>
+                            <li><a href="#" class="hover:text-white">Política de Privacidade</a></li>
+                            <li><a href="#" class="hover:text-white">LGPD</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-sm text-gray-400">
+                        © {{ date('Y') }} AutoRecurso. Todos os direitos reservados.
+                    </div>
+                    <div class="text-sm text-gray-400 mt-4 md:mt-0">
+                        Desenvolvido com <i class="fas fa-heart text-red-500"></i> no Brasil
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Scripts -->
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>
-            const swiper = new Swiper('.testimonial-swiper', {
-                slidesPerView: 1,
-                spaceBetween: 30,
-                loop: true,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 1,
-                    },
-                    768: {
-                        slidesPerView: 2,
-                    },
-                    1024: {
-                        slidesPerView: 2,
-                    },
-                }
+            AOS.init({
+                duration: 800,
+                once: true,
+            });
+
+            // Mobile menu
+            document.addEventListener('DOMContentLoaded', function() {
+                const menuToggle = document.querySelector('.menu-toggle');
+                const mobileMenu = document.querySelector('.mobile-menu');
+                
+                menuToggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    mobileMenu.classList.toggle('active');
+                });
+
+                document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menuToggle.classList.remove('active');
+                        mobileMenu.classList.remove('active');
+                    });
+                });
+
+                // FAQ Accordion
+                document.querySelectorAll('.faq-question').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const faqItem = button.parentElement;
+                        const isActive = faqItem.classList.contains('active');
+                        
+                        // Close all FAQ items
+                        document.querySelectorAll('.faq-item').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        
+                        // Open clicked item if it wasn't active
+                        if (!isActive) {
+                            faqItem.classList.add('active');
+                        }
+                    });
+                });
             });
         </script>
     </body>

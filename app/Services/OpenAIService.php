@@ -8,6 +8,128 @@ use Illuminate\Support\Facades\Log;
 
 class OpenAIService
 {
+    private $jurisprudenceTemplates = [
+        'velocidade' => [
+            'argumentos' => [
+                'Ausência de aferição regular do equipamento medidor',
+                'Falta de publicidade prévia do local de fiscalização',
+                'Erro na aferição devido a condições climáticas',
+                'Ausência de sinalização adequada do limite de velocidade'
+            ],
+            'jurisprudencia' => [
+                'STJ - REsp 1.826.321/SP - Necessidade de aferição regular dos equipamentos',
+                'TJ-SP - APL 1005642-87.2019.8.26.0066 - Nulidade por falta de publicidade',
+                'TJ-RJ - RI 0039144-34.2019.8.19.0042 - Erro na medição por condições adversas'
+            ]
+        ],
+        'semaforo' => [
+            'argumentos' => [
+                'Defeito no equipamento de fiscalização',
+                'Situação de emergência justificável',
+                'Problema na temporização do semáforo',
+                'Falta de visibilidade da sinalização'
+            ],
+            'jurisprudencia' => [
+                'STJ - AREsp 1.789.432/MG - Defeito em equipamento',
+                'TJ-SP - APL 1002345-76.2020.8.26.0066 - Situação de emergência',
+                'TJ-RJ - RI 0012876-54.2020.8.19.0042 - Temporização inadequada'
+            ]
+        ],
+        'estacionamento' => [
+            'argumentos' => [
+                'Ausência de sinalização clara',
+                'Situação de emergência comprovada',
+                'Defeito no veículo',
+                'Divergência na demarcação da área'
+            ],
+            'jurisprudencia' => [
+                'STJ - REsp 1.912.456/RS - Necessidade de sinalização adequada',
+                'TJ-SP - APL 1007823-92.2020.8.26.0066 - Emergência comprovada',
+                'TJ-RJ - RI 0023567-87.2020.8.19.0042 - Defeito mecânico'
+            ]
+        ]
+    ];
+
+    private $modelosRecurso = [
+        'padrao' => "À AUTORIDADE DE TRÂNSITO COMPETENTE
+
+ASSUNTO: Recurso contra autuação de trânsito - Auto de Infração nº %s
+
+RECORRENTE: %s, portador(a) do CPF nº %s, CNH nº %s, residente e domiciliado(a) em %s.
+
+Senhor(a) Presidente da JARI,
+
+%s, já qualificado(a), vem, respeitosamente, à presença de Vossa Senhoria, com fundamento no art. 286 do Código de Trânsito Brasileiro (Lei nº 9.503/97), apresentar RECURSO ADMINISTRATIVO contra a penalidade imposta através do Auto de Infração supracitado, pelos fatos e fundamentos a seguir expostos:
+
+I - DOS FATOS
+%s
+
+II - DO DIREITO
+%s
+
+III - DOS PRECEDENTES JURISPRUDENCIAIS
+%s
+
+IV - DO PEDIDO
+
+Ante o exposto, requer:
+
+a) O recebimento e processamento do presente recurso, com efeito suspensivo;
+b) A anulação do auto de infração e o consequente arquivamento do procedimento;
+c) Subsidiariamente, a conversão da penalidade em advertência por escrito.
+
+Nestes termos,
+Pede deferimento.
+
+%s, %s
+
+_______________________
+%s
+CPF: %s
+CNH: %s",
+
+        'velocidade' => "À JARI - JUNTA ADMINISTRATIVA DE RECURSOS DE INFRAÇÕES
+
+ASSUNTO: Recurso Administrativo - Auto de Infração nº %s
+RECORRENTE: %s
+CPF: %s
+CNH: %s
+
+RECURSO ADMINISTRATIVO COM PEDIDO DE EFEITO SUSPENSIVO
+
+%s, já qualificado(a), vem, respeitosamente, apresentar RECURSO ADMINISTRATIVO contra o Auto de Infração nº %s, com fundamento no art. 286 do CTB e seguintes, pelos motivos de fato e de direito a seguir expostos:
+
+I - SÍNTESE DOS FATOS
+%s
+
+II - PRELIMINARMENTE
+2.1. Da Necessidade de Concessão do Efeito Suspensivo
+%s
+
+III - DO MÉRITO
+3.1. Da Ausência de Comprovação da Regularidade do Equipamento
+%s
+
+3.2. Da Falta de Publicidade Prévia do Local de Fiscalização
+%s
+
+IV - DOS PRECEDENTES JURISPRUDENCIAIS
+%s
+
+V - DOS PEDIDOS
+%s
+
+Nestes termos,
+Pede deferimento.
+
+%s, %s
+
+_______________________
+%s
+CPF: %s
+CNH: %s"
+    ];
+
     /**
      * Gera um recurso para uma multa usando a API da OpenAI.
      *
@@ -20,8 +142,17 @@ class OpenAIService
         try {
             Log::info('Iniciando geração de recurso para multa: ' . $ticket->id);
 
-            $prompt = $this->createPrompt($ticket, $additionalData);
-            Log::info('Prompt criado com sucesso');
+            // Identifica o tipo de infração e seleciona o template apropriado
+            $infractionType = $ticket->infractionType;
+            $templateKey = $this->getTemplateKeyFromInfraction($infractionType);
+            
+            // Obtém argumentos e jurisprudência específicos
+            $specificArguments = $this->getSpecificArguments($templateKey);
+            
+            // Cria o prompt enriquecido com os dados específicos
+            $prompt = $this->createEnhancedPrompt($ticket, $additionalData, $specificArguments);
+            
+            Log::info('Prompt enriquecido criado com sucesso');
 
             // Verificar configuração da API
             $apiKey = config('openai.api_key');
@@ -40,13 +171,28 @@ class OpenAIService
             }
 
             $result = \OpenAI\Laravel\Facades\OpenAI::chat()->create([
-                'model' => 'gpt-3.5-turbo',
+                'model' => 'gpt-4-turbo',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'Você é um especialista em legislação de trânsito e redação de recursos contra multas. Seu objetivo é gerar um recurso formal, respeitoso e convincente para contestar uma multa de trânsito no Brasil.'],
+                    [
+                        'role' => 'system', 
+                        'content' => 'Você é um advogado especialista em direito de trânsito brasileiro, com profundo conhecimento do CTB (Código de Trânsito Brasileiro), resoluções do CONTRAN, jurisprudência e doutrinas. Sua função é gerar recursos administrativos detalhados, tecnicamente precisos e altamente persuasivos.
+
+Ao gerar o recurso:
+1. Analise cuidadosamente o tipo específico de infração
+2. Identifique possíveis vícios formais no auto de infração
+3. Cite artigos relevantes do CTB e resoluções do CONTRAN
+4. Inclua jurisprudência favorável específica para o caso
+5. Use linguagem formal e técnica, mas clara
+6. Estruture o texto com introdução, qualificação, fatos, direito e pedido
+7. Foque em argumentos técnicos e jurídicos sólidos
+8. Mantenha um tom respeitoso e profissional
+9. Utilize os precedentes jurisprudenciais fornecidos
+10. Adapte os argumentos ao caso específico'
+                    ],
                     ['role' => 'user', 'content' => $prompt],
                 ],
                 'temperature' => 0.7,
-                'max_tokens' => 2000,
+                'max_tokens' => 2500,
             ]);
 
             Log::info('Resposta recebida da OpenAI API');
@@ -64,6 +210,56 @@ class OpenAIService
             Log::info('Usando texto de exemplo devido a erro na API');
             return $this->getExampleText($ticket, $additionalData);
         }
+    }
+
+    /**
+     * Identifica o template apropriado com base no tipo de infração
+     */
+    private function getTemplateKeyFromInfraction($infractionType): string
+    {
+        $description = strtolower($infractionType->description ?? '');
+        
+        if (str_contains($description, 'velocidade')) {
+            return 'velocidade';
+        } elseif (str_contains($description, 'semáforo')) {
+            return 'semaforo';
+        } elseif (str_contains($description, 'estacionamento')) {
+            return 'estacionamento';
+        }
+        
+        return 'padrao';
+    }
+
+    /**
+     * Obtém argumentos e jurisprudência específicos para o tipo de infração
+     */
+    private function getSpecificArguments(string $templateKey): array
+    {
+        return $this->jurisprudenceTemplates[$templateKey] ?? [
+            'argumentos' => [],
+            'jurisprudencia' => []
+        ];
+    }
+
+    /**
+     * Cria um prompt enriquecido com argumentos específicos
+     */
+    private function createEnhancedPrompt(Ticket $ticket, array $additionalData, array $specificArguments): string
+    {
+        $basePrompt = $this->createPrompt($ticket, $additionalData);
+        
+        // Adiciona argumentos e jurisprudência específicos ao prompt
+        $enhancedPrompt = $basePrompt . "\n\nARGUMENTOS ESPECÍFICOS RECOMENDADOS:\n";
+        foreach ($specificArguments['argumentos'] ?? [] as $argumento) {
+            $enhancedPrompt .= "- " . $argumento . "\n";
+        }
+        
+        $enhancedPrompt .= "\nJURISPRUDÊNCIA APLICÁVEL:\n";
+        foreach ($specificArguments['jurisprudencia'] ?? [] as $jurisprudencia) {
+            $enhancedPrompt .= "- " . $jurisprudencia . "\n";
+        }
+        
+        return $enhancedPrompt;
     }
 
     /**

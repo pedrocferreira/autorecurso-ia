@@ -22,8 +22,17 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'cpf',
+        'cnh_category',
+        'cnh_address',
+        'phone',
         'is_admin',
         'credits',
+        'google_id',
+        'avatar',
+        'premium',
+        'onboarded',
+        'blocked',
     ];
 
     /**
@@ -46,6 +55,8 @@ class User extends Authenticatable
         'password' => 'hashed',
         'is_admin' => 'boolean',
         'credits' => 'integer',
+        'onboarded' => 'boolean',
+        'blocked' => 'boolean',
     ];
 
     /**

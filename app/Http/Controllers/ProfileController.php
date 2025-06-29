@@ -26,15 +26,28 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
+        // Verificar se o perfil está completo agora
+        $profileIsComplete = !empty($user->cpf) && 
+                            !empty($user->cnh_category) && 
+                            !empty($user->cnh_address) && 
+                            !empty($user->phone);
+
+        if ($profileIsComplete) {
+            // Se o perfil está completo, redireciona para o dashboard
+            return Redirect::route('dashboard')->with('success', 'Perfil atualizado com sucesso! Agora você pode acessar todas as funcionalidades.');
+        } else {
+            // Se ainda não está completo, fica na página de perfil
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        }
     }
 
     /**

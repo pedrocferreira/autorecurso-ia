@@ -42,10 +42,10 @@
                     <div class="text-gray-600">
                         <p class="mb-3">
                             Os créditos são utilizados para gerar recursos personalizados para suas multas de trânsito.
-                            Cada geração de recurso consome 1 crédito.
+                            O sistema de <strong>Inteligência Híbrida</strong> combina 3 IAs especializadas e consome <span class="font-bold text-blue-600">3 créditos</span> por recurso gerado (qualidade máxima).
                         </p>
                         <p class="mb-3">
-                            Você pode adquirir pacotes de créditos com descontos progressivos.
+                            Você pode adquirir pacotes de créditos com <span class="font-bold text-green-600">descontos progressivos</span>.
                             Quanto maior o pacote, maior o desconto.
                         </p>
                         <p>
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach ($packages as $package)
                     <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 {{ $package['recommended'] ? 'ring-2 ring-blue-500' : '' }}">
                         <div class="p-5">
@@ -81,20 +81,10 @@
                                     R$ {{ number_format($package['price'] / $package['amount'], 2, ',', '.') }} por crédito
                                 </p>
                             </div>
-                            <form action="{{ route('credits.purchase') }}" method="POST">
+                            <p class="text-xs text-gray-500 mb-3">Pagamento via <strong>Cartão de Crédito</strong></p>
+                            <form action="{{ route('credits.checkout') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="package_id" value="{{ $package['id'] }}">
-
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Forma de pagamento
-                                    </label>
-                                    <select name="payment_method" class="w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        <option value="credit_card">Cartão de Crédito</option>
-                                        <option value="pix">Pix</option>
-                                        <option value="boleto">Boleto Bancário</option>
-                                    </select>
-                                </div>
 
                                 <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors">
                                     Comprar agora

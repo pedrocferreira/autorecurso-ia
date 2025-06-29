@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AppealController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +24,7 @@ Route::get('/', function () {
 });
 
 // Rotas autenticadas
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -32,23 +33,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Recursos (Appeals)
     Route::get('/appeals/new/create', [AppealController::class, 'createNew'])->name('appeals.create_new');
+    Route::post('/appeals/new/store', [AppealController::class, 'storeNew'])->name('appeals.store_new');
     Route::resource('appeals', AppealController::class);
     Route::get('/appeals/{appeal}/download', [AppealController::class, 'download'])->name('appeals.download');
 
-    // Perfil
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Perfil - IMPORTANTE: As rotas de perfil não devem ter o middleware 'profile.completed' para evitar loop
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Créditos
     Route::get('/credits', [\App\Http\Controllers\CreditController::class, 'index'])->name('credits.index');
     Route::get('/credits/packages', [\App\Http\Controllers\CreditController::class, 'packages'])->name('credits.packages');
     Route::post('/credits/purchase', [\App\Http\Controllers\CreditController::class, 'purchase'])->name('credits.purchase');
 
-    // Rota temporária para adicionar créditos gratuitos para testes
-    if (app()->environment(['local', 'development'])) {
-        Route::get('/credits/free', [\App\Http\Controllers\CreditController::class, 'addFreeCredits'])->name('credits.free');
-    }
+    Route::post('/credits/checkout', [\App\Http\Controllers\StripeController::class, 'checkout'])->middleware('auth')->name('credits.checkout');
+    Route::get('/credits/success', [\App\Http\Controllers\StripeController::class, 'success'])->name('credits.success');
+    Route::get('/credits/cancel', [\App\Http\Controllers\StripeController::class, 'cancel'])->name('credits.cancel');
 });
 
 // Rotas de administração
@@ -57,16 +58,52 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/tickets', [AdminController::class, 'tickets'])->name('tickets');
     Route::get('/appeals', [AdminController::class, 'appeals'])->name('appeals');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/users/{user}/credits', [UserController::class, 'credit'])->name('users.credit');
+    Route::post('/users/{user}/toggle-block', [UserController::class, 'toggleBlock'])->name('users.toggle_block');
 });
 
-Route::middleware(['auth'])->group(function () {
+// Outro grupo que também precisa do middleware
+Route::middleware(['auth', 'profile.completed'])->group(function () {
     // Rotas de multas
-    Route::resource('tickets', TicketController::class);
+    // Route::resource('tickets', TicketController::class); // Removido pois já está no grupo acima
     
     // Rotas de recursos
     Route::get('tickets/{ticket}/appeal', [AppealController::class, 'create'])->name('appeals.create');
     Route::post('appeals', [AppealController::class, 'store'])->name('appeals.store');
     Route::get('appeals/{appeal}', [AppealController::class, 'show'])->name('appeals.show');
+});
+
+// Rotas de perfil
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::post('/stripe/webhook', [\App\Http\Controllers\StripeController::class, 'webhook'])->name('stripe.webhook');
+
+// Rotas para documentos legais
+Route::get('/legal/privacy-policy', function () {
+    return view('legal.privacy-policy');
+})->name('legal.privacy');
+
+Route::get('/legal/terms-of-service', function () {
+    return view('legal.terms-of-service');
+})->name('legal.terms');
+
+Route::get('/legal/cookie-policy', function () {
+    return view('legal.cookie-policy');
+})->name('legal.cookies');
+
+// Rota para solicitação de dados pessoais (LGPD)
+Route::get('/privacy/request', function () {
+    return view('privacy.request');
+})->name('privacy.request');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/onboarding/complete', [\App\Http\Controllers\OnboardingController::class, 'complete'])->name('onboarding.complete');
 });
 
 require __DIR__.'/auth.php';

@@ -18,21 +18,48 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-b from-white to-blue-100 dark:from-gray-900 dark:to-gray-800">
-            <div>
-                <a href="/">
-                    <div class="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center text-white">
-                        <i class="fas fa-gavel text-4xl"></i>
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-slate-50 to-blue-50">
+            <!-- Logo Section -->
+            <div class="flex flex-col items-center mb-8">
+                <a href="/" class="flex items-center justify-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <i class="fas fa-gavel text-2xl"></i>
                     </div>
                 </a>
+                <div class="text-center">
+                    <h1 class="text-2xl font-bold text-gray-800 mb-1">
+                        <span class="text-blue-600">Auto</span>Recurso
+                    </h1>
+                    <p class="text-sm text-gray-500">Contestação inteligente de multas</p>
+                </div>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+            <!-- Main Content -->
+            <div class="w-full sm:max-w-md">
+                <div class="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
+                    {{ $slot }}
+                </div>
             </div>
 
-            <div class="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-                &copy; {{ date('Y') }} AutoRecurso - Todos os direitos reservados
+            <!-- Footer -->
+            <div class="mt-8 text-center">
+                <div class="flex items-center justify-center space-x-8 mb-4">
+                    <div class="flex items-center text-xs text-gray-500">
+                        <i class="fas fa-shield-alt text-green-500 mr-1"></i>
+                        <span>Seguro</span>
+                    </div>
+                    <div class="flex items-center text-xs text-gray-500">
+                        <i class="fas fa-bolt text-blue-500 mr-1"></i>
+                        <span>Rápido</span>
+                    </div>
+                    <div class="flex items-center text-xs text-gray-500">
+                        <i class="fas fa-star text-yellow-500 mr-1"></i>
+                        <span>Confiável</span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400">
+                    &copy; {{ date('Y') }} AutoRecurso - Todos os direitos reservados
+                </p>
             </div>
         </div>
     </body>

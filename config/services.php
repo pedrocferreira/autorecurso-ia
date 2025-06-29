@@ -31,4 +31,32 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URL'),
+    ],
+
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+    ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'enabled' => env('GEMINI_ENABLED', true),
+    ],
+
+    'huggingface' => [
+        'api_key' => env('HUGGINGFACE_API_KEY'),
+        'enabled' => env('HUGGINGFACE_ENABLED', false),
+    ],
+
+    'saul' => [
+        'enabled' => env('SAUL_ENABLED', false),
+    ],
+
+    'roberta' => [
+        'enabled' => env('ROBERTA_ENABLED', false),
+    ],
+
 ];

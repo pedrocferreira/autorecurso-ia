@@ -31,12 +31,6 @@
             text-align: justify;
             margin-bottom: 30px;
         }
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 10pt;
-            color: #666;
-        }
         .signature {
             margin-top: 80px;
             text-align: center;
@@ -45,14 +39,6 @@
             width: 200px;
             border-bottom: 1px solid #000;
             margin: 10px auto;
-        }
-        .page-number {
-            position: fixed;
-            bottom: -2cm;
-            width: 100%;
-            text-align: center;
-            font-size: 9pt;
-            color: #666;
         }
         .legal-indent {
             text-indent: 4cm;
@@ -81,14 +67,8 @@
     </style>
 </head>
 <body>
-    <div class="page-number">Página <span class="pagenum"></span></div>
-    
     <div class="content">
         {!! nl2br(e($text)) !!}
-    </div>
-
-    <div class="footer">
-        <p>Documento gerado em: {{ now()->format('d/m/Y H:i:s') }}</p>
     </div>
 </body>
 </html> 

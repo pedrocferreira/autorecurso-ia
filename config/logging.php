@@ -23,7 +23,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'custom'),
+    'default' => env('LOG_CHANNEL', 'stack'),
 
     /*
     |--------------------------------------------------------------------------
@@ -57,13 +57,6 @@ return [
     */
 
     'channels' => [
-        'custom' => [
-            'driver' => 'custom',
-            'via' => function () {
-                return Log::channel('custom');
-            },
-        ],
-
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

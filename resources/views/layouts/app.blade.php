@@ -58,6 +58,68 @@
 
                 {{ $slot }}
             </main>
+            
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-200 mt-16">
+                <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Coluna 1: Informações da empresa -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">AutoRecurso</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Plataforma inteligente para geração de recursos administrativos contra multas de trânsito.
+                            </p>
+                            <div class="flex space-x-4">
+                                <a href="mailto:contato@autorecurso.online" class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-gray-600">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-gray-600">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Coluna 2: Links úteis -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Links Úteis</h3>
+                            <ul class="space-y-2">
+                                <li><a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-gray-900 text-sm">Dashboard</a></li>
+                                <li><a href="{{ route('appeals.create_new') }}" class="text-gray-600 hover:text-gray-900 text-sm">Criar Recurso</a></li>
+                                <li><a href="{{ route('credits.index') }}" class="text-gray-600 hover:text-gray-900 text-sm">Comprar Créditos</a></li>
+                                <li><a href="mailto:suporte@autorecurso.online" class="text-gray-600 hover:text-gray-900 text-sm">Suporte</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Coluna 3: Documentos legais -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Legal & Privacidade</h3>
+                            <ul class="space-y-2">
+                                <li><a href="{{ route('legal.privacy') }}" class="text-gray-600 hover:text-gray-900 text-sm">Política de Privacidade</a></li>
+                                <li><a href="{{ route('legal.terms') }}" class="text-gray-600 hover:text-gray-900 text-sm">Termos de Serviço</a></li>
+                                <li><a href="{{ route('legal.cookies') }}" class="text-gray-600 hover:text-gray-900 text-sm">Política de Cookies</a></li>
+                                <li><a href="{{ route('privacy.request') }}" class="text-gray-600 hover:text-gray-900 text-sm">Solicitar Dados (LGPD)</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 mt-8 pt-8">
+                        <div class="flex flex-col md:flex-row justify-between items-center">
+                            <div class="text-sm text-gray-600">
+                                © {{ date('Y') }} AutoRecurso. Todos os direitos reservados.
+                            </div>
+                            <div class="text-sm text-gray-600 mt-4 md:mt-0">
+                                <span class="inline-flex items-center">
+                                    <i class="fas fa-shield-alt text-green-500 mr-2"></i>
+                                    Protegido pela LGPD
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
         
         @stack('scripts')

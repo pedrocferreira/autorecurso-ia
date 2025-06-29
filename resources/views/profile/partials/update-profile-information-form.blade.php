@@ -1,4 +1,27 @@
-<section>
+<section x-data="{
+    formatCpf(value) {
+        let v = value.replace(/\D/g, '');
+        v = v.substring(0, 11); // Limita a 11 dígitos
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        return v;
+    },
+    formatPhone(value) {
+        let v = value.replace(/\D/g, '');
+        v = v.substring(0, 11); // Limita a 11 dígitos (para (XX) XXXXX-XXXX)
+        if (v.length <= 2) {
+            v = v.replace(/(\d{0,2})/, '($1');
+        } else if (v.length <= 6) {
+            v = v.replace(/(\d{2})(\d{0,4})/, '($1) $2');
+        } else if (v.length <= 10) {
+            v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+        } else { // v.length === 11
+            v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        }
+        return v;
+    }
+}">
     <header>
         <h2 class="text-lg font-medium text-gray-900">
             {{ __('Profile Information') }}
@@ -45,6 +68,50 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        {{-- CPF --}}
+        <div>
+            <x-input-label for="cpf" :value="__('CPF')" />
+            <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" 
+                          :value="old('cpf', $user->cpf)" 
+                          x-on:input="$event.target.value = formatCpf($event.target.value)" 
+                          required autocomplete="off" />
+            <x-input-error class="mt-2" :messages="$errors->get('cpf')" />
+        </div>
+
+        {{-- Categoria CNH --}}
+        <div>
+            <x-input-label for="cnh_category" :value="__('Categoria da CNH')" />
+            <select id="cnh_category" name="cnh_category" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                <option value="">{{ __('Selecione a categoria...') }}</option>
+                <option value="A" {{ old('cnh_category', $user->cnh_category) == 'A' ? 'selected' : '' }}>A - Motocicleta</option>
+                <option value="B" {{ old('cnh_category', $user->cnh_category) == 'B' ? 'selected' : '' }}>B - Automóvel</option>
+                <option value="AB" {{ old('cnh_category', $user->cnh_category) == 'AB' ? 'selected' : '' }}>AB - Moto e Automóvel</option>
+                <option value="C" {{ old('cnh_category', $user->cnh_category) == 'C' ? 'selected' : '' }}>C - Caminhão</option>
+                <option value="AC" {{ old('cnh_category', $user->cnh_category) == 'AC' ? 'selected' : '' }}>AC - Moto e Caminhão</option>
+                <option value="D" {{ old('cnh_category', $user->cnh_category) == 'D' ? 'selected' : '' }}>D - Ônibus</option>
+                <option value="E" {{ old('cnh_category', $user->cnh_category) == 'E' ? 'selected' : '' }}>E - Carreta</option>
+                <option value="ACC" {{ old('cnh_category', $user->cnh_category) == 'ACC' ? 'selected' : '' }}>ACC - Autorização para Conduzir Ciclomotor</option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('cnh_category')" />
+        </div>
+
+        {{-- Endereço CNH --}}
+        <div>
+            <x-input-label for="cnh_address" :value="__('Endereço (conforme CNH)')" />
+            <textarea id="cnh_address" name="cnh_address" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3" required autocomplete="off">{{ old('cnh_address', $user->cnh_address) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('cnh_address')" />
+        </div>
+
+        {{-- Telefone --}}
+        <div>
+            <x-input-label for="phone" :value="__('Telefone')" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" 
+                          :value="old('phone', $user->phone)" 
+                          x-on:input="$event.target.value = formatPhone($event.target.value)" 
+                          required autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 
         <div class="flex items-center gap-4">

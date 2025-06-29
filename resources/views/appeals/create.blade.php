@@ -32,48 +32,88 @@
                         <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
 
                         <!-- Dados Pessoais -->
-                        <div class="space-y-4">
+                        <div class="space-y-4" x-data="{
+                            formatCpf(value) {
+                                let v = value.replace(/\D/g, '');
+                                v = v.substring(0, 11);
+                                v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                                v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                                v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                                return v;
+                            },
+                            formatPhone(value) {
+                                let v = value.replace(/\D/g, '');
+                                v = v.substring(0, 11);
+                                if (v.length <= 2) {
+                                    v = v.replace(/(\d{0,2})/, '($1');
+                                } else if (v.length <= 6) {
+                                    v = v.replace(/(\d{2})(\d{0,4})/, '($1) $2');
+                                } else if (v.length <= 10) {
+                                    v = v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+                                } else { // v.length === 11
+                                    v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                                }
+                                return v;
+                            }
+                        }">
                             <h3 class="text-lg font-medium text-gray-900">Dados Pessoais</h3>
                             
                             <div>
                                 <x-input-label for="name" :value="__('Nome Completo')" />
-                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $ticket->name)" required />
+                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', Auth::user()->name)" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
                             </div>
 
                             <div>
                                 <x-input-label for="cpf" :value="__('CPF')" />
-                                <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" :value="old('cpf', $ticket->cpf)" required />
+                                <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" 
+                                              :value="old('cpf', Auth::user()->cpf)" 
+                                              x-on:input="$event.target.value = formatCpf($event.target.value)" 
+                                              required />
                                 <x-input-error class="mt-2" :messages="$errors->get('cpf')" />
                             </div>
 
                             <div>
                                 <x-input-label for="driver_license" :value="__('Número da CNH')" />
-                                <x-text-input id="driver_license" name="driver_license" type="text" class="mt-1 block w-full" :value="old('driver_license', $ticket->driver_license)" required />
+                                <x-text-input id="driver_license" name="driver_license" type="text" class="mt-1 block w-full" :value="old('driver_license')" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('driver_license')" />
                             </div>
 
                             <div>
                                 <x-input-label for="driver_license_category" :value="__('Categoria da CNH')" />
-                                <x-text-input id="driver_license_category" name="driver_license_category" type="text" class="mt-1 block w-full" :value="old('driver_license_category', $ticket->driver_license_category)" required />
+                                <select id="driver_license_category" name="driver_license_category" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                                    <option value="">{{ __('Selecione a categoria...') }}</option>
+                                    @php $selectedCategory = old('driver_license_category', Auth::user()->cnh_category); @endphp
+                                    <option value="A" {{ $selectedCategory == 'A' ? 'selected' : '' }}>A - Motocicleta</option>
+                                    <option value="B" {{ $selectedCategory == 'B' ? 'selected' : '' }}>B - Automóvel</option>
+                                    <option value="AB" {{ $selectedCategory == 'AB' ? 'selected' : '' }}>AB - Moto e Automóvel</option>
+                                    <option value="C" {{ $selectedCategory == 'C' ? 'selected' : '' }}>C - Caminhão</option>
+                                    <option value="AC" {{ $selectedCategory == 'AC' ? 'selected' : '' }}>AC - Moto e Caminhão</option>
+                                    <option value="D" {{ $selectedCategory == 'D' ? 'selected' : '' }}>D - Ônibus</option>
+                                    <option value="E" {{ $selectedCategory == 'E' ? 'selected' : '' }}>E - Carreta</option>
+                                    <option value="ACC" {{ $selectedCategory == 'ACC' ? 'selected' : '' }}>ACC - Autorização para Conduzir Ciclomotor</option>
+                                </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('driver_license_category')" />
                             </div>
 
                             <div>
                                 <x-input-label for="address" :value="__('Endereço Completo')" />
-                                <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $ticket->address)" required />
+                                <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', Auth::user()->cnh_address)" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('address')" />
                             </div>
 
                             <div>
                                 <x-input-label for="phone" :value="__('Telefone')" />
-                                <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $ticket->phone)" required />
+                                <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" 
+                                              :value="old('phone', Auth::user()->phone)" 
+                                              x-on:input="$event.target.value = formatPhone($event.target.value)" 
+                                              required />
                                 <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                             </div>
 
                             <div>
                                 <x-input-label for="email" :value="__('E-mail')" />
-                                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $ticket->email)" required />
+                                <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', Auth::user()->email)" required />
                                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
                             </div>
                         </div>

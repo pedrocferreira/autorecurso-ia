@@ -14,14 +14,13 @@
                     </svg>
                     <strong>{{ Auth::user()->credits }} créditos</strong>
                 </span>
-                @if(config('app.env') == 'local' || config('app.env') == 'development')
-                    <a href="{{ route('credits.free') }}" class="ml-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs rounded-full hover:from-blue-600 hover:to-blue-700 transition shadow-sm flex items-center">
-                        <i class="fas fa-gift mr-1"></i> +5 créditos grátis
-                    </a>
-                @endif
             </div>
         </div>
     </x-slot>
+
+    @if(!Auth::user()->onboarded)
+        @include('components.onboarding-tutorial')
+    @endif
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -47,11 +46,11 @@
                         <h3 class="text-xl font-bold mb-2">Bem-vindo ao AutoRecurso</h3>
                         <p class="mb-4">Use nossa inteligência artificial para contestar multas de trânsito com maior chance de sucesso. Economize tempo e dinheiro.</p>
                         <div class="flex space-x-3">
-                            <a href="{{ route('appeals.create_new') }}" class="inline-block px-4 py-2 bg-white text-blue-600 rounded-lg font-medium shadow-sm hover:bg-gray-100 transition flex flex-col items-center">
-                                <span><i class="fas fa-file-alt mr-1"></i> Gerar Recurso</span>
-                                <span class="text-xs text-blue-400 mt-1">Custo: 1 crédito</span>
+                            <a href="{{ route('appeals.create_new') }}" id="btn-generate-appeal" class="inline-block px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold shadow-lg hover:bg-blue-50 transition transform hover:scale-105 ring-2 ring-white animate-pulse">
+                                <span class="flex items-center"><i class="fas fa-rocket mr-2 text-blue-500"></i> <span class="uppercase">Gerar Recurso</span></span>
+                                <span class="text-xs text-blue-400 mt-1">Custo: 3 créditos • Inteligência Híbrida</span>
                             </a>
-                            <a href="{{ route('credits.packages') }}" class="inline-block px-4 py-2 bg-blue-700 text-white rounded-lg font-medium shadow-sm hover:bg-blue-800 transition">
+                            <a href="{{ route('credits.packages') }}" id="btn-buy-credits" class="inline-block px-4 py-2 bg-blue-700 text-white rounded-lg font-medium shadow-sm hover:bg-blue-800 transition">
                                 <i class="fas fa-coins mr-1"></i> Comprar Créditos
                             </a>
                         </div>
@@ -71,7 +70,7 @@
                         <i class="fas fa-chart-line text-blue-600 mr-2"></i>
                         Seu Progresso
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="stats-grid">
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 transition hover:shadow-md flex">
                             <div class="rounded-full w-12 h-12 bg-blue-100 flex items-center justify-center mr-3">
                                 <i class="fas fa-ticket-alt text-blue-600 text-xl"></i>
@@ -120,7 +119,7 @@
                         Ações Rápidas
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <a href="{{ route('tickets.create') }}" class="bg-blue-50 hover:bg-blue-100 p-5 rounded-lg border border-blue-200 flex items-center justify-between transition duration-300 group">
+                        <a href="{{ route('tickets.create') }}" id="btn-new-ticket" class="bg-blue-50 hover:bg-blue-100 p-5 rounded-lg border border-blue-200 flex items-center justify-between transition duration-300 group">
                             <div class="flex items-center">
                                 <div class="rounded-full w-10 h-10 bg-blue-500 flex items-center justify-center mr-3 group-hover:bg-blue-600 transition">
                                     <i class="fas fa-plus text-white"></i>
@@ -129,17 +128,17 @@
                             </div>
                             <i class="fas fa-chevron-right text-blue-300 group-hover:text-blue-500 transition"></i>
                         </a>
-                        <a href="{{ route('appeals.create_new') }}" class="bg-green-50 hover:bg-green-100 p-5 rounded-lg border border-green-200 flex items-center justify-between transition duration-300 group">
+                        <a href="{{ route('appeals.create_new') }}" class="bg-green-100 hover:bg-green-200 p-6 rounded-lg border-2 border-green-400 flex items-center justify-between transition duration-300 group shadow-lg transform hover:-translate-y-0.5">
                             <div class="flex items-center">
-                                <div class="rounded-full w-10 h-10 bg-green-500 flex items-center justify-center mr-3 group-hover:bg-green-600 transition">
-                                    <i class="fas fa-file-alt text-white"></i>
+                                <div class="rounded-full w-12 h-12 bg-green-500 flex items-center justify-center mr-4 group-hover:bg-green-600 transition">
+                                    <i class="fas fa-rocket text-white text-lg"></i>
                                 </div>
                                 <div>
-                                    <span class="font-medium text-green-800 block">Gerar Novo Recurso</span>
-                                    <span class="text-xs text-green-600">Custo: 1 crédito por recurso</span>
+                                    <span class="font-bold text-green-900 block text-lg">Gerar Novo Recurso</span>
+                                    <span class="text-xs text-green-700">Custa 3 créditos • Máxima qualidade</span>
                                 </div>
                             </div>
-                            <i class="fas fa-chevron-right text-green-300 group-hover:text-green-500 transition"></i>
+                            <i class="fas fa-chevron-right text-green-400 group-hover:text-green-600 transition"></i>
                         </a>
                         <a href="{{ route('credits.packages') }}" class="bg-yellow-50 hover:bg-yellow-100 p-5 rounded-lg border border-yellow-200 flex items-center justify-between transition duration-300 group">
                             <div class="flex items-center">
