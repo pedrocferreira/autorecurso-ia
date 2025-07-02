@@ -73,11 +73,17 @@
         {{-- CPF --}}
         <div>
             <x-input-label for="cpf" :value="__('CPF')" />
-            <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" 
-                          :value="old('cpf', $user->cpf)" 
-                          x-on:input="$event.target.value = formatCpf($event.target.value)" 
-                          required autocomplete="off" />
+            <x-text-input id="cpf" name="cpf" type="text" class="mt-1 block w-full" :value="old('cpf', $user->cpf)" required autofocus autocomplete="cpf" 
+                x-on:input="$el.value = formatCpf($el.value)"
+                x-on:blur="validateCpf($el.value)"
+                x-ref="cpfInput"
+                @submit.prevent="
+                    // Remove formatação antes de enviar
+                    $refs.cpfInput.value = $refs.cpfInput.value.replace(/\D/g, '')
+                "
+            />
             <x-input-error class="mt-2" :messages="$errors->get('cpf')" />
+            <p class="mt-1 text-sm text-red-600 hidden" id="cpf-error"></p>
         </div>
 
         {{-- Categoria CNH --}}
@@ -129,3 +135,53 @@
         </div>
     </form>
 </section>
+
+<script>
+    function validateCpf(cpf) {
+        const errorElement = document.getElementById('cpf-error');
+        
+        // Remove tudo que não for número
+        cpf = cpf.replace(/[^0-9]/g, '');
+        
+        // Valida tamanho
+        if (cpf.length !== 11) {
+            errorElement.textContent = 'CPF deve ter 11 dígitos';
+            errorElement.classList.remove('hidden');
+            return false;
+        }
+
+        // Valida se todos os dígitos são iguais
+        if (/^(\d)\1+$/.test(cpf)) {
+            errorElement.textContent = 'CPF inválido';
+            errorElement.classList.remove('hidden');
+            return false;
+        }
+
+        // Calcula primeiro dígito verificador
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = soma % 11;
+        let digito1 = (resto < 2) ? 0 : 11 - resto;
+
+        // Calcula segundo dígito verificador
+        soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        soma += digito1 * 2;
+        resto = soma % 11;
+        let digito2 = (resto < 2) ? 0 : 11 - resto;
+
+        // Verifica se os dígitos calculados são iguais aos informados
+        if (parseInt(cpf.charAt(9)) !== digito1 || parseInt(cpf.charAt(10)) !== digito2) {
+            errorElement.textContent = 'CPF inválido';
+            errorElement.classList.remove('hidden');
+            return false;
+        }
+
+        errorElement.classList.add('hidden');
+        return true;
+    }
+</script>

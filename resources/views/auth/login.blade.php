@@ -6,7 +6,7 @@
         </h2>
         <p class="text-gray-600 text-sm">
             Acesse o painel do AutoRecurso
-        </p>
+            </p>
     </div>
 
     <!-- Session Status -->
@@ -81,7 +81,7 @@
             Não tem uma conta? 
             <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-800">
                 Registre-se aqui
-            </a>
+        </a>
         </p>
     </div>
 </x-guest-layout>

@@ -122,4 +122,50 @@ class User extends Authenticatable
     {
         return $this->credits >= $amount;
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($user) {
+            if ($user->isDirty('cpf')) {
+                $cpf = preg_replace('/[^0-9]/', '', $user->cpf);
+                
+                // Valida tamanho
+                if (strlen($cpf) !== 11) {
+                    throw new \Exception('CPF deve ter 11 dígitos');
+                }
+
+                // Valida se todos os dígitos são iguais
+                if (preg_match('/^(\d)\1+$/', $cpf)) {
+                    throw new \Exception('CPF inválido');
+                }
+
+                // Calcula primeiro dígito verificador
+                $soma = 0;
+                for ($i = 0; $i < 9; $i++) {
+                    $soma += $cpf[$i] * (10 - $i);
+                }
+                $resto = $soma % 11;
+                $digito1 = ($resto < 2) ? 0 : 11 - $resto;
+
+                // Calcula segundo dígito verificador
+                $soma = 0;
+                for ($i = 0; $i < 9; $i++) {
+                    $soma += $cpf[$i] * (11 - $i);
+                }
+                $soma += $digito1 * 2;
+                $resto = $soma % 11;
+                $digito2 = ($resto < 2) ? 0 : 11 - $resto;
+
+                // Verifica se os dígitos calculados são iguais aos informados
+                if ($cpf[9] != $digito1 || $cpf[10] != $digito2) {
+                    throw new \Exception('CPF inválido');
+                }
+
+                // Salva o CPF sem formatação
+                $user->cpf = $cpf;
+            }
+        });
+    }
 }

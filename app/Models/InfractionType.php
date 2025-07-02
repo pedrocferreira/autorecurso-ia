@@ -18,9 +18,10 @@ class InfractionType extends Model
         'code',
         'name',
         'description',
-        'article',
+        'law_article',
         'base_amount',
         'points',
+        'severity',
         'active'
     ];
 

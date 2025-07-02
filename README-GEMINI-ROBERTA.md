@@ -43,8 +43,8 @@ O sistema agora usa **INTELIGÊNCIA HÍBRIDA** por padrão - o sistema mais avan
 **OBRIGATÓRIO**: Configure as seguintes variáveis no seu arquivo `.env`:
 
 ```env
-# Google Gemini (JÁ CONFIGURADO)
-GEMINI_API_KEY=AIzaSyD67Krgy_1vNiXsFAWI_R3CMB17TGM03oc
+# Google Gemini
+GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_ENABLED=true
 
 # Hugging Face (para RoBERTaLexPT)
@@ -55,7 +55,13 @@ HUGGINGFACE_ENABLED=true
 ROBERTA_ENABLED=true
 ```
 
-## 🔑 Como Obter a Chave do Hugging Face
+## 🔑 Como Obter as Chaves de API
+
+### Google Gemini
+1. Vá para https://makersuite.google.com/app/apikey
+2. Faça login com sua conta Google
+3. Crie uma nova chave de API
+4. Copie a chave e coloque em `GEMINI_API_KEY`
 
 ### Hugging Face (Para RoBERTaLexPT)
 1. Vá para https://huggingface.co/

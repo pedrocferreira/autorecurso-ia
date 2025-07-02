@@ -8,11 +8,8 @@
         <title>AutoRecurso - Recursos de Multas com Inteligência Artificial</title>
 
         <!-- Favicon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="icon" href="/gavel-favicon.svg" type="image/svg+xml">
         <link rel="manifest" href="/site.webmanifest">
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4361ee">
         <meta name="msapplication-TileColor" content="#4361ee">
         <meta name="theme-color" content="#4361ee">
 
@@ -24,14 +21,18 @@
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        <!-- AOS Animations -->
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16970325896"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-        <!-- Swiper CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+        gtag('config', 'AW-16970325896');
+        </script>
 
         <!-- Styles -->
-        @vite(['resources/css/landing.css'])
+        @vite(['resources/css/landing.css', 'resources/js/landing.js'])
     </head>
     <body class="antialiased">
         <!-- Header -->
@@ -75,97 +76,138 @@
         <section class="hero-section">
             <div class="max-w-7xl mx-auto px-4">
                 <!-- Trust Badge -->
-                <div class="text-center mb-6">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-lime-400/20 text-lime-100 rounded-full text-sm font-medium">
-                        <i class="fas fa-star text-lime-400"></i>
-                        Mais de 10.000 recursos aprovados
-                        <i class="fas fa-star text-lime-400"></i>
+                <div class="text-center mb-8" data-aos="fade-down">
+                    <div class="trust-badge inline-flex items-center gap-3 px-6 py-3 text-white rounded-full text-base font-semibold">
+                        <i class="fas fa-star text-lime-400 text-lg"></i>
+                        <span>Mais de 10.000 recursos aprovados</span>
+                        <i class="fas fa-star text-lime-400 text-lg"></i>
                     </div>
                 </div>
 
                 <!-- Hero Content -->
                 <div class="text-center">
-                    <h1 class="hero-title" data-aos="fade-up">
+                    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
                         Cancele suas multas<br>
-                        <span class="bg-gradient-to-r from-lime-400 to-green-400 bg-clip-text text-transparent">sem sair de casa</span>
+                        <span class="bg-gradient-to-r from-lime-400 via-green-400 to-emerald-400 bg-clip-text text-transparent">sem sair de casa</span>
                     </h1>
-                    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                        Gere recursos jurídicos personalizados em 5 minutos usando nossa IA especializada. 
-                        <strong>95% de taxa de aprovação</strong> comprovada por mais de 10.000 motoristas.
-                    </p>
+                    
+                    <!-- Subtitle com destaque melhorado -->
+                    <div class="hero-subtitle-container" data-aos="fade-up" data-aos-delay="200">
+                        <p class="hero-subtitle">
+                            Gere recursos jurídicos personalizados em <span class="highlight-time">5 minutos</span> usando nossa 
+                            <span class="highlight-ai">IA Híbrida especializada</span>. 
+                        </p>
+                        <div class="success-rate-badge">
+                            <span class="success-percentage">95%</span>
+                            <span class="success-text">de taxa de aprovação<br>comprovada</span>
+                        </div>
+                    </div>
 
-                    <!-- Social Proof -->
-                    <div class="flex justify-center items-center gap-6 mb-8" data-aos="fade-up" data-aos-delay="150">
-                        <div class="flex items-center gap-2 text-white/90">
-                            <div class="flex -space-x-2">
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 border-2 border-white"></div>
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-blue-500 border-2 border-white"></div>
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 border-2 border-white"></div>
+                    <!-- Social Proof Melhorado -->
+                    <div class="social-proof-container" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-6 mb-8">
+                            <div class="flex items-center text-white/90">
+                                <div class="avatar-stack">
+                                    <div class="avatar avatar-1">CS</div>
+                                    <div class="avatar avatar-2">AM</div>
+                                    <div class="avatar avatar-3">PO</div>
+                                    <div class="avatar avatar-count">+10k</div>
+                                </div>
+                                <div class="user-count">
+                                    <span class="count-number">+10.000</span>
+                                    <span class="count-label">usuários</span>
+                                </div>
                             </div>
-                            <span class="text-sm font-medium">+10.000 usuários</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-lime-400">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span class="text-white/90 ml-1 text-sm">4.9/5 (2.847 avaliações)</span>
+                            <div class="rating-display">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="rating-text">4.9/5 (2.847 avaliações)</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8" data-aos="fade-up" data-aos-delay="200">
-                        <a href="{{ route('register') }}" class="cta-button cta-primary">
-                            <i class="fas fa-rocket"></i>
-                            Começar Agora - Grátis
-                        </a>
-                        <a href="#como-funciona" class="cta-button cta-secondary">
-                            <i class="fas fa-play"></i>
-                            Ver Demonstração
-                        </a>
+                    <!-- CTA Buttons Melhorados -->
+                    <div class="cta-container" data-aos="fade-up" data-aos-delay="400">
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                            <a href="{{ route('register') }}" class="cta-button cta-primary enhanced">
+                                <span class="cta-icon">
+                                    <i class="fas fa-rocket"></i>
+                                </span>
+                                <span class="cta-content">
+                                    <span class="cta-main">Começar Agora - Grátis</span>
+                                    <span class="cta-sub">Sem cartão de crédito</span>
+                                </span>
+                            </a>
+                        </div>
                     </div>
 
-                    <!-- Badges -->
-                    <div class="flex flex-wrap justify-center gap-3" data-aos="fade-up" data-aos-delay="250">
-                        <div class="hero-badge">
-                            <i class="fas fa-shield-check"></i>
-                            100% Seguro
-                        </div>
-                        <div class="hero-badge">
-                            <i class="fas fa-clock"></i>
-                            Resultado em 5min
-                        </div>
-                        <div class="hero-badge">
-                            <i class="fas fa-money-bill-wave"></i>
-                            Garantia 7 dias
+                    <!-- Trust Indicators Melhorados -->
+                    <div class="trust-indicators" data-aos="fade-up" data-aos-delay="500">
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <div class="trust-item">
+                                <i class="fas fa-shield-check trust-icon"></i>
+                                <span class="trust-text">100% Seguro</span>
+                            </div>
+                            <div class="trust-item">
+                                <i class="fas fa-clock trust-icon"></i>
+                                <span class="trust-text">Resultado em 5min</span>
+                            </div>
+                            <div class="trust-item">
+                                <i class="fas fa-money-bill-wave trust-icon"></i>
+                                <span class="trust-text">Garantia 30 dias</span>
+                            </div>
+                            <div class="trust-item">
+                                <i class="fas fa-certificate trust-icon"></i>
+                                <span class="trust-text">LGPD Compliance</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Floating Elements para Visual Enhancement -->
+            <div class="floating-elements">
+                <div class="floating-shape shape-1"></div>
+                <div class="floating-shape shape-2"></div>
+                <div class="floating-shape shape-3"></div>
             </div>
         </section>
 
         <!-- Stats Section -->
         <div class="max-w-7xl mx-auto px-6">
             <div class="stats-grid">
-                <div class="stat-card" data-aos="fade-up">
-                    <div class="stat-number">+10.000</div>
+                <div class="stat-card enhanced" data-aos="fade-up">
+                    <div class="stat-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="stat-number counter" data-target="10000">0</div>
                     <div class="stat-label">Recursos Gerados</div>
-                    <p class="text-sm text-gray-500 mt-2">Recursos aprovados nos últimos 12 meses</p>
+                    <p class="stat-description">Recursos aprovados nos últimos 12 meses com nossa IA especializada</p>
                 </div>
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stat-number">95%</div>
+                <div class="stat-card enhanced" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number counter" data-target="95">0</div>
                     <div class="stat-label">Taxa de Aprovação</div>
-                    <p class="text-sm text-gray-500 mt-2">Comprovado por dados reais de usuários</p>
+                    <p class="stat-description">Comprovado por dados reais de usuários em todo o Brasil</p>
                 </div>
-                <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-number">5 min</div>
-                    <div class="stat-label">Tempo Médio</div>
-                    <p class="text-sm text-gray-500 mt-2">Do cadastro ao recurso pronto para envio</p>
+                <div class="stat-card enhanced" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-number counter" data-target="5">0</div>
+                    <div class="stat-label">Minutos de Processo</div>
+                    <p class="stat-description">Do cadastro ao recurso pronto para envio ao órgão competente</p>
                 </div>
             </div>
         </div>
-
+        
         <!-- Como Funciona Section -->
         <section id="como-funciona" class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-6">
@@ -293,45 +335,48 @@
                     <div class="section-label">Preços Transparentes</div>
                     <h2 class="section-heading">Escolha o plano ideal para você</h2>
                     <p class="section-subheading">
-                        Sem mensalidades, sem surpresas. Pague apenas pelos recursos que usar.
+                        Sistema de créditos sem mensalidades. Pague apenas pelos recursos que usar.<br>
+                        <strong>3 créditos = 1 recurso</strong> (IA Híbrida com qualidade máxima)
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                    <!-- Plano Básico -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                    <!-- Pacote 5 Créditos -->
                     <div class="pricing-card" data-aos="fade-up">
                         <div class="pricing-header">
-                            <h3 class="pricing-title">Teste Grátis</h3>
+                            <h3 class="pricing-title">Teste</h3>
                             <div class="pricing-price">
-                                <span class="text-4xl font-bold">R$ 0</span>
-                                <span class="text-gray-500">/recurso</span>
+                                <span class="text-4xl font-bold">R$ 19,90</span>
                             </div>
+                            <div class="text-sm text-gray-500">5 créditos • R$ 3,98/crédito</div>
                         </div>
                         <ul class="pricing-features">
-                            <li><i class="fas fa-check text-green-500"></i> 1 recurso gratuito</li>
-                            <li><i class="fas fa-check text-green-500"></i> IA básica</li>
+                            <li><i class="fas fa-check text-green-500"></i> 5 créditos inclusos</li>
+                            <li><i class="fas fa-check text-green-500"></i> 1 recurso completo + extras</li>
+                            <li><i class="fas fa-check text-green-500"></i> IA Híbrida (3 IAs)</li>
                             <li><i class="fas fa-check text-green-500"></i> PDF para download</li>
                             <li><i class="fas fa-check text-green-500"></i> Suporte por email</li>
                         </ul>
                         <a href="{{ route('register') }}" class="pricing-button pricing-button-secondary">
-                            Começar Grátis
+                            Começar Teste
                         </a>
                     </div>
 
-                    <!-- Plano Popular -->
+                    <!-- Pacote 10 Créditos - Mais Popular -->
                     <div class="pricing-card pricing-card-popular" data-aos="fade-up" data-aos-delay="100">
                         <div class="pricing-badge">Mais Popular</div>
                         <div class="pricing-header">
                             <h3 class="pricing-title">Pacote Pro</h3>
                             <div class="pricing-price">
-                                <span class="text-4xl font-bold">R$ 29</span>
-                                <span class="text-gray-500">/5 recursos</span>
+                                <span class="text-4xl font-bold">R$ 34,90</span>
                             </div>
-                            <div class="text-sm text-gray-500">R$ 5,80 por recurso</div>
+                            <div class="text-sm text-gray-500">10 créditos • R$ 3,49/crédito</div>
+                            <div class="text-xs text-green-600 font-semibold">12% de desconto</div>
                         </div>
                         <ul class="pricing-features">
-                            <li><i class="fas fa-check text-green-500"></i> 5 recursos inclusos</li>
-                            <li><i class="fas fa-check text-green-500"></i> IA avançada</li>
+                            <li><i class="fas fa-check text-green-500"></i> 10 créditos inclusos</li>
+                            <li><i class="fas fa-check text-green-500"></i> 3 recursos completos + extras</li>
+                            <li><i class="fas fa-check text-green-500"></i> IA Híbrida avançada</li>
                             <li><i class="fas fa-check text-green-500"></i> Argumentos personalizados</li>
                             <li><i class="fas fa-check text-green-500"></i> Suporte prioritário</li>
                             <li><i class="fas fa-check text-green-500"></i> Garantia 30 dias</li>
@@ -341,20 +386,21 @@
                         </a>
                     </div>
 
-                    <!-- Plano Premium -->
+                    <!-- Pacote 20 Créditos -->
                     <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="pricing-header">
                             <h3 class="pricing-title">Pacote Premium</h3>
                             <div class="pricing-price">
-                                <span class="text-4xl font-bold">R$ 49</span>
-                                <span class="text-gray-500">/10 recursos</span>
+                                <span class="text-4xl font-bold">R$ 59,90</span>
                             </div>
-                            <div class="text-sm text-gray-500">R$ 4,90 por recurso</div>
+                            <div class="text-sm text-gray-500">20 créditos • R$ 2,99/crédito</div>
+                            <div class="text-xs text-green-600 font-semibold">25% de desconto</div>
                         </div>
                         <ul class="pricing-features">
-                            <li><i class="fas fa-check text-green-500"></i> 10 recursos inclusos</li>
-                            <li><i class="fas fa-check text-green-500"></i> IA premium</li>
-                            <li><i class="fas fa-check text-green-500"></i> Revisão jurídica</li>
+                            <li><i class="fas fa-check text-green-500"></i> 20 créditos inclusos</li>
+                            <li><i class="fas fa-check text-green-500"></i> 6 recursos completos + extras</li>
+                            <li><i class="fas fa-check text-green-500"></i> IA premium especializada</li>
+                            <li><i class="fas fa-check text-green-500"></i> Revisão jurídica avançada</li>
                             <li><i class="fas fa-check text-green-500"></i> Suporte WhatsApp</li>
                             <li><i class="fas fa-check text-green-500"></i> Garantia 60 dias</li>
                         </ul>
@@ -362,11 +408,35 @@
                             Escolher Premium
                         </a>
                     </div>
+
+                    <!-- Pacote 50 Créditos -->
+                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="pricing-header">
+                            <h3 class="pricing-title">Pacote Empresarial</h3>
+                            <div class="pricing-price">
+                                <span class="text-4xl font-bold">R$ 129,90</span>
+                            </div>
+                            <div class="text-sm text-gray-500">50 créditos • R$ 2,59/crédito</div>
+                            <div class="text-xs text-green-600 font-semibold">35% de desconto</div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check text-green-500"></i> 50 créditos inclusos</li>
+                            <li><i class="fas fa-check text-green-500"></i> 16 recursos completos + extras</li>
+                            <li><i class="fas fa-check text-green-500"></i> IA empresarial dedicada</li>
+                            <li><i class="fas fa-check text-green-500"></i> Consultoria jurídica</li>
+                            <li><i class="fas fa-check text-green-500"></i> Gerente de conta</li>
+                            <li><i class="fas fa-check text-green-500"></i> Garantia 90 dias</li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="pricing-button pricing-button-secondary">
+                            Escolher Empresarial
+                        </a>
+                    </div>
                 </div>
 
                 <div class="text-center mt-12">
                     <p class="text-gray-600 mb-4">💳 Aceitamos PIX, cartão de crédito e débito</p>
-                    <p class="text-gray-600">🔒 Pagamento 100% seguro com criptografia SSL</p>
+                    <p class="text-gray-600 mb-4">🔒 Pagamento 100% seguro com criptografia SSL</p>
+                    <p class="text-sm text-gray-500">* Créditos não expiram e podem ser usados a qualquer momento</p>
                 </div>
             </div>
         </section>
@@ -610,51 +680,6 @@
                 </div>
             </div>
         </footer>
-
-        <!-- Scripts -->
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <script>
-            AOS.init({
-                duration: 800,
-                once: true,
-            });
-
-            // Mobile menu
-            document.addEventListener('DOMContentLoaded', function() {
-                const menuToggle = document.querySelector('.menu-toggle');
-                const mobileMenu = document.querySelector('.mobile-menu');
-                
-                menuToggle.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    mobileMenu.classList.toggle('active');
-                });
-
-                document.querySelectorAll('.mobile-nav-link').forEach(link => {
-                    link.addEventListener('click', () => {
-                        menuToggle.classList.remove('active');
-                        mobileMenu.classList.remove('active');
-                    });
-                });
-
-                // FAQ Accordion
-                document.querySelectorAll('.faq-question').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const faqItem = button.parentElement;
-                        const isActive = faqItem.classList.contains('active');
-                        
-                        // Close all FAQ items
-                        document.querySelectorAll('.faq-item').forEach(item => {
-                            item.classList.remove('active');
-                        });
-                        
-                        // Open clicked item if it wasn't active
-                        if (!isActive) {
-                            faqItem.classList.add('active');
-                        }
-                    });
-                });
-            });
-        </script>
     </body>
 </html>
 

@@ -40,6 +40,8 @@
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">ID</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Data</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Tipo</th>
+                                        <th class="p-3 text-left text-xs font-medium text-gray-500">Status</th>
+                                        <th class="p-3 text-left text-xs font-medium text-gray-500">Pagamento</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Quantidade</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Saldo Após</th>
                                         <th class="p-3 text-left text-xs font-medium text-gray-500">Descrição</th>
@@ -48,28 +50,101 @@
                                 <tbody>
                                     @foreach($transactions as $transaction)
                                         <tr class="border-b hover:bg-gray-50">
-                                            <td class="p-3 text-sm">#{{ $transaction->id }}</td>
-                                            <td class="p-3 text-sm">{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
+                                            <td class="p-3 text-sm font-mono">#{{ $transaction->id }}</td>
+                                            <td class="p-3 text-sm">
+                                                {{ $transaction->created_at->format('d/m/Y') }}
+                                                <br>
+                                                <span class="text-xs text-gray-500">{{ $transaction->created_at->format('H:i') }}</span>
+                                            </td>
                                             <td class="p-3 text-sm">
                                                 @if($transaction->type == 'purchase')
-                                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Compra</span>
+                                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                                                        <i class="fas fa-shopping-cart mr-1"></i>Compra
+                                                    </span>
                                                 @elseif($transaction->type == 'consumption')
-                                                    <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Consumo</span>
+                                                    <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                                                        <i class="fas fa-minus-circle mr-1"></i>Consumo
+                                                    </span>
                                                 @elseif($transaction->type == 'admin_adjustment')
-                                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Ajuste</span>
+                                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                                                        <i class="fas fa-cogs mr-1"></i>Ajuste
+                                                    </span>
                                                 @elseif($transaction->type == 'refund')
-                                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">Reembolso</span>
+                                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">
+                                                        <i class="fas fa-undo mr-1"></i>Reembolso
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="p-3 text-sm">
+                                                @if($transaction->status == 'completed')
+                                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                                                        <i class="fas fa-check-circle mr-1"></i>Completado
+                                                    </span>
+                                                @elseif($transaction->status == 'pending')
+                                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">
+                                                        <i class="fas fa-clock mr-1"></i>Pendente
+                                                    </span>
+                                                @elseif($transaction->status == 'failed')
+                                                    <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                                                        <i class="fas fa-times-circle mr-1"></i>Falhou
+                                                    </span>
+                                                @elseif($transaction->status == 'cancelled')
+                                                    <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">
+                                                        <i class="fas fa-ban mr-1"></i>Cancelado
+                                                    </span>
+                                                @elseif($transaction->status == 'expired')
+                                                    <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs">
+                                                        <i class="fas fa-hourglass-end mr-1"></i>Expirado
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="p-3 text-sm">
+                                                @if($transaction->payment_method)
+                                                    <div class="flex items-center">
+                                                        @if($transaction->payment_method == 'pix')
+                                                            <i class="fas fa-qrcode text-green-600 mr-1"></i>
+                                                            <span class="text-green-700">PIX</span>
+                                                        @elseif($transaction->payment_method == 'stripe')
+                                                            <i class="fas fa-credit-card text-blue-600 mr-1"></i>
+                                                            <span class="text-blue-700">Cartão</span>
+                                                        @elseif($transaction->payment_method == 'boleto')
+                                                            <i class="fas fa-barcode text-yellow-600 mr-1"></i>
+                                                            <span class="text-yellow-700">Boleto</span>
+                                                        @elseif($transaction->payment_method == 'admin')
+                                                            <i class="fas fa-user-shield text-purple-600 mr-1"></i>
+                                                            <span class="text-purple-700">Admin</span>
+                                                        @endif
+                                                    </div>
+                                                @else
+                                                    <span class="text-gray-400 text-xs">-</span>
                                                 @endif
                                             </td>
                                             <td class="p-3 text-sm">
                                                 @if($transaction->amount > 0)
-                                                    <span class="text-green-600">+{{ $transaction->amount }}</span>
+                                                    <span class="text-green-600 font-semibold">+{{ $transaction->amount }}</span>
                                                 @else
-                                                    <span class="text-red-600">{{ $transaction->amount }}</span>
+                                                    <span class="text-red-600 font-semibold">{{ $transaction->amount }}</span>
                                                 @endif
                                             </td>
-                                            <td class="p-3 text-sm">{{ $transaction->balance_after }}</td>
-                                            <td class="p-3 text-sm">{{ $transaction->description }}</td>
+                                            <td class="p-3 text-sm font-medium">{{ $transaction->balance_after }}</td>
+                                            <td class="p-3 text-sm">
+                                                <div class="max-w-xs">
+                                                    {{ $transaction->description }}
+                                                    @if($transaction->reference)
+                                                        <br>
+                                                        <span class="text-xs text-gray-500 font-mono">
+                                                            Ref: {{ Str::limit($transaction->reference, 20) }}
+                                                        </span>
+                                                    @endif
+                                                    @if($transaction->paid_at)
+                                                        <br>
+                                                        <span class="text-xs text-green-600">
+                                                            <i class="fas fa-calendar-check mr-1"></i>
+                                                            Pago em {{ $transaction->paid_at->format('d/m/Y H:i') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

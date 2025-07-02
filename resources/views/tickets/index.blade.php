@@ -59,7 +59,7 @@
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     @if(!$ticket->appeals()->exists())
-                                                        <a href="{{ route('appeals.create', $ticket) }}" class="text-green-600 hover:text-green-800" title="Gerar Recurso">
+                                                        <a href="{{ route('tickets.create_appeal', $ticket) }}" class="text-green-600 hover:text-green-800" title="Gerar Recurso">
                                                             <i class="fas fa-file-alt"></i>
                                                         </a>
                                                     @endif

@@ -79,9 +79,9 @@
                         <a href="{{ route('legal.privacy') }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium underline">Política de Privacidade</a>
                         <span class="text-red-500">*</span>
                     </span>
-                </label>
-                <x-input-error :messages="$errors->get('terms')" class="mt-2" />
-            </div>
+            </label>
+            <x-input-error :messages="$errors->get('terms')" class="mt-2" />
+        </div>
 
             <!-- Data Processing Consent -->
             <div>

@@ -89,6 +89,7 @@ class StripeController extends Controller
                 $payload, $sig_header, $endpoint_secret
             );
         } catch (\Exception $e) {
+            Log::error('Erro na validação do webhook Stripe: ' . $e->getMessage());
             return response('Invalid payload', 400);
         }
 
@@ -96,18 +97,38 @@ class StripeController extends Controller
             $session = $event->data->object;
             $userId = $session->metadata->user_id ?? null;
             $credits = $session->metadata->credits ?? 0;
+            $packageId = $session->metadata->package_id ?? null;
 
             if ($userId && $credits) {
                 $user = \App\Models\User::find($userId);
                 if ($user) {
+                    // Adiciona créditos ao usuário
                     $user->credits += $credits;
                     $user->save();
 
+                    // Cria transação completada
                     CreditTransaction::create([
                         'user_id' => $user->id,
-                        'credits' => $credits,
                         'type' => 'purchase',
+                        'status' => 'completed',
+                        'payment_method' => 'stripe',
                         'reference' => $session->id,
+                        'paid_at' => now(),
+                        'amount' => $credits,
+                        'balance_after' => $user->credits,
+                        'description' => "Compra de {$credits} créditos via cartão de crédito",
+                        'metadata' => [
+                            'package_id' => $packageId,
+                            'stripe_session_id' => $session->id,
+                            'stripe_payment_intent' => $session->payment_intent ?? null,
+                            'webhook_processed_at' => now()->toISOString()
+                        ]
+                    ]);
+
+                    Log::info('Pagamento Stripe processado com sucesso', [
+                        'user_id' => $userId,
+                        'credits' => $credits,
+                        'session_id' => $session->id
                     ]);
                 }
             }

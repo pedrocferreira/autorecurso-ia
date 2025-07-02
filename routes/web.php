@@ -23,6 +23,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Rota de teste
+Route::get('/test', function() {
+    return 'Rota de teste funcionando!';
+});
+
 // Rotas autenticadas
 Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () {
     // Dashboard
@@ -34,13 +39,9 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
     // Recursos (Appeals)
     Route::get('/appeals/new/create', [AppealController::class, 'createNew'])->name('appeals.create_new');
     Route::post('/appeals/new/store', [AppealController::class, 'storeNew'])->name('appeals.store_new');
-    Route::resource('appeals', AppealController::class);
+    Route::get('tickets/{ticket}/appeal', [AppealController::class, 'create'])->name('tickets.create_appeal');
+    Route::resource('appeals', AppealController::class)->except(['create', 'store']);
     Route::get('/appeals/{appeal}/download', [AppealController::class, 'download'])->name('appeals.download');
-
-    // Perfil - IMPORTANTE: As rotas de perfil não devem ter o middleware 'profile.completed' para evitar loop
-    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Créditos
     Route::get('/credits', [\App\Http\Controllers\CreditController::class, 'index'])->name('credits.index');
@@ -50,6 +51,13 @@ Route::middleware(['auth', 'verified', 'profile.completed'])->group(function () 
     Route::post('/credits/checkout', [\App\Http\Controllers\StripeController::class, 'checkout'])->middleware('auth')->name('credits.checkout');
     Route::get('/credits/success', [\App\Http\Controllers\StripeController::class, 'success'])->name('credits.success');
     Route::get('/credits/cancel', [\App\Http\Controllers\StripeController::class, 'cancel'])->name('credits.cancel');
+
+    // Rotas AbacatePay (PIX)
+    Route::get('/credits/payment/form', [\App\Http\Controllers\AbacatePayController::class, 'showPaymentForm'])->name('credits.payment.form');
+    Route::post('/credits/pix/payment', [\App\Http\Controllers\AbacatePayController::class, 'createPixPayment'])->name('credits.pix.payment');
+    Route::post('/credits/pix/status', [\App\Http\Controllers\AbacatePayController::class, 'checkPaymentStatus'])->name('credits.pix.status');
+    Route::get('/credits/pix/success', [\App\Http\Controllers\AbacatePayController::class, 'success'])->name('credits.pix.success');
+    Route::get('/credits/pix/cancel', [\App\Http\Controllers\AbacatePayController::class, 'cancel'])->name('credits.pix.cancel');
 });
 
 // Rotas de administração
@@ -64,17 +72,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/users/{user}/toggle-block', [UserController::class, 'toggleBlock'])->name('users.toggle_block');
 });
 
-// Outro grupo que também precisa do middleware
-Route::middleware(['auth', 'profile.completed'])->group(function () {
-    // Rotas de multas
-    // Route::resource('tickets', TicketController::class); // Removido pois já está no grupo acima
-    
-    // Rotas de recursos
-    Route::get('tickets/{ticket}/appeal', [AppealController::class, 'create'])->name('appeals.create');
-    Route::post('appeals', [AppealController::class, 'store'])->name('appeals.store');
-    Route::get('appeals/{appeal}', [AppealController::class, 'show'])->name('appeals.show');
-});
-
 // Rotas de perfil
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -83,6 +80,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::post('/stripe/webhook', [\App\Http\Controllers\StripeController::class, 'webhook'])->name('stripe.webhook');
+
+// Webhook AbacatePay (fora do middleware de autenticação)
+Route::post('/abacatepay/webhook', [\App\Http\Controllers\AbacatePayController::class, 'webhook'])->name('abacatepay.webhook');
 
 // Rotas para documentos legais
 Route::get('/legal/privacy-policy', function () {

@@ -7,6 +7,23 @@
 
         <title>{{ config('app.name', 'AutoRecurso') }}</title>
 
+        <!-- Favicon -->
+        <link rel="icon" href="/gavel-favicon.svg" type="image/svg+xml">
+        <link rel="alternate icon" href="/favicon.ico">
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="msapplication-TileColor" content="#4361ee">
+        <meta name="theme-color" content="#4361ee">
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16970325896"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-16970325896');
+        </script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -37,7 +54,7 @@
             <!-- Main Content -->
             <div class="w-full sm:max-w-md">
                 <div class="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
-                    {{ $slot }}
+                {{ $slot }}
                 </div>
             </div>
 
@@ -58,7 +75,7 @@
                     </div>
                 </div>
                 <p class="text-xs text-gray-400">
-                    &copy; {{ date('Y') }} AutoRecurso - Todos os direitos reservados
+                &copy; {{ date('Y') }} AutoRecurso - Todos os direitos reservados
                 </p>
             </div>
         </div>

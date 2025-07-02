@@ -20,6 +20,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RecursoGeradoMail;
 
 class AppealController extends Controller
 {
@@ -194,6 +196,14 @@ class AppealController extends Controller
                 'updated_at' => now()
             ]);
 
+            // Envia o e-mail de confirmação para o usuário
+            try {
+                Mail::to($user)->send(new RecursoGeradoMail($user, $appeal));
+            } catch (\Exception $e) {
+                Log::error('Falha ao enviar e-mail de confirmação: ' . $e->getMessage());
+                // Não interrompe o fluxo, apenas registra o erro.
+            }
+
             return redirect()->route('appeals.show', $appeal)
                 ->with('success', 'Recurso gerado com sucesso!');
 
@@ -321,6 +331,14 @@ class AppealController extends Controller
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
+
+            // Envia o e-mail de confirmação para o usuário
+            try {
+                Mail::to($user)->send(new RecursoGeradoMail($user, $appeal));
+            } catch (\Exception $e) {
+                Log::error('Falha ao enviar e-mail de confirmação (Inteligência Híbrida): ' . $e->getMessage());
+                // Não interrompe o fluxo, apenas registra o erro.
+            }
 
             return redirect()->route('appeals.show', $appeal)
                 ->with('success', 'Recurso gerado com INTELIGÊNCIA HÍBRIDA! 🧠🎉 Confira a melhor versão selecionada automaticamente!');
