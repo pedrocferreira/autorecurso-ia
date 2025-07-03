@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            InfractionTypeSeeder::class,
+            InfractionTypesSeeder::class, // Novo seeder com todas as multas CTB
             // Outros seeders aqui...
         ]);
     }

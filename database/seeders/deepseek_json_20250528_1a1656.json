@@ -28,9 +28,9 @@
       "active": true
     },
     {
-      "code": "162-60",
-      "description": "Dirigir sem usar lentes corretoras de visão",
-      "law_article": "Art. 162, VI do CTB",
+      "code": "162-40",
+      "description": "Dirigir veículo sem usar lentes corretoras de visão",
+      "law_article": "Art. 162, IV do CTB",
       "base_amount": 293.47,
       "points": 7,
       "severity": "severe",
@@ -40,6 +40,24 @@
       "code": "162-50",
       "description": "Dirigir com a CNH vencida (+30 dias)",
       "law_article": "Art. 162, V do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "162-60",
+      "description": "Dirigir sem usar lentes corretoras de visão",
+      "law_article": "Art. 162, VI do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "163-00",
+      "description": "Entregar a direção do veículo a pessoa sem CNH",
+      "law_article": "Art. 163 do CTB",
       "base_amount": 293.47,
       "points": 7,
       "severity": "severe",
@@ -115,6 +133,15 @@
       "base_amount": 293.47,
       "points": 7,
       "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "171-00",
+      "description": "Usar veículo para demonstrar manobra perigosa",
+      "law_article": "Art. 171 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
       "active": true
     },
     {
@@ -232,6 +259,15 @@
       "base_amount": 88.38,
       "points": 3,
       "severity": "light",
+      "active": true
+    },
+    {
+      "code": "180-00",
+      "description": "Estacionar em local proibido pela sinalização",
+      "law_article": "Art. 180 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
       "active": true
     },
     {
@@ -775,6 +811,15 @@
       "active": true
     },
     {
+      "code": "204-00",
+      "description": "Ultrapassar em local proibido pela sinalização",
+      "law_article": "Art. 204 do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
       "code": "205-00",
       "description": "Ultrapassar cortejo, préstito, desfile e formações militares sem autorização",
       "law_article": "Art. 205 do CTB",
@@ -890,6 +935,14 @@
       "points": 7,
       "severity": "severe",
       "active": true
+    },
+    {
+      "code": "213-20",
+      "description": "Deixar de parar o veículo por agrupamento de veículos",
+      "law_article": "Art. 213, II do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "severe",
     }
   ]
 }

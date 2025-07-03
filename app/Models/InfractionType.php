@@ -16,13 +16,12 @@ class InfractionType extends Model
      */
     protected $fillable = [
         'code',
-        'name',
         'description',
         'law_article',
         'base_amount',
         'points',
         'severity',
-        'active'
+        'active',
     ];
 
     /**
@@ -31,9 +30,9 @@ class InfractionType extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'base_amount' => 'float',
+        'base_amount' => 'decimal:2',
         'points' => 'integer',
-        'active' => 'boolean'
+        'active' => 'boolean',
     ];
 
     /**
@@ -42,5 +41,10 @@ class InfractionType extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
     }
 }
