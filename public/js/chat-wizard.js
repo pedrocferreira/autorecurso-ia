@@ -6,6 +6,7 @@ document.addEventListener('alpine:init', () => {
         searchInfraction: '',
         filteredInfractions: [],
         selectedCategory: 'all',
+        infractionOptions: [], // Será carregado na inicialização
         form: {
             name: '',
             cpf: '',
@@ -26,7 +27,6 @@ document.addEventListener('alpine:init', () => {
             location: '',
             driver_license: '',
             pendingVehicleConfirm: false,
-            infractionOptions: [],
             apiCallInProgress: false,
             resumoMostrado: false
         },
@@ -42,6 +42,22 @@ document.addEventListener('alpine:init', () => {
         paymentInterval: null,
 
         async init() {
+            // Carrega os dados de infrações passados do Blade
+            if (window.infractionOptions && Array.isArray(window.infractionOptions)) {
+                this.infractionOptions = window.infractionOptions.map(i => ({
+                    value: i.id,
+                    code: i.code,
+                    description: i.description,
+                    base_amount: parseFloat(i.base_amount || 0),
+                    points: parseInt(i.points || 0),
+                    severity: i.severity || 'medium'
+                }));
+                this.filteredInfractions = [...this.infractionOptions];
+            } else {
+                // Fallback: carrega via API se não tiver dados do Blade
+                await this.loadInfractionOptions();
+            }
+            
             await this.startConversation();
             this.$watch('searchInfraction', () => this.filterInfractions());
             this.$watch('selectedCategory', () => this.filterInfractions());
@@ -436,26 +452,69 @@ Relato: ${this.form.details}`;
 
         async loadInfractionOptions() {
             try {
+                console.log('Tentando carregar tipos de infração via API...');
                 const resp = await fetch('/cliente/api/infraction-types');
+                
+                if (!resp.ok) {
+                    throw new Error(`HTTP error! status: ${resp.status}`);
+                }
+                
                 const json = await resp.json();
-                if (json.success) {
+                console.log('Resposta da API:', json);
+                
+                if (json.success && Array.isArray(json.data)) {
                     this.infractionOptions = json.data.map(i => ({
                         value: i.id,
-                        code: i.code,
-                        description: i.description,
-                        base_amount: i.base_amount.toFixed(2),
-                        points: i.points,
-                        severity: i.severity
+                        code: i.code || 'N/A',
+                        description: i.description || 'Descrição não disponível',
+                        base_amount: parseFloat(i.base_amount || 0),
+                        points: parseInt(i.points || 0),
+                        severity: i.severity || 'medium'
                     }));
                     this.filteredInfractions = [...this.infractionOptions];
+                    console.log(`Carregadas ${this.infractionOptions.length} infrações`);
+                } else {
+                    throw new Error('Resposta da API inválida ou sem dados');
                 }
             } catch (e) {
                 console.error('Erro ao carregar tipos de infração:', e);
+                // Fallback: criar alguns tipos básicos se falhar
+                this.infractionOptions = [
+                    {
+                        value: 'fallback_1',
+                        code: '501-00',
+                        description: 'Dirigir sem CNH/PPD/ACC',
+                        base_amount: 880.41,
+                        points: 7,
+                        severity: 'very_severe'
+                    },
+                    {
+                        value: 'fallback_2', 
+                        code: '574-63',
+                        description: 'Transitar em velocidade superior à máxima permitida em até 20%',
+                        base_amount: 130.16,
+                        points: 4,
+                        severity: 'medium'
+                    }
+                ];
+                this.filteredInfractions = [...this.infractionOptions];
+                console.log('Usando infrações de fallback');
             }
         },
 
         async lookupVehicle(plate) {
             try {
+                console.log('Consultando dados do veículo para placa:', plate);
+                
+                // Validação básica da placa
+                if (!plate || plate.length < 7) {
+                    console.warn('Placa inválida, pulando consulta:', plate);
+                    await this.showNextQuestion();
+                    return;
+                }
+
+                await this.typeMessage('🔍 Consultando dados do veículo na base nacional...');
+                
                 const resp = await fetch('/api/vehicle/lookup', {
                     method: 'POST',
                     headers: {
@@ -464,38 +523,88 @@ Relato: ${this.form.details}`;
                     },
                     body: JSON.stringify({ placa: plate })
                 });
-                const json = await resp.json();
                 
-                if (json.success) {
+                console.log('Status da resposta da API:', resp.status);
+                
+                if (!resp.ok) {
+                    const errorData = await resp.json();
+                    console.error('Erro na API de veículos:', errorData);
+                    
+                    if (resp.status === 404) {
+                        await this.typeMessage('⚠️ Não encontrei dados para esta placa na base nacional. Vamos continuar com os dados manuais.');
+                    } else if (resp.status === 422) {
+                        await this.typeMessage('❌ Formato de placa inválido. Vamos continuar sem a consulta automática.');
+                    } else if (resp.status === 503) {
+                        await this.typeMessage('⚠️ Serviço de consulta temporariamente indisponível. Continuando sem dados automáticos.');
+                    } else {
+                        await this.typeMessage('⚠️ Erro ao consultar dados do veículo. Vamos continuar manualmente.');
+                    }
+                    
+                    await this.showNextQuestion();
+                    return;
+                }
+
+                const json = await resp.json();
+                console.log('Dados retornados:', json);
+                
+                if (json.success && json.data) {
                     const data = json.data;
-                    await this.typeMessage(`✅ Encontrei os dados do veículo:`);
                     
-                    const info = [
-                        ['Modelo', data.modelo],
-                        ['Marca', data.marca],
-                        ['Ano', data.ano],
-                        ['Cor', data.cor],
-                        ['Município', data.municipio],
-                        ['UF', data.uf]
-                    ].filter(([_, value]) => value);
-
-                    let infoText = info.map(([label, value]) => `${label}: ${value}`).join('<br>');
-                    this.messages.push({ type: 'bot', content: infoText });
-
-                    // Preenche os dados automaticamente
-                    if (data.modelo) this.form.vehicle_model = data.modelo;
-                    if (data.ano) this.form.vehicle_year = data.ano;
+                    // Verifica se pelo menos um dado foi encontrado
+                    const hasData = data.modelo || data.marca || data.ano || data.cor;
                     
-                    await this.typeMessage('Os dados estão corretos?');
-                    this.showOptionsInput('vehicle_confirm', [
-                        { value: 'sim', label: '✅ Sim, está correto' },
-                        { value: 'nao', label: '❌ Não, preciso corrigir' }
-                    ]);
+                    if (hasData) {
+                        await this.typeMessage(`✅ Dados encontrados na base nacional!`);
+                        
+                        // Mostrar informações da consulta (custo, saldo, etc.)
+                        if (json.api_info && json.api_info.message) {
+                            await this.typeMessage(`📊 ${json.api_info.message}`);
+                        }
+                        
+                        const info = [
+                            ['Marca', data.marca],
+                            ['Modelo', data.modelo],
+                            ['Ano', data.ano],
+                            ['Cor', data.cor],
+                            ['Combustível', data.combustivel],
+                            ['Município', data.municipio],
+                            ['UF', data.uf]
+                        ].filter(([_, value]) => value);
+
+                        let infoText = info.map(([label, value]) => `<strong>${label}:</strong> ${value}`).join('<br>');
+                        this.messages.push({ type: 'bot', content: infoText });
+
+                        // Preenche os dados automaticamente
+                        if (data.modelo) {
+                            this.form.vehicle_model = data.modelo;
+                            console.log('Modelo preenchido automaticamente:', data.modelo);
+                        }
+                        if (data.ano) {
+                            this.form.vehicle_year = data.ano;
+                            console.log('Ano preenchido automaticamente:', data.ano);
+                        }
+                        
+                        // Aguardar um pouco para que o usuário possa ler as informações
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        
+                        await this.typeMessage('Os dados estão corretos?');
+                        this.showOptionsInput('vehicle_confirm', [
+                            { value: 'sim', label: '✅ Sim, está correto' },
+                            { value: 'nao', label: '❌ Não, preciso corrigir' }
+                        ]);
+                    } else {
+                        console.log('Nenhum dado útil encontrado');
+                        await this.typeMessage('ℹ️ Dados não encontrados para esta placa. Vamos continuar com preenchimento manual.');
+                        await this.showNextQuestion();
+                    }
                 } else {
+                    console.log('Resposta sem sucesso ou sem dados');
+                    await this.typeMessage('ℹ️ Não consegui encontrar dados para esta placa. Vamos continuar manualmente.');
                     await this.showNextQuestion();
                 }
             } catch(e) {
                 console.error('Falha ao consultar placa:', e);
+                await this.typeMessage('⚠️ Erro de conectividade. Vamos continuar sem os dados automáticos.');
                 await this.showNextQuestion();
             }
         },

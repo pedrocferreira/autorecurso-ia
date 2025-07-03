@@ -255,7 +255,10 @@
 @endpush
 
 @section('content')
-<div class="fixed inset-0 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 overflow-hidden gradient-animate" x-data="wizardApp()" x-init="infractionOptions = {{ $infractionOptions->toJson() }}">
+<!-- CSRF Token Meta Tag -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<div class="fixed inset-0 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 overflow-hidden gradient-animate" x-data="wizardApp()">
     <!-- Chat Container -->
     <div class="h-full flex flex-col">
         <!-- Header com Avatar e Progresso -->
@@ -485,5 +488,9 @@
 @endsection
 
 @push('scripts')
+<script>
+    // Dados de infrações disponíveis globalmente para o Alpine.js
+    window.infractionOptions = @json($infractionOptions);
+</script>
 <script src="/js/chat-wizard.js"></script>
 @endpush
