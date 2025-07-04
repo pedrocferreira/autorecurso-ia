@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AbacatePayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Webhook da AbacatePay (sem autenticação)
+Route::post('/abacatepay/webhook', [AbacatePayController::class, 'webhook'])->name('abacatepay.webhook');
 
 // Incluir rotas de autenticação
 require __DIR__.'/auth.php';

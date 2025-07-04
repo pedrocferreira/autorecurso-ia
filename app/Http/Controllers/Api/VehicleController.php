@@ -49,7 +49,7 @@ class VehicleController extends Controller
             // Fazer a requisição para o novo endpoint da API Brasil
             $response = Http::timeout(15)
                 ->withHeaders([
-                    'Content-Type' => 'application/json',
+                'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $apiToken
                 ])
                 ->post('https://gateway.apibrasil.io/api/v2/vehicles/base/000/dados', [

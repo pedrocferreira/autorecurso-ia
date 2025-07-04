@@ -111,12 +111,37 @@ class AbacatePayService
 
             $data = $response->json();
 
+            // Se não vier o campo pix na resposta, buscar detalhes do billing
+            if (empty($data['data']['pix'])) {
+                // Buscar detalhes do billing
+                $billingId = $data['data']['id'] ?? null;
+                if ($billingId) {
+                    $detailsResp = Http::withToken($this->apiKey)
+                        ->timeout(30)
+                        ->withHeaders([
+                            'Accept' => 'application/json',
+                            'Content-Type' => 'application/json'
+                        ])
+                        ->get($this->baseUrl . '/billing/' . $billingId);
+                    if ($detailsResp->successful()) {
+                        $detailsData = $detailsResp->json();
+                        if (!empty($detailsData['data']['pix'])) {
+                            $data['data']['pix'] = $detailsData['data']['pix'];
+                        }
+                    }
+                }
+            }
+
             // Cria a transação local
+            // Para pagamentos via chat, usa o user_id dos metadata
+            $userId = $paymentData['metadata']['user_id'] ?? auth()->id();
+            $user = $userId ? \App\Models\User::find($userId) : null;
+            
             \App\Models\CreditTransaction::create([
-                'user_id' => auth()->id(),
+                'user_id' => $userId,
                 'type' => 'purchase',
                 'amount' => $paymentData['metadata']['credits'] ?? 10,
-                'balance_after' => auth()->user()->credits,
+                'balance_after' => $user ? $user->credits : 0,
                 'description' => $paymentData['description'],
                 'status' => 'pending',
                 'payment_method' => 'pix',
@@ -127,7 +152,8 @@ class AbacatePayService
                     'gateway' => 'abacatepay',
                     'abacatepay_billing_id' => $data['data']['id'],
                     'created_at_abacatepay' => now()->toISOString(),
-                    'payment_url' => $data['data']['url'] ?? null
+                    'payment_url' => $data['data']['url'] ?? null,
+                    'chat_payment' => $paymentData['metadata']['chat_payment'] ?? false
                 ]
             ]);
 
