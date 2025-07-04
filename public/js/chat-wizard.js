@@ -391,7 +391,34 @@ Relato: ${this.form.details}`;
                         if (billing.url) {
                             this.messages.push({
                                 type: 'bot',
-                                content: `<a href="${billing.url}" target="_blank" class="text-blue-600 underline font-bold">💠 Pagar com PIX (R$ 29,90) – abrir checkout</a>`
+                                content: `
+                                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-green-200 mb-4">
+                                        <div class="text-center">
+                                            <div class="mb-4">
+                                                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                                    </svg>
+                                                </div>
+                                                <h3 class="text-lg font-bold text-gray-800 mb-2">Pagamento PIX</h3>
+                                                <p class="text-gray-600 mb-4">Clique no botão abaixo para realizar o pagamento</p>
+                                            </div>
+                                            <a href="${billing.url}" target="_blank" 
+                                               class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer no-underline min-w-[280px]"
+                                               style="text-decoration: none;">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                </svg>
+                                                <span>Pagar com PIX</span>
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">R$ 29,90</span>
+                                            </a>
+                                            <p class="text-sm text-gray-500 mt-3">
+                                                <i class="fas fa-shield-alt mr-1"></i>
+                                                Pagamento seguro • Nova aba será aberta
+                                            </p>
+                                        </div>
+                                    </div>
+                                `
                             });
 
                             // Garante que a mensagem fique visível aplicando a classe de animação
@@ -459,7 +486,34 @@ Relato: ${this.form.details}`;
 
                             this.messages.push({
                                 type: 'bot',
-                                content: `<a href="${json.url}" target="_blank" class="text-blue-600 underline font-bold">💳 Pagar agora com cartão de crédito (R$ 29,90)</a>`
+                                content: `
+                                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-blue-200 mb-4">
+                                        <div class="text-center">
+                                            <div class="mb-4">
+                                                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                                    </svg>
+                                                </div>
+                                                <h3 class="text-lg font-bold text-gray-800 mb-2">Pagamento Cartão</h3>
+                                                <p class="text-gray-600 mb-4">Clique no botão abaixo para pagar com cartão</p>
+                                            </div>
+                                            <a href="${json.url}" target="_blank" 
+                                               class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer no-underline min-w-[280px]"
+                                               style="text-decoration: none;">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                                </svg>
+                                                <span>Pagar com Cartão</span>
+                                                <span class="bg-white bg-opacity-20 px-2 py-1 rounded text-sm">R$ 29,90</span>
+                                            </a>
+                                            <p class="text-sm text-gray-500 mt-3">
+                                                <i class="fas fa-shield-alt mr-1"></i>
+                                                Pagamento seguro • Nova aba será aberta
+                                            </p>
+                                        </div>
+                                    </div>
+                                `
                             });
                             this.$nextTick(() => {
                                 const msgs = document.querySelectorAll('.message-enter');
@@ -706,18 +760,51 @@ Relato: ${this.form.details}`;
                 this.currentQuestion = field;
                 this.inputType = 'text';
                 this.showInput = true;
+                this.$nextTick(() => {
+                    const focusLoop = () => {
+                        const el = document.getElementById('user-input') || document.querySelector('input[x-model="userInput"]');
+                        if (el && el.offsetParent !== null) { // offsetParent null => elemento ainda oculto
+                            el.focus();
+                            return;
+                        }
+                        requestAnimationFrame(focusLoop);
+                    };
+                    focusLoop();
+                });
             },
 
             showDateInput(field) {
                 this.currentQuestion = field;
                 this.inputType = 'date';
                 this.showInput = true;
+                this.$nextTick(() => {
+                    const focusLoop = () => {
+                        const el = document.querySelector('input[type="date"][x-model="userInput"]');
+                        if (el && el.offsetParent !== null) {
+                            el.focus();
+                            return;
+                        }
+                        requestAnimationFrame(focusLoop);
+                    };
+                    focusLoop();
+                });
             },
 
             showTextArea(field) {
                 this.currentQuestion = field;
                 this.inputType = 'textarea';
                 this.showInput = true;
+                this.$nextTick(() => {
+                    const focusLoop = () => {
+                        const el = document.querySelector('textarea[x-model="userInput"]');
+                        if (el && el.offsetParent !== null) {
+                            el.focus();
+                            return;
+                        }
+                        requestAnimationFrame(focusLoop);
+                    };
+                    focusLoop();
+                });
             },
 
             showOptionsInput(field, options) {
