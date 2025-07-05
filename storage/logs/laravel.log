@@ -2220,3 +2220,282 @@
 [2025-07-04 22:15:24] local.INFO: CPF informado pelo usuário validado com sucesso para AbacatePay: {"taxId":"01414397003"} 
 [2025-07-04 22:15:24] local.INFO: Dados completos enviados para AbacatePay: {"request_data":{"amount":2990,"description":"AutoRecurso - Recurso de multa","frequency":"ONE_TIME","methods":["PIX"],"products":[{"name":"AutoRecurso - Recurso de multa","description":"AutoRecurso - Recurso de multa","quantity":1,"price":2990,"externalId":"credit-package-1751667324"}],"customer":{"name":"Pedro da Costa Ferreira","email":"pedroocferreira@gmail.com","cellphone":"519681281898","taxId":"01414397003"},"metadata":{"user_id":8,"credits":1,"gateway":"abacatepay","chat_payment":true},"devMode":true,"expiresIn":3600,"returnUrl":"http://localhost:8000/cliente/sucesso","completionUrl":"http://localhost:8000/cliente/sucesso","webhookUrl":"http://localhost:8000/abacatepay/webhook?webhookSecret=AbT"}} 
 [2025-07-04 22:15:24] local.INFO: Resposta da API AbacatePay {"status":200,"body":{"error":null,"data":{"products":[{"id":"prod_Q3332eNfmNLxhBtf3HPJ4GaG","externalId":"credit-package-1751667324","quantity":1}],"amount":2990,"status":"PENDING","devMode":false,"methods":["PIX"],"frequency":"ONE_TIME","allowCoupons":false,"coupons":[],"metadata":{"fee":100,"returnUrl":"http://localhost:8000/cliente/sucesso","completionUrl":"http://localhost:8000/cliente/sucesso"},"createdAt":"2025-07-04T22:15:24.498Z","updatedAt":"2025-07-04T22:15:24.498Z","couponsUsed":[],"url":"https://abacatepay.com/pay/bill_SZydGw1MUrQnkkFDjFwNr0D0","customer":{"id":"cust_dkp5xX56qpZfC6AAxsEezfmE","metadata":{"name":"Pedro da Costa Ferreira","cellphone":"519681281898","taxId":"01414397003","email":"pedroocferreira@gmail.com"}},"id":"bill_SZydGw1MUrQnkkFDjFwNr0D0"}}} 
+[2025-07-04 22:20:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 22:25:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 22:30:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 22:35:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 22:40:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 22:45:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 22:50:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 22:55:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:00:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:05:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:10:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:15:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:20:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:25:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:30:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:35:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:40:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:45:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:50:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-04 23:55:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:00:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:05:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:10:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:15:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:25:03] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:30:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:35:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:40:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:45:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:50:02] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2025-07-05 00:55:01] local.ERROR: There are no commands defined in the "payments" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"payments\" namespace. at /var/www/autorecurso-ia/vendor/symfony/console/Application.php:669)
+[stacktrace]
+#0 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(720): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->find()
+#2 /var/www/autorecurso-ia/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#3 /var/www/autorecurso-ia/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#4 /var/www/autorecurso-ia/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 

@@ -70,7 +70,7 @@ Route::get('/privacy-request', function () {
 // Rotas do self-service (cliente)
 Route::prefix('cliente')->name('cliente.')->group(function () {
     Route::get('/', function () {
-        return redirect('/cliente/wizard');
+        return view('self-service.landing-simple');
     })->name('index');
     
     Route::get('/wizard', function () {
