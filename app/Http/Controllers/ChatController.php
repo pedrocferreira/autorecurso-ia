@@ -65,9 +65,6 @@ class ChatController extends Controller
             // Criar ou encontrar usuário
             $user = $this->createOrFindUser($validated);
 
-            // Armazenar dados temporários na sessão para usar após pagamento
-            session(['chat_payment_data' => $request->all()]);
-
             // Criar transação especial para chat (valor fixo de R$ 29,90)
             $chatTransaction = \App\Models\CreditTransaction::create([
                 'user_id' => $user->id,
@@ -81,7 +78,8 @@ class ChatController extends Controller
                     'source' => 'chat_wizard',
                     'price' => 29.90,
                     'service_type' => 'recurso_generation',
-                    'gateway' => 'abacatepay'
+                    'gateway' => 'abacatepay',
+                    'chat_data' => $request->all() // Armazenar dados do chat nos metadados
                 ]
             ]);
 
@@ -269,9 +267,21 @@ class ChatController extends Controller
         try {
             DB::beginTransaction();
 
-            $paymentData = session('chat_payment_data');
+            // Buscar transação se não foi fornecida
+            if (!$transaction) {
+                $transaction = \App\Models\CreditTransaction::where('reference', $billingId)
+                    ->where('payment_method', 'pix')
+                    ->whereJsonContains('metadata->source', 'chat_wizard')
+                    ->first();
+            }
+
+            if (!$transaction) {
+                throw new \Exception('Transação do chat não encontrada');
+            }
+
+            $paymentData = $transaction->metadata['chat_data'] ?? null;
             if (!$paymentData) {
-                throw new \Exception('Dados de pagamento não encontrados na sessão');
+                throw new \Exception('Dados de pagamento não encontrados nos metadados da transação');
             }
 
             Log::info('Processando pagamento aprovado via AbacatePay', [
@@ -312,9 +322,6 @@ class ChatController extends Controller
             $this->sendRecursoEmail($user, $appeal);
 
             DB::commit();
-
-            // Limpar dados da sessão
-            session()->forget('chat_payment_data');
 
             Log::info('Recurso gerado e enviado com sucesso via chat', ['appeal_id' => $appeal->id]);
 

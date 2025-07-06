@@ -100,6 +100,7 @@ Route::post('/chat/stripe', [App\Http\Controllers\ChatController::class, 'create
 
 // Webhook do chat (sem auth)
 Route::post('/chat/webhook/abacatepay', [App\Http\Controllers\ChatController::class, 'webhookAbacatePay'])
+    ->name('chat.webhook.abacatepay')
     ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 // Rota para consulta de placa

@@ -83,7 +83,9 @@ class AbacatePayService
                 'expiresIn' => $paymentData['expires_in'] ?? 3600,
                 'returnUrl' => $paymentData['return_url'] ?? route('credits.success'),
                 'completionUrl' => $paymentData['completion_url'] ?? route('credits.success'),
-                'webhookUrl' => route('abacatepay.webhook', ['webhookSecret' => config('abacatepay.webhook_secret')])
+                'webhookUrl' => $paymentData['metadata']['chat_payment'] ?? false 
+                    ? route('chat.webhook.abacatepay', ['webhookSecret' => config('abacatepay.webhook_secret')])
+                    : route('abacatepay.webhook', ['webhookSecret' => config('abacatepay.webhook_secret')])
             ];
 
             // Log dos dados completos da requisição
