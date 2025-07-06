@@ -27,6 +27,6 @@ class Kernel extends ConsoleKernel
     }
 
     protected $commands = [
-        // Commands registrados automaticamente via load()
+        \App\Console\Commands\SimulateChatWebhook::class,
     ];
 }

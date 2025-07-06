@@ -97,7 +97,8 @@ class ChatController extends Controller
                     'user_id' => $user->id,
                     'transaction_id' => $chatTransaction->id,
                     'service' => 'recurso_generation',
-                    'source' => 'chat_wizard'
+                    'source' => 'chat_wizard',
+                    'chat_payment' => true
                 ],
                 'return_url' => route('cliente.success'),
                 'completion_url' => route('cliente.success')
@@ -496,13 +497,26 @@ class ChatController extends Controller
             }
 
             $payload = $request->all();
-            $billingId = $payload['data']['id'] ?? null;
-            $status = $payload['data']['status'] ?? null;
+            
+            // Suporta diferentes estruturas de payload
+            $billingId = null;
+            $status = null;
+            
+            if (isset($payload['data']['id'])) {
+                $billingId = $payload['data']['id'];
+                $status = $payload['data']['status'] ?? null;
+            } elseif (isset($payload['data']['billing']['id'])) {
+                $billingId = $payload['data']['billing']['id'];
+                $status = $payload['data']['billing']['status'] ?? null;
+            }
 
             Log::info('Webhook AbacatePay recebido para chat', [
                 'event' => $payload['event'] ?? 'unknown',
                 'billing_id' => $billingId,
-                'status' => $status
+                'status' => $status,
+                'payload_keys' => array_keys($payload),
+                'data_keys' => isset($payload['data']) ? array_keys($payload['data']) : 'no_data',
+                'full_payload' => json_encode($payload)
             ]);
 
             // Só processa pagamentos aprovados
