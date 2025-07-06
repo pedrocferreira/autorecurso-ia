@@ -1,6 +1,6 @@
 @extends('self-service.layout')
 
-@section('title', 'Sucesso! - AutoRecurso')
+@section('title', 'Recurso Gerado com Sucesso - AutoRecurso')
 
 @push('styles')
 <style>
@@ -195,275 +195,296 @@
     background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
     border: 1px solid #10b981;
 }
+
+.success-animation {
+    animation: successBounce 0.6s ease-out;
+}
+
+@keyframes successBounce {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.step-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.step-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(59,130,246,0.1);
+}
+
+.step-number {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.floating-card {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.checklist-item {
+    transition: all 0.3s ease;
+}
+
+.checklist-item:hover {
+    background-color: #f8fafc;
+    padding-left: 1.5rem;
+}
 </style>
 @endpush
 
 @section('content')
-<div class="min-h-screen success-bg relative overflow-hidden" x-data="successPage()">
-    <!-- Confetti Animation -->
-    <div class="fixed inset-0 pointer-events-none">
-        <template x-for="i in 50" :key="i">
-            <div class="confetti-piece" 
-                 :style="`left: ${Math.random() * 100}%; animation-delay: ${Math.random() * 3}s; background: ${['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7'][Math.floor(Math.random() * 7)]}`">
-            </div>
-        </template>
-    </div>
-
-    <div class="max-w-4xl mx-auto px-4 py-20">
-        <!-- Success Message -->
-        <div class="success-card rounded-3xl p-8 text-center mb-12 fade-in-up">
-            <div class="success-icon w-24 h-24 success-checkmark">
-                <i class="fas fa-check text-white text-4xl"></i>
+<div class="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-indigo-50 py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Header de Sucesso -->
+        <div class="text-center mb-12">
+            <div class="success-animation mb-6">
+                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
             </div>
             
-            <h1 class="text-4xl font-bold gradient-text mb-4">
-                Parabéns! Sua Solicitação foi Enviada!
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                🎉 Recurso Gerado com Sucesso!
             </h1>
             
-            <p class="text-xl text-gray-600 mb-8">
-                Recebemos sua multa e nossa <strong>IA especializada</strong> já começou a análise. 
-                Você receberá o resultado em até <strong>48 horas</strong>.
+            <p class="text-xl text-gray-600 mb-6">
+                Seu recurso personalizado foi criado pela nossa <strong>Inteligência Artificial</strong> especializada
             </p>
-
-            <!-- Protocolo -->
-            <div class="bg-blue-50 p-6 rounded-2xl mb-8 inline-block">
-                <div class="flex items-center justify-center gap-3">
-                    <i class="fas fa-file-alt text-blue-600 text-xl"></i>
-                    <div>
-                        <p class="text-sm text-gray-600">Número do Protocolo</p>
-                        <p class="text-2xl font-bold text-blue-600" x-text="protocolNumber"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Social Proof -->
-            <div class="social-proof p-6 rounded-2xl">
-                <div class="flex items-center justify-center gap-4 mb-4">
-                    <div class="rating-stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <span class="text-lg font-semibold">4.9/5</span>
-                </div>
-                <p class="text-sm text-gray-600">
-                    <strong>12.543 multas</strong> anuladas com <strong>85% de taxa de sucesso</strong>
-                </p>
-            </div>
-        </div>
-
-        <!-- O que acontece agora -->
-        <div class="bg-white rounded-3xl p-8 mb-12 fade-in-up">
-            <h2 class="text-3xl font-bold text-center mb-8">O que acontece agora?</h2>
             
-            <div class="timeline">
-                <div class="timeline-item completed">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-green-100 p-3 rounded-full">
-                            <i class="fas fa-check text-green-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Multa Recebida</h3>
-                            <p class="text-gray-600">Sua multa foi recebida e está em nossa base de dados</p>
-                            <p class="text-sm text-green-600 font-medium">✓ Concluído</p>
-                        </div>
+            <div class="floating-card bg-white p-6 rounded-2xl shadow-lg inline-block">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">📧 Verifique seu email agora!</h3>
+                <p class="text-gray-600">Enviamos todas as instruções e o PDF do recurso</p>
+            </div>
+        </div>
+
+        <!-- Cards informativos -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <!-- Card do que foi enviado -->
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <div class="flex items-center mb-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">O que foi enviado?</h3>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <span class="text-green-500 mr-3">✅</span>
+                        <span class="text-gray-700"><strong>PDF do recurso</strong> pronto para imprimir</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-green-500 mr-3">✅</span>
+                        <span class="text-gray-700"><strong>Instruções detalhadas</strong> de protocolamento</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-green-500 mr-3">✅</span>
+                        <span class="text-gray-700"><strong>Lista completa</strong> de documentos necessários</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-green-500 mr-3">✅</span>
+                        <span class="text-gray-700"><strong>Endereços dos órgãos</strong> competentes</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-green-500 mr-3">✅</span>
+                        <span class="text-gray-700"><strong>Dicas especiais</strong> para maximizar aprovação</span>
                     </div>
                 </div>
+            </div>
 
-                <div class="timeline-item">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-blue-100 p-3 rounded-full pulse-success">
-                            <i class="fas fa-robot text-blue-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Análise por IA</h3>
-                            <p class="text-gray-600">Nossa IA está analisando 150+ critérios técnicos e jurídicos</p>
-                            <p class="text-sm text-blue-600 font-medium">⏳ Em andamento</p>
-                        </div>
+            <!-- Card de tempo restante -->
+            <div class="bg-gradient-to-br from-orange-50 to-red-50 p-8 rounded-2xl shadow-lg border-2 border-orange-200">
+                <div class="flex items-center mb-6">
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900">⏰ Prazo Importante</h3>
                 </div>
-
-                <div class="timeline-item">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-purple-100 p-3 rounded-full">
-                            <i class="fas fa-gavel text-purple-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Revisão Jurídica</h3>
-                            <p class="text-gray-600">Advogados especialistas validarão a análise da IA</p>
-                            <p class="text-sm text-gray-500">⏳ Próximo passo</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-orange-100 p-3 rounded-full">
-                            <i class="fas fa-paper-plane text-orange-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Protocolo do Recurso</h3>
-                            <p class="text-gray-600">Envio automático do recurso para o órgão competente</p>
-                            <p class="text-sm text-gray-500">⏳ Em breve</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-green-100 p-3 rounded-full">
-                            <i class="fas fa-trophy text-green-600"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">Resultado</h3>
-                            <p class="text-gray-600">Você receberá o resultado em até 48 horas</p>
-                            <p class="text-sm text-gray-500">⏳ Até 48h</p>
-                        </div>
+                
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-orange-600 mb-2">30 DIAS</p>
+                    <p class="text-gray-700 mb-4">para protocolar seu recurso a partir da data de notificação da multa</p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <p class="text-sm text-gray-600"><strong>Dica:</strong> Não deixe para a última hora! Protocole assim que possível.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Expectativas -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div class="expectation-card rounded-2xl p-8">
-                <div class="flex items-center gap-4 mb-4">
-                    <i class="fas fa-clock text-2xl text-orange-600"></i>
-                    <h3 class="text-xl font-bold">Quando vou receber o resultado?</h3>
-                </div>
-                <p class="text-gray-700 mb-4">
-                    Você receberá um e-mail com o resultado da análise em <strong>até 48 horas</strong>. 
-                    Se for identificada uma possibilidade de anulação, protocolamos o recurso automaticamente.
-                </p>
-                <div class="flex items-center gap-2 text-sm">
-                    <i class="fas fa-info-circle text-blue-500"></i>
-                    <span class="text-gray-600">Média atual: 36 horas</span>
-                </div>
-            </div>
-
-            <div class="benefit-highlight rounded-2xl p-8">
-                <div class="flex items-center gap-4 mb-4">
-                    <i class="fas fa-shield-check text-2xl text-green-600"></i>
-                    <h3 class="text-xl font-bold">Lembre-se da nossa garantia</h3>
-                </div>
-                <p class="text-gray-700 mb-4">
-                    Você só paga se conseguirmos anular sua multa. Se o recurso não for aceito, 
-                    você não paga absolutamente nada.
-                </p>
-                <div class="flex items-center gap-2 text-sm">
-                    <i class="fas fa-check-circle text-green-500"></i>
-                    <span class="text-gray-600">Garantia 100% sem risco</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Próximos Passos -->
-        <div class="bg-white rounded-3xl p-8 mb-12 fade-in-up">
-            <h2 class="text-3xl font-bold text-center mb-8">Enquanto isso, você pode:</h2>
+        <!-- Próximos passos -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">
+                🚀 Próximos Passos - Siga Esta Ordem
+            </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="process-step text-center">
-                    <i class="fas fa-bell text-3xl text-blue-600 mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Fique Atento ao E-mail</h3>
-                    <p class="text-gray-600 text-sm">
-                        Verifique sua caixa de entrada e spam. Enviaremos todas as atualizações por e-mail.
-                    </p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Passo 1 -->
+                <div class="step-card bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">1</div>
+                        <h3 class="font-bold text-gray-900">Verifique o Email</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm mb-4">Acesse sua caixa de entrada e baixe o PDF do recurso. Verifique também a pasta de spam.</p>
+                    <div class="text-xs text-gray-500">
+                        <span class="block">📧 Pode demorar até 5 minutos</span>
+                        <span>💡 Salve o PDF em local seguro</span>
+                    </div>
                 </div>
 
-                <div class="process-step text-center">
-                    <i class="fas fa-share-alt text-3xl text-green-600 mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Indique um Amigo</h3>
-                    <p class="text-gray-600 text-sm">
-                        Compartilhe com amigos que também têm multas. Quanto mais pessoas ajudarmos, melhor!
-                    </p>
+                <!-- Passo 2 -->
+                <div class="step-card bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">2</div>
+                        <h3 class="font-bold text-gray-900">Prepare Documentos</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm mb-4">Imprima o recurso, assine e separe todas as cópias dos documentos listados no email.</p>
+                    <div class="text-xs text-gray-500">
+                        <span class="block">📄 Use papel A4 branco</span>
+                        <span>✍️ Assine com caneta azul</span>
+                    </div>
                 </div>
 
-                <div class="process-step text-center">
-                    <i class="fas fa-headset text-3xl text-purple-600 mb-4"></i>
-                    <h3 class="text-lg font-semibold mb-2">Suporte Disponível</h3>
-                    <p class="text-gray-600 text-sm">
-                        Dúvidas? Nossa equipe está disponível 24/7 para ajudar você.
-                    </p>
+                <!-- Passo 3 -->
+                <div class="step-card bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="step-number w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">3</div>
+                        <h3 class="font-bold text-gray-900">Protocole o Recurso</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm mb-4">Vá até o órgão competente ou protocole online seguindo as instruções detalhadas do email.</p>
+                    <div class="text-xs text-gray-500">
+                        <span class="block">🏢 JARI ou Detran</span>
+                        <span>📱 Ou protocolo online</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Estatísticas -->
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white text-center mb-12">
-            <h2 class="text-3xl font-bold mb-8">Resultados que Comprovam</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <div class="text-4xl font-bold mb-2">85%</div>
-                    <p class="text-blue-100">Taxa de Sucesso</p>
+        <!-- Checklist final -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-2xl shadow-lg mb-12">
+            <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">
+                ✅ Checklist Final - Antes de Protocolar
+            </h2>
+            
+            <div class="max-w-2xl mx-auto space-y-3">
+                <div class="checklist-item p-3 rounded-lg cursor-pointer flex items-center">
+                    <input type="checkbox" class="mr-4 w-5 h-5 text-blue-600 rounded">
+                    <span class="text-gray-700">Baixei e imprimi o PDF do recurso</span>
                 </div>
-                <div>
-                    <div class="text-4xl font-bold mb-2">12.543</div>
-                    <p class="text-blue-100">Multas Anuladas</p>
+                <div class="checklist-item p-3 rounded-lg cursor-pointer flex items-center">
+                    <input type="checkbox" class="mr-4 w-5 h-5 text-blue-600 rounded">
+                    <span class="text-gray-700">Assinei o recurso com caneta azul</span>
                 </div>
-                <div>
-                    <div class="text-4xl font-bold mb-2">R$ 2.8M</div>
-                    <p class="text-blue-100">Economizados</p>
+                <div class="checklist-item p-3 rounded-lg cursor-pointer flex items-center">
+                    <input type="checkbox" class="mr-4 w-5 h-5 text-blue-600 rounded">
+                    <span class="text-gray-700">Separei todas as cópias dos documentos</span>
+                </div>
+                <div class="checklist-item p-3 rounded-lg cursor-pointer flex items-center">
+                    <input type="checkbox" class="mr-4 w-5 h-5 text-blue-600 rounded">
+                    <span class="text-gray-700">Verifiquei endereço e horário do órgão</span>
+                </div>
+                <div class="checklist-item p-3 rounded-lg cursor-pointer flex items-center">
+                    <input type="checkbox" class="mr-4 w-5 h-5 text-blue-600 rounded">
+                    <span class="text-gray-700">Confirmei que estou dentro do prazo de 30 dias</span>
                 </div>
             </div>
         </div>
 
-        <!-- Call to Action -->
-        <div class="text-center">
-            <h2 class="text-2xl font-bold text-white mb-4">Tem mais multas para anular?</h2>
-            <p class="text-blue-100 mb-6">
-                Aproveite e analise todas as suas multas de uma vez!
+        <!-- Estatísticas de sucesso -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 rounded-2xl shadow-lg text-white text-center mb-12">
+            <h2 class="text-2xl font-bold mb-6">📊 Suas Chances de Sucesso</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <div class="text-3xl font-bold mb-2">95%</div>
+                    <div class="text-blue-100">Taxa de Aprovação</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold mb-2">10.000+</div>
+                    <div class="text-blue-100">Recursos Aprovados</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold mb-2">30 dias</div>
+                    <div class="text-blue-100">Resposta Média</div>
+                </div>
+            </div>
+            
+            <p class="mt-6 text-blue-100">
+                Recursos gerados com nossa IA têm <strong>95% de chance de aprovação</strong>
             </p>
-            <a href="{{ route('cliente.wizard') }}" class="bg-white text-blue-600 px-8 py-4 rounded-2xl font-semibold hover:bg-blue-50 transition-all duration-300 inline-flex items-center gap-2">
-                <i class="fas fa-plus"></i>
-                Analisar Outra Multa
-            </a>
         </div>
+
+        <!-- Suporte -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">
+                🆘 Precisa de Ajuda?
+            </h2>
+            
+            <p class="text-gray-600 mb-6">
+                Nossa equipe está pronta para te ajudar em qualquer etapa do processo
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-4">
+                <a href="mailto:suporte@autorecurso.com.br" class="flex items-center justify-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                    <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="text-blue-700 font-medium">Email</span>
+                </a>
+                
+                <a href="https://wa.me/5511999999999" class="flex items-center justify-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                    <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.309"/>
+                    </svg>
+                    <span class="text-green-700 font-medium">WhatsApp</span>
+                </a>
+                
+                <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
+                    <svg class="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-gray-700 font-medium">Seg-Sex 8h-18h</span>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-    <!-- WhatsApp Float -->
-    <a href="https://wa.me/5511999999999?text=Olá! Acabei de enviar uma multa para análise e gostaria de tirar algumas dúvidas." 
-       target="_blank" 
-       class="whatsapp-float">
-        <i class="fab fa-whatsapp text-white text-2xl"></i>
-    </a>
 </div>
-@endsection
 
 @push('scripts')
 <script>
-function successPage() {
-    return {
-        protocolNumber: '#AR' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0'),
-        
-        init() {
-            // Confetti animation
-            this.createConfetti();
-            
-            // Auto-scroll to show all content
-            setTimeout(() => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            }, 1000);
-        },
-        
-        createConfetti() {
-            // Additional confetti logic if needed
-            console.log('Confetti created!');
-        }
-    }
-}
-
-// Auto-hide loading and show success
+// Animação dos checkboxes
 document.addEventListener('DOMContentLoaded', function() {
-    // Track success conversion
-    console.log('Success page loaded - conversion completed');
+    const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
     
-    // You can add analytics tracking here
-    // Example: gtag('event', 'conversion', { send_to: 'AW-XXXXXXXXX/XXXXXX' });
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const item = this.closest('.checklist-item');
+            if (this.checked) {
+                item.classList.add('bg-green-50');
+                item.querySelector('span').classList.add('line-through', 'text-green-600');
+            } else {
+                item.classList.remove('bg-green-50');
+                item.querySelector('span').classList.remove('line-through', 'text-green-600');
+            }
+        });
+    });
 });
 </script>
-@endpush 
+@endpush
+@endsection 

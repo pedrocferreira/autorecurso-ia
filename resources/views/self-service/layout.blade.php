@@ -28,7 +28,7 @@
                         <div class="text-xl font-bold text-gray-900">AutoRecurso</div>
                     </a>
                     <div class="ml-4 text-sm text-gray-600">
-                        Cliente Final
+                        
                     </div>
                 </div>
             </div>

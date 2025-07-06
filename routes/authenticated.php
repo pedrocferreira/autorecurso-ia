@@ -7,6 +7,7 @@ use App\Http\Controllers\AppealController;
 use App\Http\Controllers\CreditController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,9 +94,13 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
 });
 
 // Rotas de chat/pagamento (não precisam de auth)
-Route::post('/chat/pix', [App\Http\Controllers\Api\ChatPaymentController::class, 'createPix']);
-Route::get('/chat/pix/{id}/status', [App\Http\Controllers\Api\ChatPaymentController::class, 'checkStatus']);
-Route::post('/chat/stripe', [App\Http\Controllers\Api\ChatStripeController::class, 'createSession']);
+Route::post('/chat/pix', [App\Http\Controllers\ChatController::class, 'createPixPayment']);
+Route::get('/chat/pix/{id}/status', [App\Http\Controllers\ChatController::class, 'checkPixStatus']);
+Route::post('/chat/stripe', [App\Http\Controllers\ChatController::class, 'createStripePayment']);
+
+// Webhook do chat (sem auth)
+Route::post('/chat/webhook/abacatepay', [App\Http\Controllers\ChatController::class, 'webhookAbacatePay'])
+    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 // Rota para consulta de placa
 Route::post('/api/vehicle/lookup', [App\Http\Controllers\Api\VehicleController::class, 'lookup']);

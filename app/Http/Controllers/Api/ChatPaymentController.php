@@ -9,6 +9,7 @@ use App\Models\CreditTransaction;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\AppealDraft;
 
 class ChatPaymentController extends Controller
 {
@@ -45,6 +46,13 @@ class ChatPaymentController extends Controller
                 }
             }
 
+            // Cria / atualiza draft do recurso com todos os dados enviados pelo chat
+            $draft = AppealDraft::create([
+                'user_id'    => $user->id,
+                'form_data'  => $request->all(),
+                'status'     => 'pending',
+            ]);
+
             // Monta os dados para o serviço AbacatePay
             $paymentData = [
                 'amount' => (int) ($request->amount * 100), // centavos
@@ -59,7 +67,8 @@ class ChatPaymentController extends Controller
                     'user_id' => $user->id,
                     'credits' => 1,
                     'gateway' => 'abacatepay',
-                    'chat_payment' => true
+                    'chat_payment' => true,
+                    'draft_id' => $draft->id,
                 ],
                 'return_url' => url('/cliente/sucesso'),
                 'completion_url' => url('/cliente/sucesso')
@@ -102,8 +111,8 @@ class ChatPaymentController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-        return response()->json([
-            'success' => false,
+            return response()->json([
+                'success' => false,
                 'message' => 'Erro interno ao processar pagamento PIX.'
             ], 500);
         }
@@ -111,7 +120,29 @@ class ChatPaymentController extends Controller
 
     public function checkStatus($id)
     {
-        // Retorna status pendente por enquanto
+        // Procura transação relacionada ao billing/reference
+        $tx = CreditTransaction::where('reference', $id)->first();
+        if (!$tx) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Transação não encontrada'
+            ]);
+        }
+
+        if ($tx->status === 'completed') {
+            return response()->json(['status' => 'paid']);
+        }
+
+        // Caso ainda pendente, consulta AbacatePay
+        $abacate = new \App\Services\AbacatePayService();
+        $resp = $abacate->getBillingStatus($id);
+        if ($resp['success']) {
+            return response()->json([
+                'status' => strtolower($resp['status']),
+                'message' => $resp['status']
+            ]);
+        }
+
         return response()->json([
             'status' => 'pending',
             'message' => 'Aguardando pagamento'

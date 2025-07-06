@@ -356,8 +356,7 @@ Relato: ${this.form.details}`;
                         const resp = await fetch('/chat/pix', {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
                                 name: this.form.name,
@@ -429,8 +428,12 @@ Relato: ${this.form.details}`;
 
                             await this.typeMessage('Após o pagamento, volto aqui para confirmar automaticamente!');
 
+                            // Inicia monitoramento usando o ID real da AbacatePay
                             if (billing.id) {
                                 this.pollPix(billing.id);
+                            } else {
+                                console.error('ID do PIX não encontrado na resposta');
+                                await this.typeMessage('❌ Erro: ID do pagamento não foi gerado. Entre em contato com o suporte.');
                             }
                         } 
                         // Se tiver QR code, exibe
@@ -447,8 +450,12 @@ Relato: ${this.form.details}`;
 
                             await this.typeMessage('Após o pagamento, volto aqui para confirmar automaticamente!');
 
+                            // Inicia monitoramento usando o ID real da AbacatePay  
                             if (billing.id) {
                                 this.pollPix(billing.id);
+                            } else {
+                                console.error('ID do PIX não encontrado na resposta');
+                                await this.typeMessage('❌ Erro: ID do pagamento não foi gerado. Entre em contato com o suporte.');
                             }
                         } else {
                             await this.typeMessage('❌ Não foi possível gerar o QR Code ou link de pagamento PIX. Tente novamente mais tarde ou escolha outra forma de pagamento.');
@@ -471,8 +478,7 @@ Relato: ${this.form.details}`;
                         const resp = await fetch('/chat/stripe', {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
                                 name: this.form.name,
@@ -665,8 +671,7 @@ Relato: ${this.form.details}`;
                     const resp = await fetch('/api/vehicle/lookup', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ placa: plate })
                     });
@@ -853,21 +858,94 @@ Relato: ${this.form.details}`;
 
             pollPix(id) {
                 if (!id) return;
-                this.typeMessage('⌛ Aguardando confirmação do pagamento…');
+                
+                let checkCount = 0;
+                const maxChecks = 50; // Máximo de 50 verificações (aproximadamente 6 minutos)
+                
                 this.paymentInterval = setInterval(async () => {
                     try {
+                        checkCount++;
+                        console.log(`Verificando status do pagamento... (${checkCount}/${maxChecks})`);
+                        
                         const r = await fetch(`/chat/pix/${id}/status`);
                         const js = await r.json();
+                        
                         if (js.status === 'paid') {
                             clearInterval(this.paymentInterval);
-                            await this.typeMessage('✅ Pagamento confirmado! Obrigado.');
-                            window.location.href = '/cliente/sucesso';
+                            
+                            await this.typeMessage('✅ Pagamento confirmado! 🎉');
+                            await this.sleep(500);
+                            await this.typeMessage('🤖 Nossa IA está gerando seu recurso personalizado...');
+                            await this.sleep(1000);
+                            await this.typeMessage('📄 Criando documento em PDF...');
+                            await this.sleep(1000);
+                            await this.typeMessage('📧 Enviando por email com instruções completas...');
+                            await this.sleep(1500);
+                            
+                            await this.typeMessage(`
+                                <div class="bg-green-50 p-6 rounded-xl shadow-lg border-2 border-green-200 mb-4">
+                                    <div class="text-center">
+                                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-green-800 mb-2">🎉 Recurso Gerado com Sucesso!</h3>
+                                        <p class="text-green-700 mb-4">Seu recurso personalizado foi criado e enviado para seu email!</p>
+                                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                                            <h4 class="font-semibold text-gray-800 mb-2">📧 Verifique seu email agora:</h4>
+                                            <p class="text-sm text-gray-600 mb-3">Enviamos seu recurso completo com:</p>
+                                            <div class="text-left space-y-1 text-sm text-gray-700">
+                                                <div>✅ PDF do recurso pronto para imprimir</div>
+                                                <div>✅ Instruções detalhadas de protocolamento</div>
+                                                <div>✅ Lista de documentos necessários</div>
+                                                <div>✅ Endereços dos órgãos competentes</div>
+                                                <div>✅ Dicas para aumentar aprovação</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                            
+                            await this.sleep(2000);
+                            await this.typeMessage('🚀 Pronto! Agora é só seguir as instruções do email e protocolar seu recurso. Boa sorte! 🍀');
+                            
+                            // Opcional: redirecionar após alguns segundos
+                            setTimeout(() => {
+                                window.location.href = '/cliente/sucesso';
+                            }, 5000);
+                            
                         } else if (js.status === 'expired' || js.status === 'cancelled') {
                             clearInterval(this.paymentInterval);
-                            await this.typeMessage('⚠️ Pagamento não foi concluído. Você pode tentar novamente.');
+                            await this.typeMessage(`
+                                <div class="bg-yellow-50 p-4 rounded-lg shadow-sm">
+                                    <p class="text-yellow-800 font-medium">⚠️ Pagamento não foi concluído.</p>
+                                    <p class="text-sm text-yellow-700 mt-1">Você pode tentar novamente a qualquer momento!</p>
+                                </div>
+                            `);
+                        } else if (checkCount >= maxChecks) {
+                            // Timeout após muitas tentativas
+                            clearInterval(this.paymentInterval);
+                            await this.typeMessage(`
+                                <div class="bg-blue-50 p-4 rounded-lg shadow-sm">
+                                    <p class="text-blue-800 font-medium">⏰ Tempo limite excedido</p>
+                                    <p class="text-sm text-blue-700 mt-1">Se você já efetuou o pagamento, aguarde alguns minutos. O recurso será gerado automaticamente.</p>
+                                </div>
+                            `);
                         }
                     } catch (error) {
                         console.error('Erro ao verificar status do pagamento:', error);
+                        
+                        // Se houver muitos erros, para a verificação
+                        if (checkCount >= maxChecks) {
+                            clearInterval(this.paymentInterval);
+                            await this.typeMessage(`
+                                <div class="bg-red-50 p-4 rounded-lg shadow-sm">
+                                    <p class="text-red-800 font-medium">❌ Erro na verificação do pagamento</p>
+                                    <p class="text-sm text-red-600 mt-1">Entre em contato conosco se o problema persistir.</p>
+                                </div>
+                            `);
+                        }
                     }
                 }, 7000);
             }
@@ -961,8 +1039,7 @@ function setupTestMode() {
                 const response = await fetch('/chat/pix', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(wizardAppInstance.form)
                 });

@@ -5,6 +5,13 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use App\Models\AppealDraft;
+use App\Models\Appeal;
+use App\Services\OpenAIService;
+use App\Services\PDFService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RecursoGeradoMail;
+use App\Models\Ticket;
 
 class AbacatePayService
 {
@@ -153,7 +160,8 @@ class AbacatePayService
                     'abacatepay_billing_id' => $data['data']['id'],
                     'created_at_abacatepay' => now()->toISOString(),
                     'payment_url' => $data['data']['url'] ?? null,
-                    'chat_payment' => $paymentData['metadata']['chat_payment'] ?? false
+                    'chat_payment' => $paymentData['metadata']['chat_payment'] ?? false,
+                    'draft_id' => $paymentData['metadata']['draft_id'] ?? null
                 ]
             ]);
 
@@ -327,6 +335,53 @@ class AbacatePayService
             ]);
 
             $transaction = $creditService->confirmTransaction($transaction);
+
+            // Se for pagamento via chat, gerar recurso automático
+            if (($transaction->metadata['chat_payment'] ?? false) && ($draftId = $transaction->metadata['draft_id'] ?? null)) {
+                Log::info('Pagamento via chat: gerando recurso automaticamente', ['draft_id' => $draftId]);
+
+                $draft = AppealDraft::find($draftId);
+                if ($draft && $draft->status === 'pending') {
+                    try {
+                        // Obtém ou cria ticket
+                        $ticket = $draft->ticket_id ? \App\Models\Ticket::find($draft->ticket_id) : null;
+                        if (!$ticket) {
+                            $ticket = \App\Models\Ticket::create([
+                                'user_id' => $draft->user_id,
+                                'plate' => $draft->form_data['placa'] ?? 'AAA0A00',
+                                'reason' => $draft->form_data['reason'] ?? 'Infração de trânsito',
+                                'amount' => 2990,
+                                'date' => now(),
+                            ]);
+                        }
+
+                        // Gera texto do recurso
+                        $openAI = app(OpenAIService::class);
+                        $appealText = $openAI->generateAppealText($ticket, $draft->form_data);
+
+                        // Cria recurso
+                        $appeal = Appeal::create([
+                            'user_id' => $draft->user_id,
+                            'ticket_id' => $ticket->id,
+                            'content' => $appealText,
+                        ]);
+
+                        // Gera PDF e envia email
+                        $pdfService = app(PDFService::class);
+                        $appeal->pdf_path = $pdfService->generatePDF($appeal);
+                        $appeal->save();
+
+                        Mail::to($appeal->user)->send(new RecursoGeradoMail($appeal->user, $appeal));
+
+                        $draft->update(['status' => 'consumed', 'transaction_id' => $transaction->id]);
+                    } catch (\Exception $e) {
+                        Log::error('Erro ao gerar recurso automático após pagamento chat', [
+                            'draft_id' => $draftId,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
+                }
+            }
 
             Log::info('Pagamento processado com sucesso via webhook', [
                 'billing_id' => $billingId,
