@@ -13,7 +13,7 @@ Olá **{{ $user->name }}**,
 - **Data da Infração:** {{ $appeal->ticket->date ? \Carbon\Carbon::parse($appeal->ticket->date)->format('d/m/Y') : 'N/A' }}
 - **Status:** Pronto para protocolo
 
-@component('mail::button', ['url' => route('appeals.download', $appeal), 'color' => 'success'])
+@component('mail::button', ['url' => route('public.download.recurso', [$appeal->id, preg_replace('/[^0-9]/', '', $appeal->ticket->cpf)]), 'color' => 'success'])
 📄 Baixar Recurso (PDF)
 @endcomponent
 
