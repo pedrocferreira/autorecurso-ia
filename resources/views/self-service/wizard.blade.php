@@ -3,6 +3,7 @@
 @section('title', 'Wizard de Recurso - AutoRecurso')
 
 @push('styles')
+<link rel="stylesheet" href="/css/mobile-chat.css">
 <style>
 /* Scrollbar personalizada */
 #chat-body::-webkit-scrollbar {
@@ -143,6 +144,7 @@
     margin-bottom: 1rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
 }
 
 .category-tag {
@@ -152,6 +154,7 @@
     white-space: nowrap;
     cursor: pointer;
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
 .category-tag.active {
@@ -251,10 +254,288 @@
     margin-bottom: 1rem;
     color: #9ca3af;
 }
+
+/* ===== RESPONSIVIDADE MOBILE ===== */
+
+/* Ajustes gerais para mobile */
+@media (max-width: 768px) {
+    /* Header mais compacto */
+    .header-mobile {
+        padding: 0.75rem 1rem;
+    }
+    
+    .header-mobile .ana-avatar img {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+    
+    .header-mobile h1 {
+        font-size: 1rem;
+        line-height: 1.2;
+    }
+    
+    .header-mobile p {
+        font-size: 0.75rem;
+    }
+    
+    /* Progress bar menor */
+    .progress-mobile {
+        width: 6rem;
+        height: 0.375rem;
+    }
+    
+    /* Chat body com padding menor */
+    #chat-body {
+        padding: 0.75rem;
+        padding-bottom: 1rem;
+    }
+    
+    /* Mensagens mais compactas */
+    .message-mobile {
+        max-width: 85vw !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+    
+    /* Avatars menores */
+    .avatar-mobile {
+        width: 2rem !important;
+        height: 2rem !important;
+        flex-shrink: 0;
+    }
+    
+    /* Input area mais compacta */
+    .input-mobile {
+        padding: 0.75rem;
+        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    }
+    
+    /* Botões de opção mais altos para touch */
+    .option-mobile {
+        min-height: 3.5rem;
+        padding: 1rem 0.75rem;
+        font-size: 0.875rem;
+        line-height: 1.3;
+    }
+    
+    /* Categorias de infração com scroll horizontal melhor */
+    .categories-mobile {
+        gap: 0.375rem;
+        padding: 0 0.5rem 0.75rem 0.5rem;
+        margin: 0 -0.5rem 1rem -0.5rem;
+    }
+    
+    .category-tag-mobile {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        min-width: fit-content;
+    }
+    
+    /* Cards de infração mais compactos */
+    .infraction-card-mobile {
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .infraction-card-mobile .infraction-code {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.4rem;
+    }
+    
+    .infraction-card-mobile .infraction-points,
+    .infraction-card-mobile .infraction-amount {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+    
+    /* Search input mais alto para touch */
+    .search-mobile {
+        height: 3.25rem;
+        font-size: 1rem;
+    }
+    
+    /* Textarea mais alta */
+    .textarea-mobile {
+        min-height: 4rem;
+        font-size: 1rem;
+    }
+    
+    /* Botão de envio mais alto */
+    .send-button-mobile {
+        height: 3.25rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    
+    /* Espaçamento entre mensagens menor */
+    .message-spacing-mobile {
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Container de pagamento responsivo */
+    .payment-container-mobile {
+        padding: 1rem;
+        margin: 0.5rem 0;
+    }
+    
+    .payment-button-mobile {
+        width: 100%;
+        min-height: 3.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+    .message-mobile {
+        max-width: 90vw !important;
+        padding: 0.625rem 0.875rem !important;
+        font-size: 0.8rem;
+    }
+    
+    .header-mobile {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .input-mobile {
+        padding: 0.5rem;
+        padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    }
+    
+    .option-mobile {
+        min-height: 3rem;
+        padding: 0.875rem 0.625rem;
+        font-size: 0.8rem;
+    }
+    
+    .categories-mobile {
+        gap: 0.25rem;
+        padding: 0 0.375rem 0.5rem 0.375rem;
+        margin: 0 -0.375rem 0.75rem -0.375rem;
+    }
+    
+    .category-tag-mobile {
+        padding: 0.375rem 0.625rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Ajustes para landscape em mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .header-mobile {
+        padding: 0.5rem 1rem;
+    }
+    
+    .header-mobile .ana-avatar img {
+        width: 2rem;
+        height: 2rem;
+    }
+    
+    .header-mobile h1 {
+        font-size: 0.875rem;
+    }
+    
+    .header-mobile p {
+        font-size: 0.7rem;
+    }
+    
+    #chat-body {
+        padding: 0.5rem;
+    }
+    
+    .input-mobile {
+        padding: 0.5rem;
+    }
+}
+
+/* Melhorias para touch */
+@media (hover: none) and (pointer: coarse) {
+    .category-tag:hover,
+    .infraction-card:hover,
+    .option-mobile:hover {
+        transform: none;
+    }
+    
+    .category-tag:active,
+    .infraction-card:active,
+    .option-mobile:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    /* Área de toque maior para botões */
+    .option-mobile,
+    .send-button-mobile,
+    .payment-button-mobile {
+        min-height: 44px;
+    }
+    
+    /* Input com tamanho mínimo para touch */
+    input[type="text"],
+    input[type="date"],
+    textarea {
+        min-height: 44px;
+        font-size: 16px; /* Evita zoom no iOS */
+    }
+}
+
+/* Suporte para safe area (iPhone X e similares) */
+@supports (padding: max(0px)) {
+    .input-mobile {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+    
+    .header-mobile {
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+    }
+}
+
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .message-enter,
+    .message-enter-active,
+    .typing-indicator span,
+    .ana-avatar,
+    .category-tag,
+    .infraction-card {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Modo escuro (opcional) */
+@media (prefers-color-scheme: dark) {
+    .bot-message {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        border-color: #374151;
+        color: #f9fafb;
+    }
+    
+    .user-message {
+        background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        border-color: #1e40af;
+    }
+    
+    .typing-indicator {
+        background: #374151;
+    }
+    
+    .typing-indicator span {
+        background: #9ca3af;
+    }
+}
 </style>
 @endpush
 
 @section('content')
+<!-- Meta tags para mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#3b82f6">
 <!-- CSRF Token Meta Tag -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -262,11 +543,11 @@
     <!-- Chat Container -->
     <div class="h-full flex flex-col">
         <!-- Header com Avatar e Progresso -->
-        <div class="bg-white border-b px-4 py-3 shadow-sm">
+        <div class="bg-white border-b px-4 py-3 shadow-sm header-mobile">
             <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center">
                     <div class="ana-avatar">
-                        <img src="/images/ana-avatar.png" alt="Ana" class="w-12 h-12 rounded-full border-2 border-blue-200">
+                        <img src="/images/ana-avatar.png" alt="Ana" class="w-12 h-12 rounded-full border-2 border-blue-200 avatar-mobile">
                     </div>
                     <div class="ml-3">
                         <h1 class="text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Ana - Assistente Virtual</h1>
@@ -275,7 +556,7 @@
                 </div>
                 <div class="flex flex-col items-end">
                     <span class="text-sm font-medium text-blue-600" x-text="`${progress.toFixed(0)}% completo`"></span>
-                    <div class="w-32 bg-gray-100 rounded-full h-2 mt-1">
+                    <div class="w-32 bg-gray-100 rounded-full h-2 mt-1 progress-mobile">
                         <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-700 ease-in-out"
                              :style="`width: ${progress}%`"></div>
                     </div>
@@ -287,15 +568,15 @@
         <div id="chat-body" class="flex-1 overflow-y-auto p-4 space-y-4">
             <!-- Messages -->
             <template x-for="(message, index) in messages" :key="index">
-                <div class="flex items-end space-x-2 message-enter" :class="message.type === 'user' ? 'justify-end' : 'justify-start'">
+                <div class="flex items-end space-x-2 message-enter message-spacing-mobile" :class="message.type === 'user' ? 'justify-end' : 'justify-start'">
                     <!-- Avatar para mensagens da Ana -->
                     <template x-if="message.type !== 'user'">
                         <div class="ana-avatar flex-shrink-0">
-                            <img src="/images/ana-avatar.png" alt="Ana" class="w-8 h-8 rounded-full border-2 border-white shadow-sm">
+                            <img src="/images/ana-avatar.png" alt="Ana" class="w-8 h-8 rounded-full border-2 border-white shadow-sm avatar-mobile">
                         </div>
                     </template>
                     
-                    <div class="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-sm" 
+                    <div class="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-sm message-mobile" 
                          :class="message.type === 'user' ? 
                             'user-message text-white rounded-br-sm' : 
                             'bot-message rounded-bl-sm'">
@@ -304,7 +585,7 @@
 
                     <!-- Avatar do usuário -->
                     <template x-if="message.type === 'user'">
-                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-600 text-sm font-medium border-2 border-white shadow-sm flex-shrink-0">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-600 text-sm font-medium border-2 border-white shadow-sm flex-shrink-0 avatar-mobile">
                             <i class="fas fa-user"></i>
                         </div>
                     </template>
@@ -314,7 +595,7 @@
             <!-- Typing Indicator -->
             <div x-show="isTyping" class="flex items-start space-x-2">
                 <div class="ana-avatar flex-shrink-0">
-                    <img src="/images/ana-avatar.png" alt="Ana" class="w-8 h-8 rounded-full border-2 border-white shadow-sm">
+                    <img src="/images/ana-avatar.png" alt="Ana" class="w-8 h-8 rounded-full border-2 border-white shadow-sm avatar-mobile">
                 </div>
                 <div class="typing-indicator">
                     <span></span>
@@ -325,7 +606,7 @@
         </div>
 
         <!-- Input Area -->
-        <div x-show="showInput" class="bg-white border-t p-4">
+        <div x-show="showInput" class="bg-white border-t p-4 input-mobile">
             <!-- Text Input -->
             <div x-show="inputType === 'text'" class="flex space-x-2">
                 <div class="flex-1 relative">
@@ -334,11 +615,11 @@
                         type="text" 
                         x-model="userInput"
                         @keydown.enter="handleInput(userInput)"
-                        class="w-full pl-4 pr-12 py-3 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm"
+                        class="w-full pl-4 pr-12 py-3 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm search-mobile"
                         placeholder="Digite sua resposta...">
                     <button 
                         @click="handleInput(userInput)"
-                        class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-sm">
+                        class="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-sm send-button-mobile">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
@@ -350,7 +631,7 @@
                     type="date" 
                     x-model="userInput"
                     @change="handleInput(userInput)"
-                    class="w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm">
+                    class="w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm search-mobile">
             </div>
 
             <!-- Textarea Input -->
@@ -358,11 +639,11 @@
                 <textarea 
                     x-model="userInput"
                     rows="3"
-                    class="w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm resize-none"
+                    class="w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm resize-none textarea-mobile"
                     placeholder="Descreva os detalhes da situação..."></textarea>
                 <button 
                     @click="handleInput(userInput)"
-                    class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-sm font-medium">
+                    class="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-sm font-medium send-button-mobile">
                     Enviar Resposta
                 </button>
             </div>
@@ -377,44 +658,44 @@
                                 type="text" 
                                 x-model="searchInfraction" 
                                 placeholder="Busque por código ou descrição da infração..."
-                                class="w-full px-4 py-3 pl-12 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm">
+                                class="w-full px-4 py-3 pl-12 border-2 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all shadow-sm search-mobile">
                         </div>
 
-                        <div class="infraction-categories">
+                        <div class="infraction-categories categories-mobile">
                             <div 
                                 @click="selectedCategory = 'all'" 
                                 :class="{'active': selectedCategory === 'all'}"
-                                class="category-tag">
+                                class="category-tag category-tag-mobile">
                                 Todas
                             </div>
                             <div 
                                 @click="selectedCategory = 'velocidade'" 
                                 :class="{'active': selectedCategory === 'velocidade'}"
-                                class="category-tag">
+                                class="category-tag category-tag-mobile">
                                 Velocidade
                             </div>
                             <div 
                                 @click="selectedCategory = 'documentacao'" 
                                 :class="{'active': selectedCategory === 'documentacao'}"
-                                class="category-tag">
+                                class="category-tag category-tag-mobile">
                                 Documentação
                             </div>
                             <div 
                                 @click="selectedCategory = 'sinalizacao'" 
                                 :class="{'active': selectedCategory === 'sinalizacao'}"
-                                class="category-tag">
+                                class="category-tag category-tag-mobile">
                                 Sinalização
                             </div>
                             <div 
                                 @click="selectedCategory = 'estacionamento'" 
                                 :class="{'active': selectedCategory === 'estacionamento'}"
-                                class="category-tag">
+                                class="category-tag category-tag-mobile">
                                 Estacionamento
                             </div>
                             <div 
                                 @click="selectedCategory = 'conducao'" 
                                 :class="{'active': selectedCategory === 'conducao'}"
-                                class="category-tag">
+                                class="category-tag category-tag-mobile">
                                 Condução
                             </div>
                         </div>
@@ -424,7 +705,7 @@
                                 <template x-for="option in filteredInfractions" :key="option.value">
                                     <button 
                                         @click="handleInput(option.value)"
-                                        class="w-full text-left p-4 bg-white border-2 rounded-xl hover:border-blue-500 transition-all shadow-sm infraction-card">
+                                        class="w-full text-left p-4 bg-white border-2 rounded-xl hover:border-blue-500 transition-all shadow-sm infraction-card infraction-card-mobile">
                                         <div class="flex items-start justify-between">
                                             <div class="space-y-2">
                                                 <div class="flex items-center gap-2">
@@ -475,7 +756,7 @@
                         <template x-for="option in inputOptions" :key="option.value">
                             <button 
                                 @click="handleInput(option.value)"
-                                class="w-full text-left px-6 py-4 border-2 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all shadow-sm group">
+                                class="w-full text-left px-6 py-4 border-2 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all shadow-sm group option-mobile">
                                 <span x-text="option.label" class="group-hover:text-blue-700 font-medium"></span>
                             </button>
                         </template>

@@ -1,0 +1,316 @@
+/* ===== MELHORIAS MOBILE PARA O CHAT ===== */
+
+/* Meta viewport para mobile */
+@media (max-width: 768px) {
+    /* Previne zoom em inputs no iOS */
+    input[type="text"],
+    input[type="date"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+        font-size: 16px !important;
+        -webkit-appearance: none;
+        border-radius: 12px;
+    }
+    
+    /* Melhora a área de toque para botões */
+    button,
+    .btn,
+    .option-mobile,
+    .category-tag-mobile {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Melhora scroll horizontal das categorias */
+    .infraction-categories {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    
+    .infraction-categories::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Opera */
+    }
+    
+    /* Melhora performance de animações no mobile */
+    .message-enter,
+    .message-enter-active {
+        will-change: transform, opacity;
+    }
+    
+    /* Otimiza scroll do chat */
+    #chat-body {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    /* Melhora feedback visual para touch */
+    .option-mobile:active,
+    .category-tag-mobile:active,
+    .infraction-card-mobile:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    /* Melhora espaçamento para telas pequenas */
+    .message-spacing-mobile {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Ajusta tamanho dos avatars no mobile */
+    .avatar-mobile {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+    
+    /* Melhora legibilidade das mensagens */
+    .message-mobile {
+        line-height: 1.4;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* Otimiza botões de pagamento */
+    .payment-button-mobile {
+        width: 100%;
+        min-height: 3.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+    }
+    
+    /* Melhora container de pagamento */
+    .payment-container-mobile {
+        margin: 0.5rem 0;
+        border-radius: 16px;
+    }
+    
+    /* Ajusta input de busca */
+    .search-mobile {
+        height: 3.25rem;
+        font-size: 1rem;
+        border-radius: 12px;
+    }
+    
+    /* Melhora textarea */
+    .textarea-mobile {
+        min-height: 4rem;
+        font-size: 1rem;
+        border-radius: 12px;
+        resize: none;
+    }
+    
+    /* Ajusta botão de envio */
+    .send-button-mobile {
+        height: 3.25rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+    .message-mobile {
+        max-width: 92vw !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.875rem;
+    }
+    
+    .header-mobile {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .input-mobile {
+        padding: 0.5rem;
+    }
+    
+    .option-mobile {
+        min-height: 3rem;
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .categories-mobile {
+        gap: 0.25rem;
+        padding: 0 0.25rem 0.5rem 0.25rem;
+    }
+    
+    .category-tag-mobile {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .payment-button-mobile {
+        min-height: 3rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Ajustes para landscape em mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .header-mobile {
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .header-mobile .ana-avatar img {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+    
+    .header-mobile h1 {
+        font-size: 0.875rem;
+    }
+    
+    .header-mobile p {
+        font-size: 0.7rem;
+    }
+    
+    #chat-body {
+        padding: 0.375rem;
+    }
+    
+    .input-mobile {
+        padding: 0.375rem;
+    }
+    
+    .message-mobile {
+        max-width: 80vw !important;
+        padding: 0.5rem 0.75rem !important;
+    }
+}
+
+/* Melhorias para dispositivos com tela de alta densidade */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .message-mobile,
+    .option-mobile,
+    .category-tag-mobile {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Suporte para safe area (iPhone X e similares) */
+@supports (padding: max(0px)) {
+    .input-mobile {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+    
+    .header-mobile {
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+    }
+    
+    .payment-button-mobile {
+        margin-bottom: max(0.5rem, env(safe-area-inset-bottom));
+    }
+}
+
+/* Melhorias de acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .message-enter,
+    .message-enter-active,
+    .typing-indicator span,
+    .ana-avatar,
+    .category-tag,
+    .infraction-card,
+    .option-mobile {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Modo escuro para mobile */
+@media (prefers-color-scheme: dark) {
+    .bot-message {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        border-color: #374151;
+        color: #f9fafb;
+    }
+    
+    .user-message {
+        background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        border-color: #1e40af;
+    }
+    
+    .typing-indicator {
+        background: #374151;
+    }
+    
+    .typing-indicator span {
+        background: #9ca3af;
+    }
+    
+    .option-mobile {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .option-mobile:hover {
+        background: #4b5563;
+    }
+    
+    .category-tag-mobile:not(.active) {
+        background: #374151;
+        color: #d1d5db;
+    }
+    
+    .infraction-card-mobile {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+}
+
+/* Melhorias para touch específicas */
+@media (hover: none) and (pointer: coarse) {
+    /* Remove hover effects em dispositivos touch */
+    .option-mobile:hover,
+    .category-tag-mobile:hover,
+    .infraction-card-mobile:hover,
+    .payment-button-mobile:hover {
+        transform: none;
+        background: inherit;
+    }
+    
+    /* Adiciona feedback visual para touch */
+    .option-mobile:active,
+    .category-tag-mobile:active,
+    .infraction-card-mobile:active,
+    .payment-button-mobile:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    /* Melhora área de toque */
+    .option-mobile,
+    .category-tag-mobile,
+    .infraction-card-mobile,
+    .payment-button-mobile {
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Otimizações de performance */
+@media (max-width: 768px) {
+    /* Reduz complexidade de animações no mobile */
+    .gradient-animate {
+        animation: none;
+    }
+    
+    /* Otimiza renderização */
+    .message-mobile,
+    .option-mobile,
+    .category-tag-mobile {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+    }
+    
+    /* Melhora scroll performance */
+    #chat-body {
+        transform: translateZ(0);
+        -webkit-overflow-scrolling: touch;
+    }
+} 

@@ -1,6 +1,20 @@
 // Variável global para armazenar a instância do componente
 let wizardAppInstance = null;
 
+// Detecção de dispositivo móvel
+const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+           window.innerWidth <= 768;
+};
+
+// Configurações específicas para mobile
+const MOBILE_CONFIG = {
+    typingSpeed: isMobile() ? 20 : 30, // Digitação mais rápida no mobile
+    scrollDelay: isMobile() ? 100 : 300, // Scroll mais responsivo
+    focusDelay: isMobile() ? 50 : 100, // Foco mais rápido
+    messageMaxWidth: isMobile() ? '85vw' : 'md:max-w-md'
+};
+
 // Função para gerar CPF aleatório válido
 function generateRandomCPF() {
     const generateDigit = (digits) => {
@@ -31,6 +45,33 @@ function generateRandomCPF() {
     return numbers.join('');
 }
 
+// Função para scroll suave no mobile
+const smoothScrollToBottom = () => {
+    const chatBody = document.getElementById('chat-body');
+    if (chatBody) {
+        if (isMobile()) {
+            // Scroll instantâneo no mobile para melhor performance
+            chatBody.scrollTop = chatBody.scrollHeight;
+        } else {
+            // Scroll suave no desktop
+            chatBody.scrollTo({
+                top: chatBody.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+    }
+};
+
+// Função para prevenir zoom no iOS
+const preventZoom = () => {
+    if (isMobile()) {
+        const inputs = document.querySelectorAll('input[type="text"], input[type="date"], textarea');
+        inputs.forEach(input => {
+            input.style.fontSize = '16px'; // Evita zoom no iOS
+        });
+    }
+};
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('wizardApp', () => {
         // Cria a instância
@@ -42,6 +83,7 @@ document.addEventListener('alpine:init', () => {
             filteredInfractions: [],
             selectedCategory: 'all',
             infractionOptions: [], // Será carregado na inicialização
+            isMobileDevice: isMobile(),
             form: {
                 name: '',
                 cpf: '',
@@ -78,6 +120,11 @@ document.addEventListener('alpine:init', () => {
             paymentInterval: null,
 
             async init() {
+                // Aplica configurações mobile
+                if (this.isMobileDevice) {
+                    this.applyMobileOptimizations();
+                }
+                
                 // Carrega os dados de infrações passados do Blade
                 if (window.infractionOptions && Array.isArray(window.infractionOptions)) {
                     this.infractionOptions = window.infractionOptions.map(i => ({
@@ -97,6 +144,52 @@ document.addEventListener('alpine:init', () => {
                 await this.startConversation();
                 this.$watch('searchInfraction', () => this.filterInfractions());
                 this.$watch('selectedCategory', () => this.filterInfractions());
+            },
+
+            // Aplicar otimizações específicas para mobile
+            applyMobileOptimizations() {
+                // Previne zoom nos inputs
+                preventZoom();
+                
+                // Adiciona classe mobile ao body
+                document.body.classList.add('mobile-device');
+                
+                // Configura viewport para mobile
+                const viewport = document.querySelector('meta[name="viewport"]');
+                if (viewport) {
+                    viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+                }
+                
+                // Adiciona listener para orientação
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => {
+                        this.handleOrientationChange();
+                    }, 100);
+                });
+                
+                // Adiciona listener para resize
+                window.addEventListener('resize', () => {
+                    this.handleResize();
+                });
+            },
+
+            // Handle mudança de orientação
+            handleOrientationChange() {
+                // Recalcula altura do chat
+                this.$nextTick(() => {
+                    smoothScrollToBottom();
+                });
+            },
+
+            // Handle resize da janela
+            handleResize() {
+                // Atualiza detecção de mobile
+                this.isMobileDevice = isMobile();
+                
+                // Reaplica otimizações se necessário
+                if (this.isMobileDevice) {
+                    preventZoom();
+                }
             },
 
             // Função para obter o texto da gravidade
@@ -391,7 +484,7 @@ Relato: ${this.form.details}`;
                             this.messages.push({
                                 type: 'bot',
                                 content: `
-                                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-green-200 mb-4">
+                                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-green-200 mb-4 payment-container-mobile">
                                         <div class="text-center">
                                             <div class="mb-4">
                                                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -403,7 +496,7 @@ Relato: ${this.form.details}`;
                                                 <p class="text-gray-600 mb-4">Clique no botão abaixo para realizar o pagamento</p>
                                             </div>
                                             <a href="${billing.url}" target="_blank" 
-                                               class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer no-underline min-w-[280px]"
+                                               class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer no-underline min-w-[280px] payment-button-mobile"
                                                style="text-decoration: none;">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -493,7 +586,7 @@ Relato: ${this.form.details}`;
                             this.messages.push({
                                 type: 'bot',
                                 content: `
-                                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-blue-200 mb-4">
+                                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-blue-200 mb-4 payment-container-mobile">
                                         <div class="text-center">
                                             <div class="mb-4">
                                                 <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -505,7 +598,7 @@ Relato: ${this.form.details}`;
                                                 <p class="text-gray-600 mb-4">Clique no botão abaixo para pagar com cartão</p>
                                             </div>
                                             <a href="${json.url}" target="_blank" 
-                                               class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer no-underline min-w-[280px]"
+                                               class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-lg font-bold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl cursor-pointer no-underline min-w-[280px] payment-button-mobile"
                                                style="text-decoration: none;">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
@@ -563,8 +656,7 @@ Relato: ${this.form.details}`;
                     messages[messages.length - 1]?.classList.add('message-enter-active');
                 });
                 this.$nextTick(() => {
-                    const chatBody = document.getElementById('chat-body');
-                    if (chatBody) chatBody.scrollTop = chatBody.scrollHeight;
+                    smoothScrollToBottom();
                 });
 
                 // Se for seleção de infração, preencher automaticamente valor e pontos
@@ -587,10 +679,18 @@ Relato: ${this.form.details}`;
                 this.currentQuestion = null;
                 this.userInput = '';
 
-                // Retornar foco ao campo
+                // Retornar foco ao campo (otimizado para mobile)
                 this.$nextTick(() => {
                     const inputField = document.getElementById('user-input');
-                    if (inputField) inputField.focus();
+                    if (inputField) {
+                        inputField.focus();
+                        // Scroll para o input no mobile
+                        if (this.isMobileDevice) {
+                            setTimeout(() => {
+                                inputField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, MOBILE_CONFIG.focusDelay);
+                        }
+                    }
                 });
 
                 // Tratamento especial para placa
@@ -770,6 +870,12 @@ Relato: ${this.form.details}`;
                         const el = document.getElementById('user-input') || document.querySelector('input[x-model="userInput"]');
                         if (el && el.offsetParent !== null) { // offsetParent null => elemento ainda oculto
                             el.focus();
+                            // Scroll para o input no mobile
+                            if (this.isMobileDevice) {
+                                setTimeout(() => {
+                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }, MOBILE_CONFIG.focusDelay);
+                            }
                             return;
                         }
                         requestAnimationFrame(focusLoop);
@@ -787,6 +893,12 @@ Relato: ${this.form.details}`;
                         const el = document.querySelector('input[type="date"][x-model="userInput"]');
                         if (el && el.offsetParent !== null) {
                             el.focus();
+                            // Scroll para o input no mobile
+                            if (this.isMobileDevice) {
+                                setTimeout(() => {
+                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }, MOBILE_CONFIG.focusDelay);
+                            }
                             return;
                         }
                         requestAnimationFrame(focusLoop);
@@ -804,6 +916,12 @@ Relato: ${this.form.details}`;
                         const el = document.querySelector('textarea[x-model="userInput"]');
                         if (el && el.offsetParent !== null) {
                             el.focus();
+                            // Scroll para o textarea no mobile
+                            if (this.isMobileDevice) {
+                                setTimeout(() => {
+                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }, MOBILE_CONFIG.focusDelay);
+                            }
                             return;
                         }
                         requestAnimationFrame(focusLoop);
@@ -819,18 +937,18 @@ Relato: ${this.form.details}`;
                 this.showInput = true;
             },
 
-            async typeMessage(text, delay = 30) {
+            async typeMessage(text, delay = null) {
+                // Usa delay específico para mobile se não fornecido
+                const typingDelay = delay || MOBILE_CONFIG.typingSpeed;
+                
                 this.isTyping = true;
                 let msg = '';
                 for (let i = 0; i < text.length; i++) {
                     msg += text[i];
                     this.typingMessage = msg;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    // Scroll seguro
-                    const chatBody = document.getElementById('chat-body');
-                    if (chatBody) {
-                        chatBody.scrollTop = chatBody.scrollHeight;
-                    }
+                    await new Promise(resolve => setTimeout(resolve, typingDelay));
+                    // Scroll otimizado para mobile
+                    smoothScrollToBottom();
                 }
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message-enter');
@@ -841,11 +959,10 @@ Relato: ${this.form.details}`;
                 });
                 this.typingMessage = '';
                 this.isTyping = false;
-                // Scroll seguro após mensagem completa
-                const chatBody = document.getElementById('chat-body');
-                if (chatBody) {
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                }
+                // Scroll após mensagem completa
+                setTimeout(() => {
+                    smoothScrollToBottom();
+                }, MOBILE_CONFIG.scrollDelay);
             },
 
             sleep(ms) {
