@@ -120,9 +120,9 @@ class AppealController extends Controller
                 'driver_license' => 'required|string|max:11',
                 'driver_license_category' => 'required|string|max:2',
                 'address' => 'required|string|max:255',
-                'phone' => 'required|string|max:20',
+                'phone' => 'nullable|string|max:20', // Tornando telefone opcional
                 'email' => 'required|email|max:255',
-                'plate' => 'required|string|max:7',
+                'plate' => 'required|string|max:8', // Aumentando limite para placas Mercosul
                 'vehicle_model' => 'required|string|max:100',
                 'vehicle_year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
                 'vehicle_color' => 'required|string|max:50',
@@ -135,11 +135,32 @@ class AppealController extends Controller
                 'infraction_type_id' => 'required|exists:infraction_types,id'
             ], [
                 'vehicle_chassi.max' => 'O campo chassi deve ter no máximo 17 caracteres.',
-                'vehicle_renavam.max' => 'O campo RENAVAM deve ter no máximo 11 caracteres.'
+                'vehicle_renavam.max' => 'O campo RENAVAM deve ter no máximo 11 caracteres.',
+                'name.required' => 'O nome é obrigatório.',
+                'cpf.required' => 'O CPF é obrigatório.',
+                'driver_license.required' => 'A CNH é obrigatória.',
+                'plate.required' => 'A placa do veículo é obrigatória.',
+                'plate.max' => 'A placa deve ter no máximo 8 caracteres.',
+                'vehicle_model.required' => 'O modelo do veículo é obrigatório.',
+                'vehicle_year.required' => 'O ano do veículo é obrigatório.',
+                'vehicle_color.required' => 'A cor do veículo é obrigatória.',
+                'date.required' => 'A data da infração é obrigatória.',
+                'amount.required' => 'O valor da multa é obrigatório.',
+                'reason.required' => 'O motivo da infração é obrigatório.'
             ]);
 
             if ($validator->fails()) {
                 Log::error('Erro de validação ao gerar recurso:', $validator->errors()->toArray());
+                
+                // Se for uma requisição AJAX, retorna JSON com erros
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Por favor, corrija os seguintes erros:',
+                        'errors' => $validator->errors()->toArray()
+                    ], 422);
+                }
+                
                 return back()->withErrors($validator)->withInput();
             }
 
