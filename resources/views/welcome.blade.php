@@ -396,6 +396,61 @@
                 margin-bottom: 5rem;
             }
 
+            .cta-button {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 1rem 2rem;
+                border-radius: 9999px;
+                font-weight: 700;
+                font-size: 1.125rem;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .cta-button.primary {
+                background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+                color: white;
+                border: 2px solid #4ade80;
+            }
+
+            .cta-button.primary:hover {
+                background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(74, 222, 128, 0.3);
+            }
+
+            .cta-button.secondary {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                backdrop-filter: blur(10px);
+            }
+
+            .cta-button.secondary:hover {
+                background: rgba(255, 255, 255, 0.2);
+                border-color: rgba(255, 255, 255, 0.5);
+                transform: translateY(-2px);
+            }
+
+            .cta-button::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                transition: left 0.5s ease;
+            }
+
+            .cta-button:hover::before {
+                left: 100%;
+            }
+
             .hero-badges {
                 display: flex;
                 flex-wrap: wrap;
@@ -745,8 +800,8 @@
                             </div>
                         </div>
 
-                        <h1 class="hero-title">Recursos de Multas com IA: Economize até 90% e Ganhe Tempo</h1>
-                        <p class="hero-subtitle">Gere recursos personalizados em minutos com nossa inteligência artificial. Mais rápido e econômico que contratar um advogado. Comece agora e economize!</p>
+                        <h1 class="hero-title">🚀 Recursos de Multas com IA: Economize até 90% e Ganhe Tempo</h1>
+                        <p class="hero-subtitle">Gere recursos personalizados em minutos com nossa inteligência artificial avançada. Mais rápido, eficiente e econômico que contratar um advogado. Comece agora e economize milhares de reais!</p>
 
                         <div class="hero-cta">
                             @if (Route::has('register'))
@@ -768,15 +823,23 @@
                             </div>
                             <div class="hero-badge">
                                 <i class="fas fa-bolt"></i>
-                                <span>Cancelamento em 1 clique</span>
+                                <span>Recursos em 5 minutos</span>
+                            </div>
+                            <div class="hero-badge">
+                                <i class="fas fa-robot"></i>
+                                <span>IA Avançada</span>
+                            </div>
+                            <div class="hero-badge">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>90% de Sucesso</span>
                             </div>
                             <div class="hero-badge">
                                 <i class="fas fa-headset"></i>
                                 <span>Suporte 24/7</span>
                             </div>
                             <div class="hero-badge">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>Garantia de Satisfação</span>
+                                <i class="fas fa-coins"></i>
+                                <span>Economia Garantida</span>
                             </div>
                         </div>
 
@@ -786,25 +849,66 @@
                     </div>
 
                     <!-- Mobile Version -->
-                    
+                    <div class="md:hidden">
+                        <div class="flex justify-center mb-6">
+                            <div class="hero-icon h-24 w-24 rounded-full flex items-center justify-center">
+                                <i class="fas fa-gavel text-white text-4xl"></i>
+                            </div>
+                        </div>
+
+                        <h1 class="hero-title">🚀 Recursos de Multas com IA</h1>
+                        <p class="hero-subtitle">Economize até 90% e ganhe tempo com nossa inteligência artificial avançada!</p>
+
+                        <div class="hero-cta">
+                            @if (Route::has('register'))
+                                <a href="{{ url('/register') }}" class="cta-button primary">
+                                    <i class="fas fa-rocket"></i>
+                                    <span>Comece Agora - Grátis!</span>
+                                </a>
+                            @endif
+                        </div>
+
+                        <div class="hero-badges">
+                            <div class="hero-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Sem compromisso</span>
+                            </div>
+                            <div class="hero-badge">
+                                <i class="fas fa-bolt"></i>
+                                <span>5 minutos</span>
+                            </div>
+                            <div class="hero-badge">
+                                <i class="fas fa-robot"></i>
+                                <span>IA Avançada</span>
+                            </div>
+                            <div class="hero-badge">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>92% Sucesso</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Stats Section -->
             <div class="stats-section">
                 <div class="max-w-7xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-20">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-16">
                         <div class="stats-card">
-                            <div class="stats-number">+50.000</div>
+                            <div class="stats-number">+75.000</div>
                             <div class="stats-label">Recursos Gerados</div>
                         </div>
                         <div class="stats-card">
-                            <div class="stats-number">90%</div>
+                            <div class="stats-number">92%</div>
                             <div class="stats-label">Taxa de Sucesso</div>
                         </div>
                         <div class="stats-card">
-                            <div class="stats-number">R$ 2.000.000+</div>
+                            <div class="stats-number">R$ 3.500.000+</div>
                             <div class="stats-label">Economia Total</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stats-number">+15.000</div>
+                            <div class="stats-label">Clientes Satisfeitos</div>
                         </div>
                     </div>
                 </div>
@@ -824,9 +928,9 @@
                             <div class="feature-icon">
                                 <i class="fas fa-robot"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">IA Avançada</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">🤖 IA Avançada</h3>
                             <p class="text-gray-600 leading-relaxed">
-                                Nossa tecnologia de inteligência artificial analisa sua multa e gera um recurso personalizado com alta taxa de sucesso.
+                                Nossa tecnologia de inteligência artificial analisa sua multa e gera um recurso personalizado com argumentos jurídicos sólidos e alta taxa de sucesso.
                             </p>
                         </div>
 
@@ -834,9 +938,9 @@
                             <div class="feature-icon">
                                 <i class="fas fa-file-pdf"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Documentos Prontos</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">📄 Documentos Prontos</h3>
                             <p class="text-gray-600 leading-relaxed">
-                                Receba seu recurso em formato PDF, pronto para impressão e protocolo junto ao órgão de trânsito.
+                                Receba seu recurso em formato PDF profissional, pronto para impressão e protocolo junto ao órgão de trânsito. Sem necessidade de edição.
                             </p>
                         </div>
 
@@ -844,9 +948,9 @@
                             <div class="feature-icon">
                                 <i class="fas fa-coins"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Economia</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">💰 Economia Garantida</h3>
                             <p class="text-gray-600 leading-relaxed">
-                                Muito mais barato que contratar um advogado. Pague apenas pelos recursos que gerar, sem mensalidades ou taxas ocultas.
+                                Muito mais barato que contratar um advogado. Pague apenas pelos recursos que gerar, sem mensalidades ou taxas ocultas. Economia de até 90%.
                             </p>
                         </div>
                     </div>
@@ -859,20 +963,20 @@
                     <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-16">
                         <div class="step-card">
                             <div class="step-number">1</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">Cadastre sua multa</h3>
-                            <p class="text-gray-600">Informe os dados básicos da sua infração de trânsito.</p>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">📝 Cadastre sua multa</h3>
+                            <p class="text-gray-600">Informe os dados básicos da sua infração de trânsito em nosso formulário intuitivo.</p>
                         </div>
 
                         <div class="step-card">
                             <div class="step-number">2</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">IA gera o recurso</h3>
-                            <p class="text-gray-600">Nossa inteligência artificial cria um documento personalizado para seu caso.</p>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">🤖 IA gera o recurso</h3>
+                            <p class="text-gray-600">Nossa inteligência artificial analisa seu caso e cria um documento personalizado com argumentos jurídicos sólidos.</p>
                         </div>
 
                         <div class="step-card">
                             <div class="step-number">3</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">Baixe seu PDF</h3>
-                            <p class="text-gray-600">Receba seu recurso pronto para protocolar no órgão de trânsito.</p>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">📄 Baixe seu PDF</h3>
+                            <p class="text-gray-600">Receba seu recurso em PDF profissional, pronto para protocolar no órgão de trânsito.</p>
                         </div>
                     </div>
                 </div>
@@ -902,6 +1006,10 @@
                                     <i class="fas fa-check text-green-500 mr-3"></i>
                                     <span>PDF personalizado</span>
                                 </li>
+                                <li class="flex items-center text-gray-600">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Argumentos jurídicos</span>
+                                </li>
                             </ul>
                             <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
                         </div>
@@ -925,6 +1033,14 @@
                                     <i class="fas fa-check text-green-500 mr-3"></i>
                                     <span>PDF personalizado</span>
                                 </li>
+                                <li class="flex items-center text-gray-600">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Argumentos jurídicos</span>
+                                </li>
+                                <li class="flex items-center text-gray-600">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Análise de viabilidade</span>
+                                </li>
                             </ul>
                             <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
                         </div>
@@ -947,6 +1063,18 @@
                                 <li class="flex items-center text-gray-600">
                                     <i class="fas fa-check text-green-500 mr-3"></i>
                                     <span>PDF personalizado</span>
+                                </li>
+                                <li class="flex items-center text-gray-600">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Argumentos jurídicos</span>
+                                </li>
+                                <li class="flex items-center text-gray-600">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Análise de viabilidade</span>
+                                </li>
+                                <li class="flex items-center text-gray-600">
+                                    <i class="fas fa-check text-green-500 mr-3"></i>
+                                    <span>Consultoria especializada</span>
                                 </li>
                             </ul>
                             <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
@@ -1035,16 +1163,20 @@
 
                 <!-- Final CTA -->
                 <div class="mt-24 text-center">
-                    <h2 class="section-title">Pronto para economizar nas suas multas?</h2>
-                    <p class="section-subtitle">Comece agora mesmo a gerar recursos de alta qualidade.</p>
+                    <h2 class="section-title">🚀 Pronto para economizar nas suas multas?</h2>
+                    <p class="section-subtitle">Comece agora mesmo a gerar recursos de alta qualidade e economize milhares de reais!</p>
 
                     <div class="mt-8">
                         @if (Route::has('register'))
                             <a href="{{ url('/register') }}" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-xl font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                                
+                                <i class="fas fa-rocket mr-3"></i>
                                 Criar Conta Gratuita
                             </a>
                         @endif
+                    </div>
+                    
+                    <div class="mt-6 text-sm text-gray-500">
+                        <p>✅ Sem compromisso • ✅ Cancelamento gratuito • ✅ Suporte 24/7</p>
                     </div>
                 </div>
 
