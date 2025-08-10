@@ -1223,104 +1223,127 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
     private function buildCleanBrazilianLegalDocument($data)
     {
         $infraType = InfractionType::find($data['infraction_type_id']);
-        $infractionName = $infraType ? $infraType->description : $data['reason'];
+        $infractionName = $infraType ? $infraType->description : ($data['reason'] ?? '');
         $infractionCode = $infraType ? $infraType->code : '';
         $infractionArticle = $infraType ? $infraType->law_article : '';
-        
-        $date = new \DateTime($data['date']);
-        $formattedDate = $date->format('d/m/Y');
-        
-        // Extrai cidade do local
+
+        $formattedDate = !empty($data['date']) ? (new \DateTime($data['date']))->format('d/m/Y') : '';
+
+        // Extrai cidade/UF a partir do local quando possível
         $cityFromLocation = $this->extractCityFromLocation($data['location'] ?? '');
-        $city = $cityFromLocation ?: 'São Paulo';
-        $state = $this->getStateFromCity($city);
-        
-        // Garantir dados completos com fallbacks inteligentes
-        $email = $data['email'] ?? auth()->user()->email ?? "{$data['name']}@email.com.br";
-        $address = $data['address'] ?? 
-                   $data['cnh_address'] ?? 
-                   auth()->user()->cnh_address ?? 
-                   "Rua {$data['name']}, nº 100, Centro, CEP 01000-000, {$city}/{$state}";
-        $cnhCategory = $data['driver_license_category'] ?? 
-                       auth()->user()->cnh_category ?? 
-                       'B';
-        $plate = $data['plate'] ?? '';
-        $vehicleModel = $data['vehicle_model'] ?? '';
-        $renavam = $data['vehicle_renavam'] ?? '';
-        $points = $data['points'] ?? '4'; // Valor padrão para pontos
+        $city = $cityFromLocation ?: '';
+        $state = $city ? $this->getStateFromCity($city) : '';
+
+        // Fallbacks amigáveis (somente para uso interno; evitamos imprimir placeholders)
+        $email = $data['email'] ?? (auth()->user()->email ?? '');
+        $address = $data['address']
+            ?? ($data['cnh_address'] ?? (auth()->user()->cnh_address ?? ''));
+        $cnhCategory = $data['driver_license_category']
+            ?? (auth()->user()->cnh_category ?? '');
+
+        $points = $data['points'] ?? '';
         $specificArguments = $this->getSpecificArguments($infractionCode, $data);
-        return "RECURSO ADMINISTRATIVO DE MULTA DE TRÂNSITO\n\n" .
-               "Ilmo(a). Sr(a). Presidente da JARI\n" .
-               "Junta Administrativa de Recursos de Infrações\n" .
-               "Departamento Estadual de Trânsito - DETRAN\n" .
-               "{$city}/{$state}\n\n" .
-               "REFERÊNCIA: Auto de Infração nº {$data['citation_number']}\n" .
-               "Data da Infração: {$formattedDate} às {$data['time']}\n" .
-               "Local: {$data['location']}\n\n" .
-               "QUALIFICAÇÃO DO RECORRENTE:\n\n" .
-               "Nome Completo: {$data['name']}\n" .
-               "CPF: {$data['cpf']}\n" .
-               "CNH: {$data['driver_license']} (categoria {$cnhCategory})\n" .
-               "Endereço para Correspondência: {$address}\n" .
-               "Telefone: {$data['phone']}\n" .
-               "E-mail: {$email}\n\n" .
-               "DADOS DO VEÍCULO:\n\n" .
-               "Modelo/Ano: {$vehicleModel} ({$data['vehicle_year']})\n" .
-               "Cor: {$data['vehicle_color']}\n" .
-               "Placa: {$plate}\n" .
-               "RENAVAM: {$renavam}\n\n" .
-               "DADOS DA AUTUAÇÃO:\n\n" .
-               "Auto de Infração nº: {$data['citation_number']}\n" .
-               "Data e Hora: {$formattedDate} às {$data['time']}\n" .
-               "Local da Infração: {$data['location']}\n" .
-               "Tipo de Infração: {$infractionName}\n" .
-               "Código da Infração: {$infractionCode}\n" .
-               "Artigo do CTB: {$infractionArticle}\n" .
-               "Valor da Multa: R$ " . number_format($data['amount'], 2, ',', '.') . "\n" .
-               "Pontos na CNH: {$points}\n\n" .
-               "DOS FATOS:\n\n" .
-               "Venho, respeitosamente, interpor RECURSO ADMINISTRATIVO contra o Auto de Infração " .
-               "nº {$data['citation_number']}, lavrado em {$formattedDate}, às {$data['time']}, " .
-               "referente à suposta infração do artigo {$infractionArticle} do Código de Trânsito Brasileiro " .
-               "(código {$infractionCode}), ocorrida em {$data['location']}, no valor de R$ " . 
-               number_format($data['amount'], 2, ',', '.') . ", com pontuação de {$points} pontos na CNH.\n\n" .
-               "Conforme será demonstrado de forma fundamentada, a autuação é improcedente pelas razões " .
-               "fáticas e jurídicas a seguir expostas, devendo ser cancelada por vícios de forma e conteúdo.\n\n" .
-               "DOS FUNDAMENTOS:\n\n" .
-               "O presente auto de infração deve ser cancelado por violação aos princípios constitucionais " .
-               "da legalidade, razoabilidade e proporcionalidade, além de não atender aos requisitos formais " .
-               "estabelecidos no artigo 280 do Código de Trânsito Brasileiro (Lei 9.503/97).\n\n" .
-               "O artigo 280 do CTB estabelece que o auto de infração deverá conter obrigatoriamente: " .
-               "tipificação clara e específica da infração, local exato com descrição detalhada, data e hora " .
-               "precisas, caracterização específica da conduta infrativa, identificação completa do veículo " .
-               "e condutor, além da assinatura legível do agente autuador.\n\n" .
-               "A Resolução CONTRAN nº 404/2012 estabelece procedimentos específicos para autuação que " .
-               "devem ser rigorosamente observados, sob pena de nulidade do ato administrativo.\n\n" .
-               $specificArguments .
-               "DOS VÍCIOS IDENTIFICADOS:\n\n" .
-               "O auto de infração apresenta os seguintes vícios que comprometem sua validade:\n\n" .
-               "1. Ausência de descrição detalhada e específica da conduta alegadamente infrativa;\n" .
-               "2. Falta de elementos técnicos objetivos que comprovem a materialidade da infração;\n" .
-               "3. Não observância integral dos procedimentos legais estabelecidos na legislação;\n" .
-               "4. Deficiência na fundamentação fática e jurídica da autuação;\n" .
-               "5. Aplicação desproporcional da penalidade face às circunstâncias específicas do caso.\n\n" .
-               "O Superior Tribunal de Justiça consolidou o entendimento de que \"o auto de infração " .
-               "é ato administrativo vinculado que deve observar rigorosamente os requisitos legais, " .
-               "sob pena de nulidade\" (STJ, REsp 1.097.717/RS).\n\n" .
-               "DO PEDIDO:\n\n" .
-               "Ante o exposto, e com fundamento nos fatos e argumentos jurídicos apresentados, " .
-               "requer-se respeitosamente:\n\n" .
-               "a) O conhecimento e provimento integral do presente recurso administrativo;\n" .
-               "b) O cancelamento definitivo da penalidade aplicada;\n" .
-               "c) O arquivamento do processo administrativo;\n" .
-               "d) A não incidência de pontos na CNH do recorrente;\n" .
-               "e) A devolução dos valores eventualmente pagos, se for o caso.\n\n" .
-               "Termos em que pede deferimento.\n\n" .
-               "{$city}/{$state}, " . now()->format('d/m/Y') . "\n\n" .
-               "______________________________\n" .
-               "{$data['name']}\n" .
-               "CPF: {$data['cpf']}\n" .
-               "CNH: {$data['driver_license']}";
+
+        // Montagem de blocos condicionais (somente imprime linhas com conteúdo)
+        $enderecoOrg = "Ilmo(a). Sr(a). Presidente da JARI\nJunta Administrativa de Recursos de Infrações";
+        if ($city && $state) {
+            $enderecoOrg .= "\nDepartamento Estadual de Trânsito - DETRAN\n{$city}/{$state}\n\n";
+        } else {
+            $enderecoOrg .= "\nÓrgão Autuador competente\n\n";
+        }
+
+        $ref = [];
+        if (!empty($data['citation_number'])) { $ref[] = "REFERÊNCIA: Auto de Infração nº {$data['citation_number']}"; }
+        if ($formattedDate) {
+            $ref[] = "Data da Infração: {$formattedDate}" . (!empty($data['time']) ? " às {$data['time']}" : "");
+        }
+        if (!empty($data['location'])) { $ref[] = "Local: {$data['location']}"; }
+        $referencia = empty($ref) ? '' : implode("\n", $ref) . "\n\n";
+
+        $qual = ["QUALIFICAÇÃO DO RECORRENTE:", ''];
+        if (!empty($data['name'])) { $qual[] = "Nome Completo: {$data['name']}"; }
+        if (!empty($data['cpf'])) { $qual[] = "CPF: {$data['cpf']}"; }
+        if (!empty($data['driver_license'])) {
+            $qual[] = 'CNH: ' . $data['driver_license'] . ($cnhCategory ? " (categoria {$cnhCategory})" : '');
+        }
+        if (!empty($address)) { $qual[] = "Endereço para Correspondência: {$address}"; }
+        if (!empty($data['phone'])) { $qual[] = "Telefone: {$data['phone']}"; }
+        if (!empty($email)) { $qual[] = "E-mail: {$email}"; }
+        $qualificacao = implode("\n", array_filter($qual)) . "\n\n";
+
+        $veic = ["DADOS DO VEÍCULO:", ''];
+        if (!empty($data['vehicle_model']) || !empty($data['vehicle_year'])) {
+            $veic[] = "Modelo/Ano: " . trim(($data['vehicle_model'] ?? '') . ' ' . (isset($data['vehicle_year']) ? "({$data['vehicle_year']})" : ''));
+        }
+        if (!empty($data['vehicle_color'])) { $veic[] = "Cor: {$data['vehicle_color']}"; }
+        if (!empty($data['plate'])) { $veic[] = "Placa: {$data['plate']}"; }
+        if (!empty($data['vehicle_renavam'])) { $veic[] = "RENAVAM: {$data['vehicle_renavam']}"; }
+        $dadosVeiculo = implode("\n", array_filter($veic)) . (count(array_filter($veic)) > 2 ? "\n\n" : "");
+
+        $auto = ["DADOS DA AUTUAÇÃO:", ''];
+        if (!empty($data['citation_number'])) { $auto[] = "Auto de Infração nº: {$data['citation_number']}"; }
+        if ($formattedDate || !empty($data['time'])) {
+            $auto[] = "Data e Hora: " . trim(($formattedDate ?: '') . (!empty($data['time']) ? " às {$data['time']}" : ''));
+        }
+        if (!empty($data['location'])) { $auto[] = "Local da Infração: {$data['location']}"; }
+        if (!empty($infractionName)) { $auto[] = "Tipo de Infração: {$infractionName}"; }
+        if (!empty($infractionCode)) { $auto[] = "Código da Infração: {$infractionCode}"; }
+        if (!empty($infractionArticle)) { $auto[] = "Artigo do CTB: {$infractionArticle}"; }
+        if (!empty($data['amount'])) { $auto[] = "Valor da Multa: R$ " . number_format($data['amount'], 2, ',', '.'); }
+        if (!empty($points)) { $auto[] = "Pontos na CNH: {$points}"; }
+        $dadosAutuacao = implode("\n", array_filter($auto)) . "\n\n";
+
+        $introFatos = [];
+        if (!empty($data['citation_number'])) {
+            $introFatos[] = "Venho, respeitosamente, interpor RECURSO ADMINISTRATIVO contra o Auto de Infração nº {$data['citation_number']}";
+        } else {
+            $introFatos[] = "Venho, respeitosamente, interpor RECURSO ADMINISTRATIVO contra o Auto de Infração aplicado";
+        }
+        if ($formattedDate) { $introFatos[] = "lavrado em {$formattedDate}"; }
+        if (!empty($data['time'])) { $introFatos[] = "às {$data['time']}"; }
+        if (!empty($infractionArticle)) { $introFatos[] = "referente ao art. {$infractionArticle} do CTB"; }
+        if (!empty($infractionCode)) { $introFatos[] = "(código {$infractionCode})"; }
+        if (!empty($data['location'])) { $introFatos[] = "ocorrida em {$data['location']}"; }
+        if (!empty($data['amount'])) { $introFatos[] = "no valor de R$ " . number_format($data['amount'], 2, ',', '.'); }
+        if (!empty($points)) { $introFatos[] = "com {$points} ponto(s)"; }
+        $fatos = "DOS FATOS:\n\n" . rtrim(implode(", ", array_filter($introFatos)), ', ') . ".\n\n" .
+                 "Conforme será demonstrado, a autuação mostra-se improcedente pelas razões fáticas e jurídicas a seguir expostas, devendo ser cancelada por vícios de forma e de mérito.\n\n";
+
+        $fundamentosGerais = "DOS FUNDAMENTOS GERAIS:\n\n" .
+            "O auto de infração deve observar rigorosamente o art. 280 do CTB (Lei 9.503/97), com tipificação clara, local, data e hora precisos, descrição específica da conduta, identificação do veículo e do agente.\n\n" .
+            "A inobservância dos procedimentos regulamentares (ex.: Resoluções CONTRAN aplicáveis) acarreta nulidade do ato administrativo, por violação aos princípios da legalidade, razoabilidade e proporcionalidade.\n\n";
+
+        $vicios = "DOS VÍCIOS IDENTIFICADOS:\n\n" .
+            "1. Descrição genérica/insuficiente da conduta alegada;\n" .
+            "2. Ausência de elementos técnicos robustos que comprovem a materialidade;\n" .
+            "3. Inobservância de procedimentos legais/regulamentares;\n" .
+            "4. Fundamentação fática e jurídica deficiente;\n" .
+            "5. Desproporcionalidade da penalidade às circunstâncias do caso.\n\n" .
+            "Precedente: STJ, REsp 1.097.717/RS — auto de infração é ato vinculado e deve observar os requisitos legais, sob pena de nulidade.\n\n";
+
+        $pedidos = "DO PEDIDO:\n\n" .
+            "a) Conhecimento e provimento integral deste recurso;\n" .
+            "b) Cancelamento da penalidade e arquivamento do processo;\n" .
+            "c) Não incidência de pontos na CNH;\n" .
+            "d) Devolução de valores eventualmente pagos, se houver.\n\n" .
+            "Termos em que, pede deferimento.\n\n" .
+            trim(($city && $state) ? "{$city}/{$state}, " : '') . now()->format('d/m/Y') . "\n\n" .
+            (!empty($data['name']) ? "______________________________\n{$data['name']}\n" : '') .
+            (!empty($data['cpf']) ? "CPF: {$data['cpf']}\n" : '') .
+            (!empty($data['driver_license']) ? "CNH: {$data['driver_license']}" : '');
+
+        return
+            "RECURSO ADMINISTRATIVO DE MULTA DE TRÂNSITO\n\n" .
+            $enderecoOrg .
+            $referencia .
+            $qualificacao .
+            $dadosVeiculo .
+            $dadosAutuacao .
+            $fatos .
+            $fundamentosGerais .
+            $specificArguments .
+            $vicios .
+            $pedidos;
     }
 
     /**
