@@ -83,8 +83,66 @@
 <body>
     <div class="page-number">Página <span class="pagenum"></span></div>
     
-    <div class="content">
-        {!! nl2br(e($text)) !!}
+    <style>
+        .section { margin-bottom: 14px; }
+        .title { text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .subtitle { font-size: 14px; font-weight: bold; margin: 10px 0 6px; text-align: center; }
+        .muted { color: #555; }
+        .list { margin: 6px 0 6px 18px; }
+        .hr { height: 1px; background: #ccc; border: none; margin: 8px 0; }
+    </style>
+
+    <div class="title">Recurso Administrativo de Trânsito</div>
+
+    <div class="section">
+        <div class="subtitle">I. Identificação</div>
+        <div>
+            <strong>Condutor:</strong> {{ $ticket->name ?? 'N/I' }} — CPF: {{ $ticket->cpf ?? 'N/I' }} — CNH: {{ $ticket->driver_license ?? 'N/I' }}<br>
+            <strong>Veículo:</strong> Placa {{ $ticket->plate ?? 'N/I' }} — Modelo {{ $ticket->vehicle_model ?? 'N/I' }} — Cor {{ $ticket->vehicle_color ?? 'N/I' }}<br>
+            <strong>Auto/Notificação:</strong> {{ $ticket->citation_number ?? 'N/I' }} — Data {{ optional($ticket->date)->format('d/m/Y') ?? 'N/I' }} — Local {{ $ticket->location ?? 'N/I' }}
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="subtitle">II. Síntese dos Fatos</div>
+        <div class="muted">Exposição objetiva da ocorrência, data, local e contexto.</div>
+        <div>{!! nl2br(e(Str::limit($text, 1500))) !!}</div>
+    </div>
+
+    <div class="section">
+        <div class="subtitle">III. Preliminares</div>
+        <ul class="list">
+            <li>Regularidade formal do auto (art. 280 do CTB) e tempestividade da notificação (art. 281, par. único, II, CTB).</li>
+            <li>Competência da autoridade autuadora e comprovação por meios idôneos.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="subtitle">IV. Mérito</div>
+        <div>
+            {!! nl2br(e($text)) !!}
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="subtitle">V. Pedidos</div>
+        <ul class="list">
+            <li>O acolhimento das preliminares e a consequente nulidade do auto, se for o caso.</li>
+            <li>Subsidiariamente, o cancelamento da penalidade por insuficiência de provas.</li>
+            <li>A juntada e análise dos anexos apresentados.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="subtitle">VI. Anexos</div>
+        <div class="muted">Cópia da notificação, CNH, CRLV, fotos, certificados (se houver).</div>
+    </div>
+
+    <hr class="hr" />
+
+    <div class="section" style="text-align:right;">
+        <div>{{ now()->format('d/m/Y') }}</div>
+        <div>{{ $ticket->name ?? 'Assinatura' }}</div>
     </div>
 
     <div class="footer">

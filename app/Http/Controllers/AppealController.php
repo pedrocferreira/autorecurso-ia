@@ -1690,8 +1690,39 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
                 }
                 return response()->download($path, $filename);
 
-            case 'doc':
             case 'docx':
+                // Gerar DOCX real usando PHPWord
+                try {
+                    $text = $appeal->generated_text ?? '';
+                    $phpWord = new \PhpOffice\PhpWord\PhpWord();
+                    $section = $phpWord->addSection([
+                        'marginTop' => 1417,    // ~2.5cm
+                        'marginBottom' => 1417,
+                        'marginLeft' => 1417,
+                        'marginRight' => 1417,
+                    ]);
+
+                    $phpWord->addTitleStyle(1, ['bold' => true, 'size' => 16]);
+                    $section->addTitle('Recurso Administrativo de Trânsito', 1);
+                    foreach (preg_split("/\r?\n/", (string) $text) as $line) {
+                        $trim = trim($line);
+                        if ($trim === '') { $section->addTextBreak(1); continue; }
+                        $section->addText($trim, ['name' => 'Calibri', 'size' => 12]);
+                    }
+
+                    $tmpPath = storage_path('app/tmp');
+                    if (!is_dir($tmpPath)) { @mkdir($tmpPath, 0775, true); }
+                    $docxFile = $tmpPath . '/' . $filename;
+                    $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+                    $writer->save($docxFile);
+
+                    return response()->download($docxFile, $filename)->deleteFileAfterSend(true);
+                } catch (\Throwable $e) {
+                    \Log::error('Erro ao gerar DOCX: ' . $e->getMessage());
+                    return back()->with('error', 'Não foi possível gerar o DOCX. Tente o PDF ou o DOC.');
+                }
+
+            case 'doc':
                 // Gera um .doc editável a partir do texto do recurso usando HTML
                 $text = $appeal->generated_text ?? '';
                 $safeHtml = nl2br(e($text));
