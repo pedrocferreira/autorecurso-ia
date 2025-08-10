@@ -44,6 +44,7 @@ class AppealController extends Controller
     public function index()
     {
         $appeals = Appeal::where('user_id', auth()->id())
+            ->with(['ticket'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

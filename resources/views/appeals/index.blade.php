@@ -58,7 +58,11 @@
                                     @foreach($appeals as $appeal)
                                         <tr class="border-b hover:bg-gray-50">
                                             <td class="p-3 text-sm">#{{ $appeal->id }}</td>
-                                            <td class="p-3 text-sm">{{ $appeal->ticket->plate }} - {{ $appeal->ticket->date->format('d/m/Y') }}</td>
+                                            <td class="p-3 text-sm">
+                                                {{ optional($appeal->ticket)->plate ?? '—' }}
+                                                -
+                                                {{ optional(optional($appeal->ticket)->date)->format('d/m/Y') ?? '—' }}
+                                            </td>
                                             <td class="p-3 text-sm">{{ $appeal->created_at->format('d/m/Y H:i') }}</td>
                                             <td class="p-3 text-sm">
                                                 @if($appeal->status == 'pending')
