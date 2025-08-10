@@ -41,14 +41,59 @@ class AppealController extends Controller
     /**
      * Exibe uma lista de recursos do usuário.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $appeals = Appeal::where('user_id', auth()->id())
-            ->with(['ticket'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $query = Appeal::where('user_id', auth()->id())
+            ->with(['ticket.infractionType'])
+            ->orderBy('created_at', 'desc');
 
-        return view('appeals.index', compact('appeals'));
+        // Filtros
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('q')) {
+            $term = $request->input('q');
+            $query->where(function ($q) use ($term) {
+                $q->where('id', intval($term))
+                  ->orWhereHas('ticket', function ($t) use ($term) {
+                      $t->where('plate', 'like', "%{$term}%")
+                        ->orWhere('citation_number', 'like', "%{$term}%");
+                  });
+            });
+        }
+
+        if ($request->filled('from') || $request->filled('to')) {
+            $from = $request->input('from');
+            $to = $request->input('to');
+            $query->whereHas('ticket', function ($t) use ($from, $to) {
+                if (!empty($from)) {
+                    $t->whereDate('date', '>=', $from);
+                }
+                if (!empty($to)) {
+                    $t->whereDate('date', '<=', $to);
+                }
+            });
+        }
+
+        $appeals = $query->paginate(10)->appends($request->query());
+
+        // Resumo por status
+        $statusCounts = Appeal::where('user_id', auth()->id())
+            ->select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        return view('appeals.index', [
+            'appeals' => $appeals,
+            'statusCounts' => $statusCounts,
+            'filters' => [
+                'q' => $request->input('q'),
+                'status' => $request->input('status'),
+                'from' => $request->input('from'),
+                'to' => $request->input('to'),
+            ],
+        ]);
     }
 
     /**

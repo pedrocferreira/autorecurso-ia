@@ -41,7 +41,51 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
+                <div class="p-6 space-y-4">
+                    <!-- Filtros e Busca -->
+                    <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                        <div class="md:col-span-2">
+                            <input type="text" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Buscar por ID, placa ou autuação" class="w-full px-3 py-2 border rounded" />
+                        </div>
+                        <div>
+                            <select name="status" class="w-full px-3 py-2 border rounded">
+                                <option value="">Status</option>
+                                @foreach(['pending' => 'Pendente','sent' => 'Enviado','successful' => 'Deferido','rejected' => 'Indeferido'] as $k => $v)
+                                    <option value="{{ $k }}" @selected(($filters['status'] ?? '') === $k)>{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <input type="date" name="from" value="{{ $filters['from'] ?? '' }}" class="w-full px-3 py-2 border rounded" />
+                        </div>
+                        <div>
+                            <input type="date" name="to" value="{{ $filters['to'] ?? '' }}" class="w-full px-3 py-2 border rounded" />
+                        </div>
+                        <div class="md:col-span-5 flex gap-2">
+                            <button class="px-4 py-2 bg-blue-600 text-white rounded">Filtrar</button>
+                            <a href="{{ route('appeals.index') }}" class="px-4 py-2 bg-gray-200 rounded">Limpar</a>
+                        </div>
+                    </form>
+
+                    <!-- Resumo por status -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="p-3 bg-gray-50 border rounded">
+                            <div class="text-xs text-gray-500">Pendente</div>
+                            <div class="text-lg font-semibold">{{ $statusCounts['pending'] ?? 0 }}</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 border rounded">
+                            <div class="text-xs text-gray-500">Enviado</div>
+                            <div class="text-lg font-semibold">{{ $statusCounts['sent'] ?? 0 }}</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 border rounded">
+                            <div class="text-xs text-gray-500">Deferido</div>
+                            <div class="text-lg font-semibold">{{ $statusCounts['successful'] ?? 0 }}</div>
+                        </div>
+                        <div class="p-3 bg-gray-50 border rounded">
+                            <div class="text-xs text-gray-500">Indeferido</div>
+                            <div class="text-lg font-semibold">{{ $statusCounts['rejected'] ?? 0 }}</div>
+                        </div>
+                    </div>
                     @if(count($appeals) > 0)
                         <div class="overflow-x-auto">
                             <table class="min-w-full">
@@ -76,7 +120,7 @@
                                                 @endif
                                             </td>
                                             <td class="p-3 text-sm">
-                                                <div class="flex space-x-2">
+                                                <div class="flex flex-wrap gap-3 items-center">
                                                     <a href="{{ route('appeals.show', $appeal->id) }}" class="text-blue-600 hover:text-blue-900" title="Visualizar">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -95,6 +139,8 @@
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                         </svg>
                                                     </a>
+                                                    <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'doc']) }}" class="text-blue-600 hover:text-blue-900" title="Baixar DOC">DOC</a>
+                                                    <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'docx']) }}" class="text-indigo-600 hover:text-indigo-900" title="Baixar DOCX">DOCX</a>
                                                 </div>
                                             </td>
                                         </tr>
