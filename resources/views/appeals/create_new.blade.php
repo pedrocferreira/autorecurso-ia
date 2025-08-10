@@ -363,6 +363,9 @@
                         <button onclick="downloadAppeal('doc')" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                             📝 Download DOC
                         </button>
+                        <button onclick="downloadAppeal('docx')" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                            📝 Download DOCX
+                        </button>
                     </div>
                     
                     <div class="mt-6">
