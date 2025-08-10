@@ -1148,6 +1148,9 @@ class AppealController extends Controller
         $vehicleChassi = (!empty($data['vehicle_chassi'])) ? $data['vehicle_chassi'] : '9BD' . strtoupper(substr(md5($data['plate']), 0, 14));
         $vehicleRenavam = (!empty($data['vehicle_renavam'])) ? $data['vehicle_renavam'] : substr(md5($data['plate']), 0, 11);
         
+        // Pontos (fallback seguro)
+        $points = $data['points'] ?? '';
+
         // Processa justificativas selecionadas pela IA
         $justificationsText = '';
         if (isset($data['selected_justifications']) && !empty($data['selected_justifications'])) {
@@ -1196,8 +1199,8 @@ DADOS DA AUTUAÇÃO:
 • Infração: {$infractionName}
 • Código da infração: {$infractionCode}
 • Artigo do CTB: {$infractionArticle}
-• Valor da multa: R$ {$data['amount']}
-• Pontos: {$points}
+        • Valor da multa: R$ {$data['amount']}
+        • Pontos: {$points}
 
 FORMATO OBRIGATÓRIO DO RECURSO:
 1. Cabeçalho: 'RECURSO ADMINISTRATIVO DE MULTA DE TRÂNSITO'
@@ -1216,6 +1219,12 @@ FORMATO OBRIGATÓRIO DO RECURSO:
 
 CRÍTICO: O texto deve sair LIMPO, SEM campos vazios, SEM placeholders, SEM comentários da IA.
 OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato tradicional brasileiro.";
+    }
+
+    // Compatibilidade: alguns trechos antigos chamam este nome
+    private function buildCleanBrazilianLegalPrompt($data)
+    {
+        return $this->buildCleanLegalPrompt($data);
     }
 
     /**
