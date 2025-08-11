@@ -121,7 +121,7 @@ return [
     
     'brevo' => [
         'api_key' => env('BREVO_API_KEY'),
-        'enabled' => env('BREVO_ENABLED', false),
+        'enabled' => (bool) env('BREVO_ENABLED', false),
     ],
 
 ]; 

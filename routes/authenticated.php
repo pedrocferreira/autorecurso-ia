@@ -6,7 +6,6 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AppealController;
 use App\Http\Controllers\CreditController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MultaImageController;
 
@@ -31,8 +30,9 @@ Route::middleware(['auth'])->group(function () {
     // Appeals (Recursos) - Rotas específicas primeiro para evitar conflitos
     Route::get('/appeals/create-new', [AppealController::class, 'createNew'])->name('appeals.create_new');
 Route::post('/appeals/create-new', [AppealController::class, 'storeNew'])->name('appeals.store_new');
-Route::get('/appeals/{appeal}/download/{format}', [AppealController::class, 'download'])->name('appeals.download');
-    Route::get('/appeals/{appeal}/download', [AppealController::class, 'download'])->name('appeals.download');
+    Route::get('/appeals/{appeal}/download/{format}', [AppealController::class, 'download'])->name('appeals.download');
+    // Route redundante removida para permitir cache de rotas
+    // Route::get('/appeals/{appeal}/download', [AppealController::class, 'download'])->name('appeals.download');
     
     // Processamento de imagem de multa com Gemini Vision
     Route::post('/multa/process-image', [MultaImageController::class, 'processImage'])->name('multa.process_image');
@@ -52,19 +52,20 @@ Route::get('/appeals/{appeal}/download/{format}', [AppealController::class, 'dow
     
     // Credits (Créditos)
     Route::get('/credits', [CreditController::class, 'index'])->name('credits.index');
-    Route::get('/credits/packages', [CreditController::class, 'packages'])->name('credits.packages');
-    Route::get('/credits/payment-form', [CreditController::class, 'paymentForm'])->name('credits.payment.form');
-    Route::post('/credits/checkout', [CreditController::class, 'checkout'])->name('credits.checkout');
-    Route::post('/credits/pix/payment', [CreditController::class, 'pixPayment'])->name('credits.pix.payment');
-    Route::get('/credits/pix/status', [CreditController::class, 'pixStatus'])->name('credits.pix.status');
+    // Pagamentos desativados temporariamente
+    // Route::get('/credits/packages', [CreditController::class, 'packages'])->name('credits.packages');
+    // Route::get('/credits/payment-form', [CreditController::class, 'paymentForm'])->name('credits.payment.form');
+    // Route::post('/credits/checkout', [CreditController::class, 'checkout'])->name('credits.checkout');
+    // Route::post('/credits/pix/payment', [CreditController::class, 'pixPayment'])->name('credits.pix.payment');
+    // Route::get('/credits/pix/status', [CreditController::class, 'pixStatus'])->name('credits.pix.status');
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // Onboarding
-    Route::post('/onboarding/complete', [OnboardingController::class, 'complete'])->name('onboarding.complete');
+    // Onboarding desativado (controller ausente)
+    // Route::post('/onboarding/complete', [OnboardingController::class, 'complete'])->name('onboarding.complete');
     
 });
 
@@ -110,33 +111,34 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
     })->name('api.infractions');
 });
 
-// Rotas de chat/pagamento (não precisam de auth)
-Route::post('/chat/pix', [App\Http\Controllers\ChatController::class, 'createPixPayment']);
-Route::get('/chat/pix/{id}/status', [App\Http\Controllers\ChatController::class, 'checkPixStatus']);
-Route::post('/chat/stripe', [App\Http\Controllers\ChatController::class, 'createStripePayment']);
+// Rotas de chat/pagamento desativadas temporariamente
+// Route::post('/chat/pix', [App\Http\Controllers\ChatController::class, 'createPixPayment']);
+// Route::get('/chat/pix/{id}/status', [App\Http\Controllers\ChatController::class, 'checkPixStatus']);
+// Route::post('/chat/stripe', [App\Http\Controllers\ChatController::class, 'createStripePayment']);
 
-// Novas rotas para persistência de sessão anônima do chat
-Route::get('/chat/session/{uuid}', [App\Http\Controllers\ChatSessionController::class, 'show']);
-Route::post('/chat/message', [App\Http\Controllers\ChatSessionController::class, 'store']);
+// Rotas de sessão de chat desativadas temporariamente
+// Route::get('/chat/session/{uuid}', [App\Http\Controllers\ChatSessionController::class, 'show']);
+// Route::post('/chat/message', [App\Http\Controllers\ChatSessionController::class, 'store']);
 
 // Webhook do chat (sem auth)
-Route::post('/chat/webhook/abacatepay', [App\Http\Controllers\ChatController::class, 'webhookAbacatePay'])
-    ->name('chat.webhook.abacatepay')
-    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+// Route::post('/chat/webhook/abacatepay', [App\Http\Controllers\ChatController::class, 'webhookAbacatePay'])
+//     ->name('chat.webhook.abacatepay')
+//     ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 // Rota para consulta de placa
 Route::post('/api/vehicle/lookup', [App\Http\Controllers\Api\VehicleController::class, 'lookup']);
 
 // Rotas de administração
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
-    Route::get('/users', [App\Http\Controllers\Admin\AdminController::class, 'users'])->name('users');
-    Route::get('/tickets', [App\Http\Controllers\Admin\AdminController::class, 'tickets'])->name('tickets');
-    Route::get('/appeals', [App\Http\Controllers\Admin\AdminController::class, 'appeals'])->name('appeals');
-    
-    // Gerenciamento de usuários
-    Route::get('/users/{user}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
-    Route::patch('/users/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
-    Route::post('/users/{user}/toggle-block', [App\Http\Controllers\Admin\UserController::class, 'toggleBlock'])->name('users.toggle_block');
-    Route::post('/users/{user}/credit', [App\Http\Controllers\Admin\UserController::class, 'credit'])->name('users.credit');
-}); 
+// Rotas de administração desativadas temporariamente (controllers ausentes)
+// Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+//     Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
+//     Route::get('/users', [App\Http\Controllers\Admin\AdminController::class, 'users'])->name('users');
+//     Route::get('/tickets', [App\Http\Controllers\Admin\AdminController::class, 'tickets'])->name('tickets');
+//     Route::get('/appeals', [App\Http\Controllers\Admin\AdminController::class, 'appeals'])->name('appeals');
+//     
+//     // Gerenciamento de usuários
+//     Route::get('/users/{user}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
+//     Route::patch('/users/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+//     Route::post('/users/{user}/toggle-block', [App\Http\Controllers\Admin\UserController::class, 'toggleBlock'])->name('users.toggle_block');
+//     Route::post('/users/{user}/credit', [App\Http\Controllers\Admin\UserController::class, 'credit'])->name('users.credit');
+// });

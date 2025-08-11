@@ -242,9 +242,13 @@ class AppealController extends Controller
                 'updated_at' => now()
             ]);
 
-            // Envia o e-mail de confirmação para o usuário
+            // Envio de e-mail desativado temporariamente (configurable)
             try {
-                Mail::to($user)->send(new RecursoGeradoMail($user, $appeal));
+                if (config('services.brevo.enabled') === true && config('mail.default') !== 'log') {
+                    Mail::to($user)->send(new RecursoGeradoMail($user, $appeal));
+                } else {
+                    Log::info('Envio de e-mail desativado (mailer/log ou brevo disabled).');
+                }
             } catch (\Exception $e) {
                 Log::error('Falha ao enviar e-mail de confirmação: ' . $e->getMessage());
                 // Não interrompe o fluxo, apenas registra o erro.
@@ -412,9 +416,13 @@ class AppealController extends Controller
                 'updated_at' => now()
             ]);
 
-            // Envia o e-mail de confirmação para o usuário
+            // Envio de e-mail desativado temporariamente (configurable)
             try {
-                Mail::to($user)->send(new RecursoGeradoMail($user, $appeal));
+                if (config('services.brevo.enabled') === true && config('mail.default') !== 'log') {
+                    Mail::to($user)->send(new RecursoGeradoMail($user, $appeal));
+                } else {
+                    Log::info('Envio de e-mail desativado (mailer/log ou brevo disabled).');
+                }
             } catch (\Exception $e) {
                 Log::error('Falha ao enviar e-mail de confirmação (Inteligência Híbrida): ' . $e->getMessage());
                 // Não interrompe o fluxo, apenas registra o erro.
@@ -1195,7 +1203,7 @@ class AppealController extends Controller
         
         // Pontos (fallback seguro)
         $points = $data['points'] ?? '';
-
+        
         // Processa justificativas selecionadas pela IA
         $justificationsText = '';
         if (isset($data['selected_justifications']) && !empty($data['selected_justifications'])) {
@@ -1244,7 +1252,7 @@ DADOS DA AUTUAÇÃO:
 • Infração: {$infractionName}
 • Código da infração: {$infractionCode}
 • Artigo do CTB: {$infractionArticle}
-        • Valor da multa: R$ {$data['amount']}
+• Valor da multa: R$ {$data['amount']}
         • Pontos: {$points}
 
 FORMATO OBRIGATÓRIO DO RECURSO:
@@ -1281,9 +1289,9 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
         $infractionName = $infraType ? $infraType->description : ($data['reason'] ?? '');
         $infractionCode = $infraType ? $infraType->code : '';
         $infractionArticle = $infraType ? $infraType->law_article : '';
-
+        
         $formattedDate = !empty($data['date']) ? (new \DateTime($data['date']))->format('d/m/Y') : '';
-
+        
         // Extrai cidade/UF a partir do local quando possível
         $cityFromLocation = $this->extractCityFromLocation($data['location'] ?? '');
         $city = $cityFromLocation ?: '';
@@ -1396,7 +1404,7 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
             $dadosAutuacao .
             $fatos .
             $fundamentosGerais .
-            $specificArguments .
+               $specificArguments .
             $vicios .
             $pedidos;
     }
@@ -1759,13 +1767,13 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
 
         switch ($format) {
             case 'pdf':
-                if (!$appeal->pdf_path) {
-                    return back()->with('error', 'O arquivo do recurso não está disponível.');
-                }
-                $path = storage_path('app/public/' . $appeal->pdf_path);
-                if (!file_exists($path)) {
-                    return back()->with('error', 'O arquivo do recurso não foi encontrado.');
-                }
+        if (!$appeal->pdf_path) {
+            return back()->with('error', 'O arquivo do recurso não está disponível.');
+        }
+        $path = storage_path('app/public/' . $appeal->pdf_path);
+        if (!file_exists($path)) {
+            return back()->with('error', 'O arquivo do recurso não foi encontrado.');
+        }
                 return response()->download($path, $filename);
 
             case 'docx':
