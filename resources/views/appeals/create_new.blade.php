@@ -280,6 +280,11 @@
                                 <option value="{{ $type->id }}" data-code="{{ $type->code }}">{{ $type->code }} - {{ $type->description }}</option>
                             @endforeach
                         </select>
+                        <div id="infraction-detected-badge" class="mt-2 hidden">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Detectado automaticamente (você pode alterar)
+                            </span>
+                        </div>
                     </div>
                     
                     <div class="md:col-span-2">
@@ -310,14 +315,15 @@
             <div class="bg-white rounded-2xl shadow-lg p-8">
                 <h3 class="text-2xl font-bold text-gray-900 mb-6">✅ Revisão e Envio</h3>
                 
-                <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6" id="review-summary">
                     <div class="flex items-center">
                         <i class="fas fa-check-circle text-green-500 text-xl mr-3"></i>
                         <div>
-                            <h4 class="font-semibold text-green-900">Formulário Completo</h4>
-                            <p class="text-green-700">Todos os dados foram preenchidos corretamente.</p>
+                            <h4 class="font-semibold text-green-900">Revisão Rápida</h4>
+                            <p class="text-green-700">Confira os dados antes de gerar o recurso.</p>
                         </div>
                     </div>
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm" id="review-summary-grid"></div>
                 </div>
                 
                 <div class="text-center">
@@ -456,6 +462,11 @@ function showStep(step) {
     // Atualizar botões
     updateNavigationButtons();
     updateStepButtons();
+
+    // Popular resumo na revisão
+    if (step === 5) {
+        try { populateReviewSummary(); } catch (e) { console.error(e); }
+    }
 }
 
 function updateNavigationButtons() {
@@ -893,12 +904,18 @@ function selectDetectedType(detectedType) {
     `;
     
     console.log('✅ Tipo de infração selecionado automaticamente');
+
+    // Mostrar badge de detecção automática
+    const badge = document.getElementById('infraction-detected-badge');
+    if (badge) badge.classList.remove('hidden');
 }
 
 function clearDetection() {
     const statusDiv = document.getElementById('detection-status');
     statusDiv.classList.add('hidden');
     statusDiv.innerHTML = '';
+    const badge = document.getElementById('infraction-detected-badge');
+    if (badge) badge.classList.add('hidden');
 }
 
 // Funções para busca de dados do veículo
@@ -1162,7 +1179,7 @@ function displayJustifications(justifications, infraction) {
                         <div class="mb-3 p-3 bg-gray-50 rounded">
                             <h6 class="font-medium text-gray-800 mb-1">${arg.titulo || `Argumento ${argIndex + 1}`}</h6>
                             <p class="text-gray-700 text-sm mb-2">${arg.descricao || 'Descrição não disponível'}</p>
-                            <p class="text-gray-600 text-xs"><strong>Fundação:</strong> ${arg.fundamentacao || 'Não especificado'}</p>
+                            <p class="text-gray-600 text-xs"><strong>Fundamentação:</strong> ${arg.fundamentacao || 'Não informado pela IA'}</p>
                         </div>
                     `;
                 });
@@ -1492,43 +1509,7 @@ function generateAppeal() {
         `;
         document.body.appendChild(errorModal);
         
-        // Destacar campos com erro se possível
-        if (error.message.includes('CPF')) {
-            highlightField('cpf', 'error');
-        }
-        if (error.message.includes('CNH')) {
-            highlightField('driver_license', 'error');
-        }
-        if (error.message.includes('placa')) {
-            highlightField('plate', 'error');
-        }
-        if (error.message.includes('modelo')) {
-            highlightField('vehicle_model', 'error');
-        }
-        if (error.message.includes('ano')) {
-            highlightField('vehicle_year', 'error');
-        }
-        if (error.message.includes('cor')) {
-            highlightField('vehicle_color', 'error');
-        }
-        if (error.message.includes('autuação')) {
-            highlightField('citation_number', 'error');
-        }
-        if (error.message.includes('data')) {
-            highlightField('date', 'error');
-        }
-        if (error.message.includes('horário')) {
-            highlightField('time', 'error');
-        }
-        if (error.message.includes('valor')) {
-            highlightField('amount', 'error');
-        }
-        if (error.message.includes('local')) {
-            highlightField('location', 'error');
-        }
-        if (error.message.includes('motivo')) {
-            highlightField('reason', 'error');
-        }
+        // Erros destacados são tratados por displayValidationErrors
     })
     .finally(() => {
         // Remover overlay de loading
@@ -1555,6 +1536,87 @@ function highlightField(fieldId, type) {
                 field.classList.add('border-gray-300', 'bg-white');
             }, 5000);
         }
+    }
+}
+
+function ensureErrorPlaceholder(fieldId) {
+    const input = document.getElementById(fieldId);
+    if (!input) return null;
+    let holder = document.getElementById(fieldId + '-error');
+    if (!holder) {
+        holder = document.createElement('div');
+        holder.id = fieldId + '-error';
+        holder.className = 'mt-1 text-xs text-red-600';
+        input.closest('div').appendChild(holder);
+    }
+    return holder;
+}
+
+function displayValidationErrors(errors) {
+    // Limpar anteriores e aplicar mensagens
+    Object.keys(errors).forEach(key => {
+        const fieldId = mapFieldKeyToId(key);
+        if (!fieldId) return;
+        highlightField(fieldId, 'error');
+        const holder = ensureErrorPlaceholder(fieldId);
+        if (holder) holder.textContent = errors[key].join(', ');
+    });
+}
+
+function mapFieldKeyToId(key) {
+    const map = {
+        name: 'name',
+        cpf: 'cpf',
+        driver_license: 'driver_license',
+        phone: 'phone',
+        plate: 'plate',
+        vehicle_model: 'vehicle_model',
+        vehicle_year: 'vehicle_year',
+        vehicle_color: 'vehicle_color',
+        citation_number: 'citation_number',
+        date: 'date',
+        time: 'time',
+        amount: 'amount',
+        location: 'location',
+        reason: 'reason',
+        infraction_type_id: 'infraction_type_id',
+    };
+    return map[key] || null;
+}
+
+function populateReviewSummary() {
+    const grid = document.getElementById('review-summary-grid');
+    if (!grid) return;
+    const entries = [
+        ['Nome', document.getElementById('name')?.value],
+        ['CPF', document.getElementById('cpf')?.value],
+        ['CNH', document.getElementById('driver_license')?.value],
+        ['Telefone', document.getElementById('phone')?.value || 'Não informado'],
+        ['Placa', document.getElementById('plate')?.value],
+        ['Modelo', document.getElementById('vehicle_model')?.value],
+        ['Ano', document.getElementById('vehicle_year')?.value],
+        ['Cor', document.getElementById('vehicle_color')?.value],
+        ['Autuação', document.getElementById('citation_number')?.value],
+        ['Data', document.getElementById('date')?.value],
+        ['Horário', document.getElementById('time')?.value],
+        ['Local', document.getElementById('location')?.value],
+        ['Valor', document.getElementById('amount')?.value],
+        ['Motivo', document.getElementById('reason')?.value],
+    ];
+    grid.innerHTML = entries.map(([label, value]) => `
+        <div class="p-3 bg-white border rounded">
+            <div class="text-xs text-gray-500">${label}</div>
+            <div class="text-sm font-medium text-gray-900 break-words">${(value || '—')}</div>
+        </div>
+    `).join('');
+}
+
+function copyToClipboard(text) {
+    try {
+        navigator.clipboard.writeText(text);
+        alert('Argumento copiado para a área de transferência.');
+    } catch (e) {
+        console.error(e);
     }
 }
 

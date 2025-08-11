@@ -100,7 +100,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($appeals as $appeal)
-                                        <tr class="border-b hover:bg-gray-50">
+                                        <tr class="border-b hover:bg-gray-50 cursor-pointer" onclick="window.location='{{ route('appeals.show', $appeal->id) }}'">
                                             <td class="p-3 text-sm">#{{ $appeal->id }}</td>
                                             <td class="p-3 text-sm">
                                                 {{ optional($appeal->ticket)->plate ?? '—' }}
