@@ -22,6 +22,7 @@ class Appeal extends Model
         'pdf_path',
         'status',
         'notes',
+        'metadata',
     ];
 
     /**
@@ -31,6 +32,7 @@ class Appeal extends Model
      */
     protected $casts = [
         'status' => 'string',
+        'metadata' => 'array',
     ];
 
     /**

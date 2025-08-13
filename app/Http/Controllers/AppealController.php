@@ -269,6 +269,9 @@ class AppealController extends Controller
     public function storeNew(Request $request)
     {
         try {
+            // Log para debug
+            Log::info('Dados recebidos na requisição:', $request->all());
+            
             // Validação dos dados para o novo formulário
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
@@ -281,11 +284,12 @@ class AppealController extends Controller
                 'vehicle_color' => 'required|string|max:50',
                 'citation_number' => 'required|string|max:50',
                 'date' => 'required|date',
-                'time' => 'required',
+                'time' => 'required|string|max:10',
                 'infraction_type_id' => 'required|exists:infraction_types,id',
                 'amount' => 'required|numeric|min:0',
                 'location' => 'required|string|max:255',
                 'reason' => 'required|string|max:1000',
+                'orgao_autuador' => 'required|string|max:255',
                 'custom_details' => 'nullable|string|max:2000',
                 'selected_justifications' => 'nullable|string' // JSON das justificativas selecionadas
             ], [
@@ -304,11 +308,13 @@ class AppealController extends Controller
                 'infraction_type_id.required' => 'O tipo de infração é obrigatório.',
                 'amount.required' => 'O valor da multa é obrigatório.',
                 'location.required' => 'O local da infração é obrigatório.',
-                'reason.required' => 'O motivo da infração é obrigatório.'
+                'reason.required' => 'O motivo da infração é obrigatório.',
+                'orgao_autuador.required' => 'O órgão autuador/JARI é obrigatório.'
             ]);
 
             if ($validator->fails()) {
                 Log::error('Erro de validação ao gerar recurso novo:', $validator->errors()->toArray());
+                Log::error('Dados da requisição que falharam:', $request->all());
                 
                 // Se for uma requisição AJAX, retorna JSON com erros
                 if ($request->ajax()) {
@@ -320,6 +326,24 @@ class AppealController extends Controller
                 }
                 
                 return back()->withErrors($validator)->withInput();
+            }
+
+            // Validação adicional: verifica campos com "n/a" ou vazios
+            try {
+                $this->validateDataBeforeGeneration($request->all());
+            } catch (\Exception $e) {
+                Log::error('Erro de validação de campos vazios: ' . $e->getMessage());
+                Log::error('Dados que falharam na validação:', $request->all());
+                
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $e->getMessage(),
+                        'type' => 'empty_fields'
+                    ], 422);
+                }
+                
+                return back()->with('error', $e->getMessage())->withInput();
             }
 
             // Verifica se o usuário tem créditos suficientes (sempre 3 para Inteligência Híbrida)
@@ -351,7 +375,16 @@ class AppealController extends Controller
                 'vehicle_chassi' => '', // Campo obrigatório mas não usado
                 'vehicle_renavam' => '', // Campo obrigatório mas não usado
                 'points' => 4, // Valor padrão
-                'phone' => $request->input('phone') ?? 'Não informado' // Valor padrão se phone for null
+                'phone' => $request->input('phone') ?? 'Não informado', // Valor padrão se phone for null
+                'time' => $request->input('time') ?? '00:00', // Valor padrão se time for null
+                'location' => $request->input('location') ?? 'Local não informado', // Valor padrão se location for null
+                'source' => 'manual', // Fonte padrão para multas criadas manualmente
+                'citation_number' => $request->input('citation_number') ?? 'N/A', // Número da autuação
+                'article' => $request->input('article') ?? 'Artigo não especificado', // Artigo do CTB
+                'infraction_code' => $request->input('infraction_code') ?? 'Código não especificado', // Código da infração
+                'city' => $request->input('city') ?? 'Cidade não especificada', // Cidade da infração
+                'state' => $request->input('state') ?? 'UF não especificada', // Estado da infração
+                'orgao_autuador' => $request->input('orgao_autuador') ?? 'JARI Estadual' // Órgão autuador
             ]);
 
             $ticket = Ticket::create($ticketData);
@@ -430,13 +463,18 @@ class AppealController extends Controller
 
             // Se for uma requisição AJAX, retorna JSON
             if ($request->ajax()) {
+                $infractionTypeInfo = 'Tipo não especificado';
+                if ($ticket->infractionType) {
+                    $infractionTypeInfo = $ticket->infractionType->code . ' - ' . $ticket->infractionType->description;
+                }
+                
                 return response()->json([
                     'success' => true,
                     'message' => 'Recurso gerado com INTELIGÊNCIA HÍBRIDA! 🧠🎉',
                     'redirect' => route('appeals.show', $appeal),
                     'appeal_id' => $appeal->id,
                     'appeal_number' => $appeal->id,
-                    'infraction_type' => $ticket->infractionType->code . ' - ' . $ticket->infractionType->description
+                    'infraction_type' => $infractionTypeInfo
                 ]);
             }
 
@@ -483,8 +521,8 @@ class AppealController extends Controller
                         } else {
                             $results['gemini'] = [
                                 'name' => '💎 Google Gemini Pro',
-                                'text' => 'Modelo não disponível',
-                                'status' => 'disabled'
+                                'text' => $this->buildCleanBrazilianLegalDocument($data),
+                                'status' => 'fallback'
                             ];
                         }
                         break;
@@ -520,8 +558,19 @@ class AppealController extends Controller
                 Log::error("❌ Erro com {$model}: " . $e->getMessage());
                 $results[$model] = [
                     'name' => $this->getModelDisplayName($model),
-                    'text' => "Erro ao gerar com {$model}: " . $e->getMessage(),
+                    'text' => $this->buildCleanBrazilianLegalDocument($data), // Fallback para template brasileiro
                     'status' => 'error'
+                ];
+            }
+        }
+        
+        // Garante que todas as chaves existam
+        foreach ($models as $model) {
+            if (!isset($results[$model])) {
+                $results[$model] = [
+                    'name' => $this->getModelDisplayName($model),
+                    'text' => $this->buildCleanBrazilianLegalDocument($data),
+                    'status' => 'fallback'
                 ];
             }
         }
@@ -599,17 +648,53 @@ class AppealController extends Controller
         } catch (\Exception $e) {
             Log::error('Erro na seleção automática da melhor versão: ' . $e->getMessage());
             
-            // Fallback: escolhe Gemini > RoBERTa > GPT-4
-            foreach (['gemini', 'roberta', 'gpt4'] as $model) {
-                if (isset($appealTexts[$model]) && $appealTexts[$model]['status'] === 'success') {
-                    return [
-                        'best_model_key' => $model,
-                        'selected_model' => $appealTexts[$model]['name'],
-                        'best_text' => $appealTexts[$model]['text'],
-                        'reason' => 'Seleção automática falhou, usando prioridade padrão',
-                        'detailed_analysis' => 'Erro na análise automática. Versão selecionada por prioridade.'
+            // Fallback inteligente: analisa o conteúdo das versões disponíveis
+            $validTexts = [];
+            foreach ($appealTexts as $model => $data) {
+                if ($data['status'] === 'success') {
+                    $validTexts[$model] = [
+                        'name' => $data['name'],
+                        'text' => $data['text']
                     ];
                 }
+            }
+            
+            if (!empty($validTexts)) {
+                $bestVersion = $this->selectBestVersionByContent($validTexts);
+                $modelKeys = array_keys($validTexts);
+                
+                // Verifica se a versão selecionada é válida
+                if ($bestVersion < 1 || $bestVersion > count($modelKeys)) {
+                    Log::warning("⚠️ Versão selecionada por conteúdo ({$bestVersion}) inválida, usando primeira versão");
+                    $bestVersion = 1;
+                }
+                
+                $selectedModelKey = $modelKeys[$bestVersion - 1];
+                
+                // Verifica se o modelo selecionado existe
+                if (!isset($validTexts[$selectedModelKey])) {
+                    Log::warning("⚠️ Modelo selecionado ({$selectedModelKey}) não encontrado, usando primeiro disponível");
+                    $selectedModelKey = $modelKeys[0];
+                }
+                
+                return [
+                    'best_model_key' => $selectedModelKey,
+                    'selected_model' => $validTexts[$selectedModelKey]['name'],
+                    'best_text' => $validTexts[$selectedModelKey]['text'],
+                    'reason' => 'Seleção automática falhou, usando análise de conteúdo',
+                    'detailed_analysis' => 'Erro na análise automática. Versão selecionada por análise de qualidade do conteúdo.'
+                ];
+            }
+            
+            // Último recurso: usa GPT-4 se disponível
+            if (isset($appealTexts['gpt4']) && $appealTexts['gpt4']['status'] === 'success') {
+                return [
+                    'best_model_key' => 'gpt4',
+                    'selected_model' => '🔥 GPT-4 Turbo (Fallback)',
+                    'best_text' => $appealTexts['gpt4']['text'],
+                    'reason' => 'Única versão disponível',
+                    'detailed_analysis' => 'Apenas uma versão foi gerada com sucesso.'
+                ];
             }
         }
     }
@@ -619,7 +704,7 @@ class AppealController extends Controller
      */
     private function buildAnalysisPrompt($validTexts)
     {
-        $prompt = "Você é um especialista jurídico brasileiro. Analise os seguintes recursos de multa de trânsito e determine qual é o MELHOR:\n\n";
+        $prompt = "Você é um especialista jurídico brasileiro especializado em recursos administrativos de trânsito. Sua tarefa é analisar 3 versões de recursos e escolher a MELHOR baseada na qualidade jurídica.\n\n";
         
         $count = 1;
         foreach ($validTexts as $model => $data) {
@@ -628,14 +713,19 @@ class AppealController extends Controller
             $count++;
         }
         
-        $prompt .= "INSTRUÇÕES PARA ANÁLISE:\n";
-        $prompt .= "1. Avalie cada versão nos critérios: fundamentação jurídica, citações do CTB, estrutura, argumentação\n";
-        $prompt .= "2. Escolha a MELHOR versão baseada na legislação brasileira de trânsito\n";
-        $prompt .= "3. Responda EXATAMENTE neste formato:\n\n";
-        $prompt .= "MELHOR_VERSAO: [número da versão: 1, 2 ou 3]\n";
-        $prompt .= "MOTIVO: [razão em 1 linha]\n";
-        $prompt .= "ANALISE_DETALHADA: [análise completa comparando os pontos fortes e fracos de cada versão]\n\n";
-        $prompt .= "Seja objetivo e técnico na análise.";
+        $prompt .= "CRITÉRIOS DE AVALIAÇÃO:\n";
+        $prompt .= "1. Fundamentação jurídica sólida (CTB, resoluções CONTRAN, jurisprudência)\n";
+        $prompt .= "2. Estrutura formal adequada (cabeçalho, qualificação, fundamentos, pedidos)\n";
+        $prompt .= "3. Argumentação técnica específica para o tipo de infração\n";
+        $prompt .= "4. Linguagem jurídica apropriada e profissional\n";
+        $prompt .= "5. Ausência de erros gramaticais ou formais\n\n";
+        
+        $prompt .= "RESPONDA EXATAMENTE NESTE FORMATO (sem variações):\n\n";
+        $prompt .= "MELHOR_VERSAO: [APENAS o número: 1, 2 ou 3]\n";
+        $prompt .= "MOTIVO: [APENAS uma linha explicando a escolha]\n";
+        $prompt .= "ANALISE_DETALHADA: [análise técnica comparando cada versão]\n\n";
+        
+        $prompt .= "IMPORTANTE: Responda EXATAMENTE como solicitado. Não adicione comentários extras.";
         
         return $prompt;
     }
@@ -666,15 +756,15 @@ class AppealController extends Controller
                 'systemInstruction' => [
                     'parts' => [
                         [
-                            'text' => 'Você é um advogado especialista em recursos de multas de trânsito no Brasil, com profundo conhecimento do CTB, resoluções do CONTRAN e jurisprudência brasileira. Crie recursos administrativos detalhados, tecnicamente precisos, com fundamentação jurídica sólida específica para o direito brasileiro.'
+                            'text' => 'Você é um especialista jurídico brasileiro especializado em análise comparativa de recursos administrativos de trânsito. Sua tarefa é analisar e comparar diferentes versões de recursos, escolhendo a MELHOR baseada em critérios técnicos objetivos. Responda EXATAMENTE no formato solicitado, sem variações ou comentários extras.'
                         ]
                     ]
                 ],
                 'generationConfig' => [
-                    'temperature' => 0.3,
-                    'topK' => 20,
-                    'topP' => 0.8,
-                    'maxOutputTokens' => 1000,
+                    'temperature' => 0.1, // Mais determinístico
+                    'topK' => 10, // Menos opções
+                    'topP' => 0.5, // Mais focado
+                    'maxOutputTokens' => 800, // Resposta mais concisa
                 ]
             ]
         ]);
@@ -707,7 +797,8 @@ class AppealController extends Controller
             } elseif (stripos($analysisText, 'gpt') !== false && stripos($analysisText, 'melhor') !== false) {
                 $selectedVersion = 3; // GPT-4 como terceira
             } else {
-                $selectedVersion = 1; // Default para primeira versão
+                // Análise mais inteligente baseada no conteúdo
+                $selectedVersion = $this->selectBestVersionByContent($validTexts);
             }
         } else {
             $selectedVersion = (int)$versionMatch[1];
@@ -739,7 +830,20 @@ class AppealController extends Controller
         
         // Mapeia número da versão para o modelo
         $modelKeys = array_keys($validTexts);
-        $selectedModelKey = isset($modelKeys[$selectedVersion - 1]) ? $modelKeys[$selectedVersion - 1] : $modelKeys[0];
+        
+        // Verifica se a versão selecionada é válida
+        if ($selectedVersion < 1 || $selectedVersion > count($modelKeys)) {
+            Log::warning("⚠️ Versão selecionada ({$selectedVersion}) inválida, usando primeira versão disponível");
+            $selectedVersion = 1;
+        }
+        
+        $selectedModelKey = $modelKeys[$selectedVersion - 1];
+        
+        // Verifica se o modelo selecionado existe
+        if (!isset($validTexts[$selectedModelKey])) {
+            Log::warning("⚠️ Modelo selecionado ({$selectedModelKey}) não encontrado, usando primeiro disponível");
+            $selectedModelKey = $modelKeys[0];
+        }
         
         Log::info("✅ Análise parseada: versão {$selectedVersion} ({$selectedModelKey}) escolhida");
         
@@ -750,6 +854,95 @@ class AppealController extends Controller
             'reason' => $reason,
             'detailed_analysis' => $detailedAnalysis
         ];
+    }
+
+    /**
+     * Seleciona a melhor versão baseada na análise do conteúdo
+     */
+    private function selectBestVersionByContent($validTexts)
+    {
+        $scores = [];
+        $modelKeys = array_keys($validTexts);
+        
+        // Verifica se há textos válidos
+        if (empty($validTexts)) {
+            Log::warning('⚠️ Nenhum texto válido para análise de conteúdo');
+            return 1; // Fallback para primeira versão
+        }
+        
+        foreach ($validTexts as $modelKey => $data) {
+            $score = 0;
+            $text = $data['text'];
+            
+            // Critérios de pontuação - Estrutura e Formatação
+            if (stripos($text, 'RECURSO ADMINISTRATIVO') !== false) $score += 15;
+            if (stripos($text, 'Ilmo(a). Sr(a). Presidente da JARI') !== false) $score += 15;
+            if (stripos($text, 'DOS FATOS') !== false) $score += 12;
+            if (stripos($text, 'DOS FUNDAMENTOS') !== false) $score += 12;
+            if (stripos($text, 'DOS VÍCIOS') !== false) $score += 12;
+            if (stripos($text, 'DO PEDIDO') !== false) $score += 12;
+            
+            // Critérios de pontuação - Fundamentação Jurídica
+            if (stripos($text, 'CTB') !== false) $score += 8;
+            if (stripos($text, 'CONTRAN') !== false) $score += 8;
+            if (stripos($text, 'Constituição') !== false) $score += 8;
+            if (stripos($text, 'art.') !== false) $score += 5;
+            if (stripos($text, 'inciso') !== false) $score += 5;
+            if (stripos($text, 'jurisprudência') !== false) $score += 8;
+            if (stripos($text, 'precedente') !== false) $score += 8;
+            if (stripos($text, 'STJ') !== false) $score += 10;
+            if (stripos($text, 'STF') !== false) $score += 10;
+            if (stripos($text, 'TJ-') !== false) $score += 8;
+            
+            // Critérios de pontuação - Qualidade do Texto
+            if (stripos($text, 'Resolução CONTRAN') !== false) $score += 10;
+            if (stripos($text, 'Portaria') !== false) $score += 8;
+            if (stripos($text, 'Manual Brasileiro') !== false) $score += 8;
+            
+            // Penalizações - Campos vazios e placeholders
+            if (stripos($text, '[INSERIR') !== false) $score -= 30;
+            if (stripos($text, '[Nome') !== false) $score -= 30;
+            if (stripos($text, '[CPF') !== false) $score -= 30;
+            if (stripos($text, 'placeholder') !== false) $score -= 25;
+            if (stripos($text, 'comentário') !== false) $score -= 20;
+            if (stripos($text, 'observação') !== false) $score -= 20;
+            
+            // Penalizações - Qualidade do texto
+            if (stripos($text, 'referente ao art. Art.') !== false) $score -= 25; // Repetição
+            if (stripos($text, 'do CTB do CTB') !== false) $score -= 25; // Repetição
+            if (stripos($text, 'Conforme será demonstrado, a autuação mostra-se improcedente pelas razões fáticas e jurídicas a seguir expostas') !== false) $score -= 15; // Frase muito longa
+            if (stripos($text, 'Endereço não informado') !== false) $score -= 10; // Dados incompletos
+            
+            // Pontuação por qualidade do texto
+            $wordCount = str_word_count($text);
+            if ($wordCount > 500) $score += 8; // Texto mais elaborado
+            if ($wordCount > 1000) $score += 10; // Texto muito elaborado
+            
+            // Pontuação por estrutura e formatação
+            $lines = explode("\n", $text);
+            $emptyLines = 0;
+            foreach ($lines as $line) {
+                if (trim($line) === '') $emptyLines++;
+            }
+            if ($emptyLines > 5) $score += 5; // Boa formatação com espaçamento
+            
+            // Pontuação por argumentos específicos
+            if (stripos($text, 'infração 518-51') !== false || stripos($text, 'código 518-51') !== false) $score += 10; // Específico para velocidade
+            if (stripos($text, 'infração 162') !== false || stripos($text, 'código 162') !== false) $score += 10; // Específico para celular
+            if (stripos($text, 'infração 181') !== false || stripos($text, 'código 181') !== false) $score += 10; // Específico para estacionamento
+            
+            $scores[$modelKey] = $score;
+        }
+        
+        // Encontra a versão com maior pontuação
+        $bestModelKey = array_keys($scores, max($scores))[0];
+        
+        // Mapeia para número da versão (1, 2, 3)
+        $versionNumber = array_search($bestModelKey, $modelKeys) + 1;
+        
+        Log::info("🎯 Seleção por conteúdo: modelo {$bestModelKey} (versão {$versionNumber}) escolhido com pontuação " . max($scores));
+        
+        return $versionNumber;
     }
 
     /**
@@ -873,7 +1066,7 @@ class AppealController extends Controller
                 'systemInstruction' => [
                     'parts' => [
                         [
-                            'text' => 'Você é um advogado especialista em recursos de multas de trânsito no Brasil. GERE APENAS O TEXTO FINAL DO RECURSO, COMPLETAMENTE LIMPO E PRONTO PARA PROTOCOLO. Nunca inclua comentários, observações, notas ou campos vazios. Preencha TODOS os dados fornecidos. O documento deve estar pronto para impressão e assinatura imediatamente.'
+                            'text' => 'Você é um advogado especialista em recursos de multas de trânsito no Brasil. GERE APENAS O TEXTO FINAL DO RECURSO, COMPLETAMENTE LIMPO E PRONTO PARA PROTOCOLO. REGRAS CRÍTICAS: 1) NUNCA use "n/a", "não informado", "não disponível" ou campos vazios. 2) Se um dado não estiver disponível, use um valor padrão apropriado ou omita a linha. 3) Preencha TODOS os dados fornecidos com informações reais. 4) O documento deve estar pronto para impressão e assinatura imediatamente. 5) Use apenas linguagem jurídica profissional e específica.'
                         ]
                     ]
                 ],
@@ -998,6 +1191,11 @@ class AppealController extends Controller
             '/\(.*endereço.*não.*informado.*\)/i',
             '/\(.*não.*informado.*\)/i',
             
+            // Remove repetições e redundâncias
+            '/referente ao art\. Art\./i',
+            '/do CTB do CTB/i',
+            '/art\. Art\./i',
+            
             // Remove quebras de linha excessivas no final
             '/\n{3,}$/',
             '/\s+$/',
@@ -1062,24 +1260,51 @@ class AppealController extends Controller
             '[Email]' => $email,
             '[Placa]' => $data['plate'],
             
-            // Outros placeholders comuns
-            '[endereço completo do recorrente]' => $address,
-            '[número do AIT]' => $data['citation_number'] ?? '',
-            '[Local]' => $city,
-            '[Data]' => $today,
-            '[Cidade]' => $city,
-            '[Estado]' => $state,
-            '[Cidade], [Estado]' => "{$city}/{$state}",
-            'São Paulo/SP' => "{$city}/{$state}",
-            
-            // Frases problemáticas
-            '(informação não disponível)' => '',
-            '(endereço não informado)' => $address,
-            '(não informado)' => '',
-            'Endereço não informado' => $address,
-            'Não informado' => '',
-            'informação não disponível' => '',
-            'endereço não disponível' => $address,
+                    // Outros placeholders comuns
+        '[endereço completo do recorrente]' => $address,
+        '[número do AIT]' => $data['citation_number'] ?? '',
+        '[Local]' => $city,
+        '[Data]' => $today,
+        '[Cidade]' => $city,
+        '[Estado]' => $state,
+        '[Cidade], [Estado]' => "{$city}/{$state}",
+        'São Paulo/SP' => "{$city}/{$state}",
+        
+        // Frases problemáticas e campos vazios
+        '(informação não disponível)' => '',
+        '(endereço não informado)' => $address,
+        '(não informado)' => '',
+        'Endereço não informado' => $address,
+        'Não informado' => '',
+        'informação não disponível' => '',
+        'endereço não disponível' => $address,
+        
+        // Campos com "n/a" e variações
+        'n/a' => '',
+        'N/A' => '',
+        'n/a.' => '',
+        'N/A.' => '',
+        'na' => '',
+        'Na' => '',
+        'NA' => '',
+        'não informado' => '',
+        'Não informado' => '',
+        'NÃO INFORMADO' => '',
+        'não disponível' => '',
+        'Não disponível' => '',
+        'NÃO DISPONÍVEL' => '',
+        'não especificado' => '',
+        'Não especificado' => '',
+        'NÃO ESPECIFICADO' => '',
+        'não consta' => '',
+        'Não consta' => '',
+        'NÃO CONSTA' => '',
+        'sem informação' => '',
+        'Sem informação' => '',
+        'SEM INFORMAÇÃO' => '',
+        'dados não informados' => '',
+        'Dados não informados' => '',
+        'DADOS NÃO INFORMADOS' => '',
         ];
         
         foreach ($replacements as $search => $replace) {
@@ -1095,6 +1320,16 @@ class AppealController extends Controller
             
             // Pula linhas que contenham apenas elementos indesejados
             if (preg_match('/^(Página|Pagina|Page|\s*Documento gerado|\s*Gerado em|\s*Data de geração)\s*$/i', $cleanLine)) {
+                continue;
+            }
+            
+            // Pula linhas que contenham apenas "n/a" ou campos vazios
+            if (preg_match('/^(n\/a|N\/A|n\/a\.|N\/A\.|na|Na|NA|não informado|Não informado|NÃO INFORMADO|não disponível|Não disponível|NÃO DISPONÍVEL|não especificado|Não especificado|NÃO ESPECIFICADO|não consta|Não consta|NÃO CONSTA|sem informação|Sem informação|SEM INFORMAÇÃO|dados não informados|Dados não informados|DADOS NÃO INFORMADOS)\s*$/i', $cleanLine)) {
+                continue;
+            }
+            
+            // Pula linhas que contenham apenas pontuação ou espaços
+            if (preg_match('/^[\s\.,;:!?\-_()\[\]{}"\']*$/', $cleanLine)) {
                 continue;
             }
             
@@ -1188,7 +1423,6 @@ class AppealController extends Controller
         
         // Garantir que todos os dados estejam completos com fallbacks inteligentes
         $cpf = preg_replace('/[^0-9]/', '', $data['cpf']);
-        $email = $data['email'] ?? auth()->user()->email ?? "{$data['name']}@email.com.br";
         $address = $data['address'] ?? 
                    $data['cnh_address'] ?? 
                    auth()->user()->cnh_address ?? 
@@ -1196,7 +1430,6 @@ class AppealController extends Controller
         $cnhCategory = $data['driver_license_category'] ?? 
                        auth()->user()->cnh_category ?? 
                        'B';
-        $phone = $data['phone'] ?? auth()->user()->phone ?? '(11) 99999-9999';
         $vehicleColor = (!empty($data['vehicle_color'])) ? $data['vehicle_color'] : 'Prata';
         $vehicleChassi = (!empty($data['vehicle_chassi'])) ? $data['vehicle_chassi'] : '9BD' . strtoupper(substr(md5($data['plate']), 0, 14));
         $vehicleRenavam = (!empty($data['vehicle_renavam'])) ? $data['vehicle_renavam'] : substr(md5($data['plate']), 0, 11);
@@ -1224,6 +1457,9 @@ class AppealController extends Controller
 4. PREENCHA TODOS os dados fornecidos diretamente no texto
 5. Use o formato tradicional brasileiro de petição jurídica
 6. O documento deve estar 100% completo e pronto para assinatura
+7. EVITE repetições e redundâncias no texto
+8. Use linguagem jurídica clara e precisa
+9. Estruture o documento com seções bem definidas e espaçamento adequado
 
 DADOS COMPLETOS PARA O RECURSO:
 
@@ -1231,8 +1467,6 @@ DADOS DO RECORRENTE:
 • Nome completo: {$data['name']}
 • CPF: {$cpf}
 • CNH: {$data['driver_license']} (categoria {$cnhCategory})
-• Telefone: {$phone}
-• Email: {$email}
 • Endereço completo: {$address}
 
 DADOS DO VEÍCULO:
@@ -1253,20 +1487,36 @@ DADOS DA AUTUAÇÃO:
 • Código da infração: {$infractionCode}
 • Artigo do CTB: {$infractionArticle}
 • Valor da multa: R$ {$data['amount']}
-        • Pontos: {$points}
+• Pontos: {$points}
+• Órgão autuador: {$data['orgao_autuador']}
 
 FORMATO OBRIGATÓRIO DO RECURSO:
 1. Cabeçalho: 'RECURSO ADMINISTRATIVO DE MULTA DE TRÂNSITO'
 2. Destinatário: 'Ilmo(a). Sr(a). Presidente da JARI'
-3. Qualificação completa do recorrente (COM TODOS OS DADOS PESSOAIS ACIMA)
-4. Dados do veículo (COM TODOS OS DADOS DO VEÍCULO ACIMA)
-5. Dados da autuação (COM TODOS OS DADOS DA MULTA ACIMA)
-6. Seção 'DOS FATOS' com descrição técnica
-7. Seção 'DOS FUNDAMENTOS' com fundamentação jurídica ROBUSTA
-8. Seção 'DOS VÍCIOS' específicos para a infração {$infractionCode}
-9. Seção 'DO PEDIDO' fundamentado
-10. Fechamento: '{$city}/{$state}, " . now()->format('d/m/Y') . "'
-11. Local para assinatura com nome completo e CPF
+3. Órgão responsável: {$data['orgao_autuador']}
+4. Qualificação completa do recorrente (COM TODOS OS DADOS PESSOAIS ACIMA)
+5. Dados do veículo (COM TODOS OS DADOS DO VEÍCULO ACIMA)
+6. Dados da autuação (COM TODOS OS DADOS DA MULTA ACIMA)
+7. Seção 'DOS FATOS' com descrição técnica clara e concisa
+8. Seção 'DOS FUNDAMENTOS' com fundamentação jurídica ROBUSTA e específica para a infração {$infractionCode}
+9. Seção 'DOS VÍCIOS' com argumentos específicos e fundamentados para a infração {$infractionCode}
+10. Seção 'DO PEDIDO' fundamentado e específico
+11. Fechamento: '{$city}/{$state}, " . now()->format('d/m/Y') . "'
+12. Local para assinatura com nome completo e CPF
+
+REGRAS IMPORTANTES:
+- Use argumentos específicos para o tipo de infração {$infractionCode}
+- Cite artigos específicos do CTB e resoluções CONTRAN relevantes
+- Evite frases muito longas e confusas
+- Use jurisprudência específica quando relevante
+- Mantenha o texto profissional e bem estruturado
+- Evite repetir informações desnecessariamente
+
+REGRAS CRÍTICAS SOBRE CAMPOS VAZIOS:
+- NUNCA use \"n/a\", \"não informado\", \"não disponível\", \"não especificado\"
+- Se um dado não estiver disponível, use um valor padrão apropriado ou omita completamente a linha
+- Todos os campos devem conter informações reais e válidas
+- O documento deve estar 100% completo e pronto para protocolo
 
 {$justificationsText}
 
@@ -1298,7 +1548,6 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
         $state = $city ? $this->getStateFromCity($city) : '';
 
         // Fallbacks amigáveis (somente para uso interno; evitamos imprimir placeholders)
-        $email = $data['email'] ?? (auth()->user()->email ?? '');
         $address = $data['address']
             ?? ($data['cnh_address'] ?? (auth()->user()->cnh_address ?? ''));
         $cnhCategory = $data['driver_license_category']
@@ -1309,11 +1558,16 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
 
         // Montagem de blocos condicionais (somente imprime linhas com conteúdo)
         $enderecoOrg = "Ilmo(a). Sr(a). Presidente da JARI\nJunta Administrativa de Recursos de Infrações";
-        if ($city && $state) {
-            $enderecoOrg .= "\nDepartamento Estadual de Trânsito - DETRAN\n{$city}/{$state}\n\n";
+        
+        // Usar o órgão autuador informado pelo usuário
+        if (!empty($data['orgao_autuador'])) {
+            $enderecoOrg .= "\n{$data['orgao_autuador']}";
+        } elseif ($city && $state) {
+            $enderecoOrg .= "\nDepartamento Estadual de Trânsito - DETRAN\n{$city}/{$state}";
         } else {
-            $enderecoOrg .= "\nÓrgão Autuador competente\n\n";
+            $enderecoOrg .= "\nÓrgão Autuador competente";
         }
+        $enderecoOrg .= "\n\n";
 
         $ref = [];
         if (!empty($data['citation_number'])) { $ref[] = "REFERÊNCIA: Auto de Infração nº {$data['citation_number']}"; }
@@ -1330,8 +1584,6 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
             $qual[] = 'CNH: ' . $data['driver_license'] . ($cnhCategory ? " (categoria {$cnhCategory})" : '');
         }
         if (!empty($address)) { $qual[] = "Endereço para Correspondência: {$address}"; }
-        if (!empty($data['phone'])) { $qual[] = "Telefone: {$data['phone']}"; }
-        if (!empty($email)) { $qual[] = "E-mail: {$email}"; }
         $qualificacao = implode("\n", array_filter($qual)) . "\n\n";
 
         $veic = ["DADOS DO VEÍCULO:", ''];
@@ -1688,6 +1940,21 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
                 'ticket' => $ticket
             ]);
 
+            // Configurações melhoradas para o PDF
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'margin_top' => 24,     // ~2cm
+                'margin_right' => 24,   // ~2cm
+                'margin_bottom' => 24,  // ~2cm
+                'margin_left' => 24,    // ~2cm
+                'defaultFont' => 'DejaVu Sans',
+                'default_font_size' => 11,
+                'line_height' => 1.5,
+                'enable_remote' => true,
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true
+            ]);
+
             // Salva o PDF no storage
             $pdf->save(storage_path('app/public/appeals/' . $filename));
 
@@ -1851,5 +2118,63 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
     {
         // Fallback usando template brasileiro limpo
         return $this->buildCleanBrazilianLegalDocument($data);
+    }
+
+    /**
+     * Detecta campos com "n/a" e solicita informações ao usuário
+     */
+    private function detectAndFixEmptyFields($data)
+    {
+        $emptyFields = [];
+        $requiredFields = [
+            'name' => 'Nome completo',
+            'cpf' => 'CPF',
+            'driver_license' => 'CNH',
+            'plate' => 'Placa do veículo',
+            'vehicle_model' => 'Modelo do veículo',
+            'vehicle_year' => 'Ano do veículo',
+            'vehicle_color' => 'Cor do veículo',
+            'citation_number' => 'Número da autuação',
+            'date' => 'Data da infração',
+            'time' => 'Hora da infração',
+            'location' => 'Local da infração',
+            'reason' => 'Motivo da infração',
+            'orgao_autuador' => 'Órgão autuador',
+            'amount' => 'Valor da multa'
+        ];
+
+        foreach ($requiredFields as $field => $label) {
+            $value = $data[$field] ?? '';
+            $trimmedValue = trim($value);
+            
+            if (empty($trimmedValue) || 
+                strtolower($trimmedValue) === 'n/a' || 
+                strtolower($trimmedValue) === 'n/a.' ||
+                strtolower($trimmedValue) === 'na' ||
+                strtolower($trimmedValue) === 'não informado' ||
+                strtolower($trimmedValue) === 'não disponível' ||
+                strtolower($trimmedValue) === 'não especificado' ||
+                strtolower($trimmedValue) === 'órgão não especificado') {
+                $emptyFields[$field] = $label;
+                Log::warning("Campo vazio detectado: {$field} = '{$value}'");
+            }
+        }
+
+        return $emptyFields;
+    }
+
+    /**
+     * Valida dados antes da geração do recurso
+     */
+    private function validateDataBeforeGeneration($data)
+    {
+        $emptyFields = $this->detectAndFixEmptyFields($data);
+        
+        if (!empty($emptyFields)) {
+            $fieldList = implode(', ', array_values($emptyFields));
+            throw new \Exception("Os seguintes campos estão vazios ou contêm 'n/a': {$fieldList}. Por favor, preencha todos os campos obrigatórios antes de gerar o recurso.");
+        }
+
+        return true;
     }
 }

@@ -1,0 +1,416 @@
+[
+    {
+      "code": "501-00",
+      "description": "Dirigir sob a influência de álcool ou de qualquer outra substância psicoativa",
+      "law_article": "Art. 165 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "757-90",
+      "description": "Recusar-se a ser submetido ao teste do etilômetro (bafômetro) ou perícia",
+      "law_article": "Art. 165-A do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "502-91",
+      "description": "Dirigir veículo sem possuir Carteira Nacional de Habilitação (CNH) ou Permissão",
+      "law_article": "Art. 162, I do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "503-71",
+      "description": "Dirigir veículo com CNH ou Permissão de categoria diferente da do veículo",
+      "law_article": "Art. 162, III do CTB",
+      "base_amount": 586.94,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "504-50",
+      "description": "Dirigir com a CNH cassada ou com a suspensão do direito de dirigir",
+      "law_article": "Art. 162, II do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "763-31",
+      "description": "Conduzir veículo com a CNH vencida há mais de 30 dias",
+      "law_article": "Art. 162, V do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "509-60",
+      "description": "Entregar a direção do veículo a pessoa sem CNH ou Permissão",
+      "law_article": "Art. 163 c/c 162, I do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "511-80",
+      "description": "Permitir posse/condução do veículo a pessoa com CNH cassada ou suspensa",
+      "law_article": "Art. 164 c/c 162, II do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "518-51",
+      "description": "Transitar em velocidade superior à máxima permitida em até 20%",
+      "law_article": "Art. 218, I do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "518-52",
+      "description": "Transitar em velocidade superior à máxima permitida em mais de 20% até 50%",
+      "law_article": "Art. 218, II do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "519-30",
+      "description": "Transitar em velocidade superior à máxima permitida em mais de 50%",
+      "law_article": "Art. 218, III do CTB",
+      "base_amount": 880.41,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "745-50",
+      "description": "Avançar o sinal vermelho do semáforo",
+      "law_article": "Art. 208 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "605-03",
+      "description": "Avançar o sinal de parada obrigatória (placa de PARE)",
+      "law_article": "Art. 208 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "762-52",
+      "description": "Dirigir veículo manuseando ou segurando telefone celular",
+      "law_article": "Art. 252, Parágrafo Único do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "521-52",
+      "description": "Deixar o condutor ou passageiro de usar o cinto de segurança",
+      "law_article": "Art. 167 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "525-83",
+      "description": "Transportar crianças sem observância das normas de segurança (cadeirinha)",
+      "law_article": "Art. 168 do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "531-00",
+      "description": "Disputar corrida (racha)",
+      "law_article": "Art. 173 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "534-40",
+      "description": "Utilizar-se de veículo para demonstrar ou exibir manobra perigosa",
+      "law_article": "Art. 175 do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "545-21",
+      "description": "Estacionar no passeio / calçada",
+      "law_article": "Art. 181, VIII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "545-22",
+      "description": "Estacionar sobre faixa de pedestre",
+      "law_article": "Art. 181, VIII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "554-12",
+      "description": "Estacionar em fila dupla",
+      "law_article": "Art. 181, XI do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "548-70",
+      "description": "Estacionar em desacordo com a regulamentação (estacionamento rotativo)",
+      "law_article": "Art. 181, XVII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "550-90",
+      "description": "Estacionar em vaga de pessoa com deficiência, sem credencial",
+      "law_article": "Art. 181, XX do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "761-72",
+      "description": "Estacionar em vaga de idoso, sem credencial",
+      "law_article": "Art. 181, XX do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "581-96",
+      "description": "Deixar de indicar com antecedência (seta) a manobra",
+      "law_article": "Art. 196 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "599-10",
+      "description": "Ultrapassar pela contramão em linha contínua",
+      "law_article": "Art. 203, V do CTB",
+      "base_amount": 1467.35,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "604-12",
+      "description": "Deixar de dar preferência a pedestre na faixa",
+      "law_article": "Art. 214, I do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "656-40",
+      "description": "Conduzir veículo que não esteja registrado e devidamente licenciado",
+      "law_article": "Art. 230, V do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "659-92",
+      "description": "Conduzir o veículo com a cor ou característica alterada",
+      "law_article": "Art. 230, VII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "663-72",
+      "description": "Conduzir o veículo com a placa de identificação sem condições de legibilidade",
+      "law_article": "Art. 230, VI do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "655-61",
+      "description": "Conduzir o veículo em mau estado de conservação (ex: pneu careca)",
+      "law_article": "Art. 230, XVIII do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "675-00",
+      "description": "Usar no veículo equipamento com som em volume não autorizado pelo CONTRAN",
+      "law_article": "Art. 228 do CTB",
+      "base_amount": 195.23,
+      "points": 5,
+      "severity": "severe",
+      "active": true
+    },
+    {
+      "code": "684-01",
+      "description": "Conduzir o veículo sem os documentos de porte obrigatório (CNH, CRLV)",
+      "law_article": "Art. 232 do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "700-61",
+      "description": "Conduzir motocicleta sem usar capacete com viseira",
+      "law_article": "Art. 244, I do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "701-40",
+      "description": "Transportar passageiro em motocicleta sem capacete",
+      "law_article": "Art. 244, II do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "702-20",
+      "description": "Conduzir motocicleta fazendo malabarismo ou empinando (equilibrando-se em uma roda)",
+      "law_article": "Art. 244, III do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "703-01",
+      "description": "Conduzir motocicleta com os faróis apagados",
+      "law_article": "Art. 244, IV do CTB",
+      "base_amount": 293.47,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "722-01",
+      "description": "Usar a buzina em local ou horário proibido pela sinalização",
+      "law_article": "Art. 227, II do CTB",
+      "base_amount": 88.38,
+      "points": 3,
+      "severity": "light",
+      "active": true
+    },
+    {
+      "code": "573-80",
+      "description": "Deixar de manter a luz baixa acesa, durante a noite",
+      "law_article": "Art. 250, I, 'a' do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "772-20",
+      "description": "Deixar de manter a luz baixa acesa em rodovias de pista simples fora do perímetro urbano, durante o dia",
+      "law_article": "Art. 250, I, 'b' do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "734-70",
+      "description": "Usar o veículo para arremessar, sobre os pedestres ou veículos, água ou detritos",
+      "law_article": "Art. 171 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "537-90",
+      "description": "Atirar do veículo ou abandonar na via objetos ou substâncias",
+      "law_article": "Art. 172 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "556-80",
+      "description": "Parar o veículo sobre a faixa de pedestres na mudança de sinal",
+      "law_article": "Art. 183 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "541-00",
+      "description": "Ter seu veículo imobilizado na via por falta de combustível (pane seca)",
+      "law_article": "Art. 180 do CTB",
+      "base_amount": 130.16,
+      "points": 4,
+      "severity": "medium",
+      "active": true
+    },
+    {
+      "code": "735-50",
+      "description": "Usar o veículo de forma a perturbar o sossego público (com som excessivo, arrancada brusca)",
+      "law_article": "Art. 175, Parágrafo Único do CTB",
+      "base_amount": 2934.70,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    },
+    {
+      "code": "758-70",
+      "description": "Usar o veículo para, deliberadamente, interromper, restringir ou perturbar a circulação na via",
+      "law_article": "Art. 253-A do CTB",
+      "base_amount": 5869.40,
+      "points": 7,
+      "severity": "very_severe",
+      "active": true
+    }
+  ]

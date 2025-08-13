@@ -91,7 +91,7 @@
                             <h4 class="text-md font-medium text-gray-900 mb-3">Ações</h4>
                             <div class="flex flex-wrap gap-2">
                                 <button id="btnCopyText" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-xs font-semibold">Copiar texto</button>
-                                <a href="{{ route('appeals.download', $appeal->id) }}" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-xs font-semibold">Baixar PDF</a>
+                                <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'pdf']) }}" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-xs font-semibold">Baixar PDF</a>
                                 <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'doc']) }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-semibold">Baixar DOC</a>
                                 <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'docx']) }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-semibold">Baixar DOCX</a>
                             </div>
@@ -113,7 +113,7 @@
 
                     <div class="mt-8 flex justify-end gap-2">
                         <a href="{{ route('tickets.show', $appeal->ticket->id) }}" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">Ver Multa</a>
-                        <a href="{{ route('appeals.download', $appeal->id) }}" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-800 focus:outline-none focus:border-green-800 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">Baixar PDF</a>
+                        <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'pdf']) }}" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-800 focus:outline-none focus:border-green-800 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">Baixar PDF</a>
                     </div>
                 </div>
             </div>

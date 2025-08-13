@@ -249,7 +249,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Número da Notificação</label>
-                        <input type="text" name="citation_number" id="citation_number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="citation_number" id="citation_number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" oninput="detectOrgaoAutuador()">
                     </div>
                     
                     <div>
@@ -264,7 +264,7 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Local</label>
-                        <input type="text" name="location" id="location" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="location" id="location" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" oninput="detectOrgaoAutuador()">
                     </div>
                     
                     <div>
@@ -289,10 +289,40 @@
                     
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Motivo da Infração</label>
-                        <textarea name="reason" id="reason" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Descreva o motivo da infração..." oninput="detectInfractionType(this.value)"></textarea>
+                        <textarea name="reason" id="reason" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Descreva o motivo da infração..." oninput="detectInfractionType(this.value); detectOrgaoAutuador()"></textarea>
                         
                         <!-- Status de Detecção -->
                         <div id="detection-status" class="mt-2 hidden"></div>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Órgão Autuador / JARI</label>
+                        <div class="space-y-3">
+                            <div id="orgao-detected" class="hidden">
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                        <span class="text-sm text-green-700">
+                                            <strong>Órgão identificado:</strong> <span id="orgao-nome"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="orgao-not-detected" class="hidden">
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>
+                                        <span class="text-sm text-yellow-700">
+                                            <strong>Órgão não identificado automaticamente.</strong> Por favor, informe o órgão responsável.
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="text" name="orgao_autuador" id="orgao_autuador" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: JARI Estadual, JARI Municipal, DETRAN-RS, etc.">
+                            <p class="text-xs text-gray-500">Informe o órgão responsável pela análise do recurso (JARI, DETRAN, etc.)</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -327,7 +357,18 @@
                 </div>
                 
                 <div class="text-center">
-                    <button type="button" onclick="generateAppeal()" id="btnSubmit" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                    <div id="orgao-validation-error" class="hidden mb-4">
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                                <span class="text-red-700">
+                                    <strong>⚠️ Órgão não informado!</strong> Por favor, informe o órgão responsável pela análise do recurso antes de continuar.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" onclick="validateAndGenerateAppeal()" id="btnSubmit" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
                         🚀 Gerar Recurso
                     </button>
                 </div>
@@ -419,6 +460,12 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
         updateProgress();
         setupUploadListeners();
+        
+        // Inicializar campo orgao_autuador com valor padrão
+        if (!document.getElementById('orgao_autuador').value.trim()) {
+            document.getElementById('orgao_autuador').value = 'JARI Estadual';
+        }
+        
         console.log('✅ Inicialização concluída');
     } catch (error) {
         console.error('❌ Erro na inicialização:', error);
@@ -1309,13 +1356,139 @@ function selectJustification(index) {
     // Salvar a estratégia selecionada
     selectedJustification = index;
     
-    // Mostrar confirmação
-    const step4Content = document.querySelector('#step-4 .bg-white');
-    const selectedCard = step4Content.querySelectorAll('.border')[index];
-    selectedCard.classList.add('ring-2', 'ring-green-500', 'bg-green-50');
-    
     // Avançar para o próximo passo
     nextStep();
+}
+
+// Função para detectar automaticamente o órgão baseado nos dados da multa
+function detectOrgaoAutuador() {
+    const location = document.getElementById('location')?.value || '';
+    const citationNumber = document.getElementById('citation_number')?.value || '';
+    const reason = document.getElementById('reason')?.value || '';
+    
+    console.log('🔍 Detectando órgão autuador...', { location, citationNumber, reason });
+    
+    // Mapeamento de padrões para órgãos
+    const orgaoPatterns = {
+        'JARI': {
+            patterns: ['jari', 'junta', 'administrativa', 'recursos', 'infrações'],
+            default: 'JARI Estadual'
+        },
+        'DETRAN': {
+            patterns: ['detran', 'departamento', 'trânsito', 'estado'],
+            default: 'DETRAN Estadual'
+        },
+        'CET': {
+            patterns: ['cet', 'companhia', 'engenharia', 'tráfego', 'municipal'],
+            default: 'CET Municipal'
+        },
+        'PM': {
+            patterns: ['pm', 'polícia', 'militar', 'rodoviária'],
+            default: 'Polícia Militar Rodoviária'
+        },
+        'PRF': {
+            patterns: ['prf', 'polícia', 'rodoviária', 'federal', 'br-'],
+            default: 'Polícia Rodoviária Federal'
+        }
+    };
+    
+    let detectedOrgao = null;
+    let confidence = 0;
+    
+    // Verificar padrões no local
+    if (location) {
+        const locationLower = location.toLowerCase();
+        for (const [orgao, config] of Object.entries(orgaoPatterns)) {
+            for (const pattern of config.patterns) {
+                if (locationLower.includes(pattern)) {
+                    detectedOrgao = config.default;
+                    confidence = 0.8;
+                    break;
+                }
+            }
+            if (detectedOrgao) break;
+        }
+    }
+    
+    // Verificar padrões no número da autuação
+    if (citationNumber && !detectedOrgao) {
+        const citationLower = citationNumber.toLowerCase();
+        for (const [orgao, config] of Object.entries(orgaoPatterns)) {
+            for (const pattern of config.patterns) {
+                if (citationLower.includes(pattern)) {
+                    detectedOrgao = config.default;
+                    confidence = 0.6;
+                    break;
+                }
+            }
+            if (detectedOrgao) break;
+        }
+    }
+    
+    // Verificar padrões no motivo da infração
+    if (reason && !detectedOrgao) {
+        const reasonLower = reason.toLowerCase();
+        for (const [orgao, config] of Object.entries(orgaoPatterns)) {
+            for (const pattern of config.patterns) {
+                if (reasonLower.includes(pattern)) {
+                    detectedOrgao = config.default;
+                    confidence = 0.4;
+                    break;
+                }
+            }
+            if (detectedOrgao) break;
+        }
+    }
+    
+    // Mostrar resultado da detecção
+    if (detectedOrgao && confidence > 0.5) {
+        document.getElementById('orgao_autuador').value = detectedOrgao;
+        document.getElementById('orgao-nome').textContent = detectedOrgao;
+        document.getElementById('orgao-detected').classList.remove('hidden');
+        document.getElementById('orgao-not-detected').classList.add('hidden');
+        console.log('✅ Órgão detectado:', detectedOrgao, 'Confiança:', confidence);
+    } else {
+        // Se não detectou, definir um valor padrão
+        if (!document.getElementById('orgao_autuador').value.trim()) {
+            document.getElementById('orgao_autuador').value = 'JARI Estadual';
+        }
+        document.getElementById('orgao-detected').classList.add('hidden');
+        document.getElementById('orgao-not-detected').classList.remove('hidden');
+        console.log('❌ Órgão não detectado automaticamente, usando padrão');
+    }
+}
+
+// Função para validar se o órgão foi informado antes de gerar o recurso
+function validateAndGenerateAppeal() {
+    const orgaoAutuador = document.getElementById('orgao_autuador')?.value?.trim();
+    
+    if (!orgaoAutuador) {
+        // Mostrar erro de validação
+        document.getElementById('orgao-validation-error').classList.remove('hidden');
+        
+        // Destacar o campo
+        const orgaoField = document.getElementById('orgao_autuador');
+        orgaoField.classList.add('border-red-500', 'ring-2', 'ring-red-500');
+        
+        // Scroll para o campo
+        orgaoField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Focar no campo
+        orgaoField.focus();
+        
+        console.log('❌ Órgão não informado');
+        return;
+    }
+    
+    // Esconder erro de validação
+    document.getElementById('orgao-validation-error').classList.add('hidden');
+    
+    // Remover destaque de erro
+    const orgaoField = document.getElementById('orgao_autuador');
+    orgaoField.classList.remove('border-red-500', 'ring-2', 'ring-red-500');
+    
+    // Gerar o recurso
+    generateAppeal();
 }
 
 function generateAppeal() {
@@ -1335,16 +1508,31 @@ function generateAppeal() {
         { id: 'time', label: 'Horário da Infração' },
         { id: 'amount', label: 'Valor da Multa' },
         { id: 'location', label: 'Local da Infração' },
-        { id: 'reason', label: 'Motivo da Infração' }
+        { id: 'reason', label: 'Motivo da Infração' },
+        { id: 'orgao_autuador', label: 'Órgão Autuador' }
     ];
     
     const missingFields = [];
     
     requiredFields.forEach(field => {
         const element = document.getElementById(field.id);
-        if (element && (!element.value || element.value.trim() === '')) {
-            missingFields.push(field.label);
-            highlightField(field.id, 'error');
+        if (element) {
+            const value = element.value.trim();
+            if (!value || 
+                value.toLowerCase() === 'n/a' || 
+                value.toLowerCase() === 'n/a.' ||
+                value.toLowerCase() === 'na' ||
+                value.toLowerCase() === 'não informado' ||
+                value.toLowerCase() === 'não disponível' ||
+                value.toLowerCase() === 'não especificado') {
+                missingFields.push(field.label);
+                highlightField(field.id, 'error');
+                
+                // Adiciona mensagem específica para campos com "n/a"
+                if (value.toLowerCase().includes('n/a') || value.toLowerCase().includes('não informado')) {
+                    showFieldError(field.id, `Campo "${field.label}" não pode conter "n/a" ou estar vazio`);
+                }
+            }
         }
     });
     
@@ -1386,6 +1574,14 @@ function generateAppeal() {
     // Coletar dados do formulário
     const formData = new FormData(document.getElementById('appealForm'));
     
+    // Verificar se o campo orgao_autuador está preenchido
+    const orgaoAutuador = document.getElementById('orgao_autuador')?.value?.trim();
+    if (!orgaoAutuador) {
+        alert('❌ Por favor, preencha o campo "Órgão Autuador" antes de continuar.');
+        document.getElementById('orgao_autuador').focus();
+        return;
+    }
+    
     // Adicionar estratégia selecionada
     if (selectedJustification !== null) {
         formData.append('selected_justification', selectedJustification);
@@ -1415,6 +1611,9 @@ function generateAppeal() {
         </div>
     `;
     document.body.appendChild(loadingOverlay);
+    
+    // Log para debug dos dados sendo enviados
+    console.log('📤 Dados sendo enviados:', Object.fromEntries(formData));
     
     // Fazer requisição para gerar o recurso
     fetch('/appeals/create-new', {
@@ -1539,6 +1738,28 @@ function highlightField(fieldId, type) {
     }
 }
 
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        // Remove mensagem de erro anterior se existir
+        const existingError = field.parentNode.querySelector('.field-error-message');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        // Cria nova mensagem de erro
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'field-error-message text-red-600 text-sm mt-1 flex items-center';
+        errorDiv.innerHTML = `
+            <i class="fas fa-exclamation-circle mr-1"></i>
+            ${message}
+        `;
+        
+        // Insere após o campo
+        field.parentNode.insertBefore(errorDiv, field.nextSibling);
+    }
+}
+
 function ensureErrorPlaceholder(fieldId) {
     const input = document.getElementById(fieldId);
     if (!input) return null;
@@ -1602,6 +1823,7 @@ function populateReviewSummary() {
         ['Local', document.getElementById('location')?.value],
         ['Valor', document.getElementById('amount')?.value],
         ['Motivo', document.getElementById('reason')?.value],
+        ['Órgão Autuador', document.getElementById('orgao_autuador')?.value || 'Não informado'],
     ];
     grid.innerHTML = entries.map(([label, value]) => `
         <div class="p-3 bg-white border rounded">

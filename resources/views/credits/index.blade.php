@@ -8,9 +8,10 @@
                 <span class="mr-4 px-4 py-2 bg-blue-100 text-blue-800 rounded-full">
                     <strong>Seus créditos:</strong> {{ Auth::user()->credits }}
                 </span>
-                <a href="{{ route('credits.packages') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                    Comprar créditos
-                </a>
+                <!-- Botão de compra desativado temporariamente -->
+                <div class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed">
+                    Comprar créditos (Em breve)
+                </div>
             </div>
         </div>
     </x-slot>
@@ -85,8 +86,8 @@
                             </svg>
                             <p class="text-lg">Nenhuma transação encontrada.</p>
                             <p class="mt-2">
-                                <a href="{{ route('credits.packages') }}" class="text-blue-600 hover:underline">Compre seus primeiros créditos</a>
-                                para começar a usar o sistema.
+                                <!-- Link de compra desativado temporariamente -->
+                                <span class="text-gray-500">Funcionalidade de compra em desenvolvimento.</span>
                             </p>
                         </div>
                     @endif

@@ -27,6 +27,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tickets', TicketController::class);
     Route::get('/tickets/{ticket}/create-appeal', [AppealController::class, 'createFromTicket'])->name('tickets.create_appeal');
     
+    // Busca Automática de Multas
+    Route::get('/traffic-tickets', [App\Http\Controllers\TrafficTicketController::class, 'index'])->name('traffic-tickets.index');
+    Route::post('/traffic-tickets/search-cpf', [App\Http\Controllers\TrafficTicketController::class, 'searchByCpf'])->name('traffic-tickets.search-cpf');
+    Route::post('/traffic-tickets/search-cnh', [App\Http\Controllers\TrafficTicketController::class, 'searchByCnh'])->name('traffic-tickets.search-cnh');
+    Route::post('/traffic-tickets/search-plate', [App\Http\Controllers\TrafficTicketController::class, 'searchByPlate'])->name('traffic-tickets.search-plate');
+    Route::post('/traffic-tickets/search-all', [App\Http\Controllers\TrafficTicketController::class, 'searchAll'])->name('traffic-tickets.search-all');
+    Route::get('/traffic-tickets/statistics', [App\Http\Controllers\TrafficTicketController::class, 'statistics'])->name('traffic-tickets.statistics');
+    
     // Appeals (Recursos) - Rotas específicas primeiro para evitar conflitos
     Route::get('/appeals/create-new', [AppealController::class, 'createNew'])->name('appeals.create_new');
 Route::post('/appeals/create-new', [AppealController::class, 'storeNew'])->name('appeals.store_new');

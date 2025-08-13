@@ -142,7 +142,7 @@
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                         </svg>
                                                     </a>
-                                                    <a href="{{ route('appeals.download', $appeal->id) }}" class="text-green-600 hover:text-green-900" title="Baixar PDF">
+                                                    <a href="{{ route('appeals.download', ['appeal' => $appeal->id, 'format' => 'pdf']) }}" class="text-green-600 hover:text-green-900" title="Baixar PDF">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                         </svg>

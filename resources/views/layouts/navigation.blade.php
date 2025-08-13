@@ -37,15 +37,14 @@
                 </x-nav-link>
             </li>
             
+            <!-- Link de créditos desativado temporariamente -->
             <li>
-                <x-nav-link :href="route('credits.packages')" :active="request()->routeIs('credits.*')" class="group">
-                    <div class="flex items-center">
-                        <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-yellow-500 transition-colors duration-200">
-                            <i class="fas fa-coins text-yellow-600 group-hover:text-white transition-colors duration-200"></i>
-                        </div>
-                        <span class="font-medium">{{ __('Créditos') }}</span>
+                <div class="flex items-center px-3 py-2 text-sm text-gray-400 cursor-not-allowed">
+                    <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-coins text-gray-400"></i>
                     </div>
-                </x-nav-link>
+                    <span class="font-medium">{{ __('Créditos') }} (Em breve)</span>
+                </div>
             </li>
             
             <!-- Separador visual -->
@@ -69,6 +68,15 @@
                         <i class="fas fa-rocket text-gray-500 group-hover:text-green-600 transition-colors duration-200 text-xs"></i>
                     </div>
                     <span>Gerar Recurso</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="{{ route('traffic-tickets.index') }}" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-all duration-200 group">
+                    <div class="w-6 h-6 bg-gray-100 rounded-md flex items-center justify-center mr-3 group-hover:bg-purple-100 transition-colors duration-200">
+                        <i class="fas fa-search text-gray-500 group-hover:text-purple-600 transition-colors duration-200 text-xs"></i>
+                    </div>
+                    <span>Buscar Multas</span>
                 </a>
             </li>
             
@@ -137,9 +145,10 @@
                         </div>
                         <span class="text-lg font-bold text-blue-600">{{ Auth::user()->credits }}</span>
                     </div>
-                    <a href="{{ route('credits.packages') }}" class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-2 px-3 rounded-lg transition-colors duration-200 flex items-center justify-center">
-                        <i class="fas fa-plus mr-1"></i> Comprar
-                    </a>
+                    <!-- Botão de compra desativado temporariamente -->
+                    <div class="mt-2 w-full bg-gray-400 text-white text-xs font-medium py-2 px-3 rounded-lg flex items-center justify-center cursor-not-allowed">
+                        <i class="fas fa-clock mr-1"></i> Em breve
+                    </div>
                 </div>
             </div>
         </div>

@@ -50,11 +50,11 @@
                                     <div class="text-xs text-blue-400">3 créditos • IA Híbrida</div>
                                 </div>
                             </a>
-                            <a href="{{ route('credits.packages') }}" id="btn-buy-credits" 
-                               class="inline-flex items-center px-6 py-3 bg-blue-700/50 backdrop-blur-sm text-white rounded-xl font-medium shadow-lg hover:bg-blue-700 transition-all duration-300 border border-white/20">
-                                <i class="fas fa-coins mr-2 text-yellow-300"></i>
-                                Comprar Créditos
-                            </a>
+                            <!-- Botão de compra de créditos desativado temporariamente -->
+                            <div class="inline-flex items-center px-6 py-3 bg-gray-400/50 backdrop-blur-sm text-white rounded-xl font-medium shadow-lg border border-white/20 cursor-not-allowed">
+                                <i class="fas fa-coins mr-2 text-gray-300"></i>
+                                Comprar Créditos (Em breve)
+                            </div>
                         </div>
                     </div>
                     <div class="hidden md:block md:w-1/3 relative">
@@ -156,17 +156,18 @@
                             <p class="text-green-600 text-sm">Custa 3 créditos • Máxima qualidade</p>
                         </a>
                         
-                        <a href="{{ route('credits.packages') }}" 
-                           class="group bg-gradient-to-br from-yellow-50 to-amber-50 hover:from-yellow-100 hover:to-amber-100 p-6 rounded-xl border-2 border-yellow-200 hover:border-yellow-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                        <!-- Card de compra de créditos desativado temporariamente
+                        <!-- Card de compra de créditos desativado temporariamente -->
+                        <div class="group bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl border-2 border-gray-200 transition-all duration-300 cursor-not-allowed">
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center group-hover:bg-yellow-600 transition-all duration-300 shadow-lg">
+                                <div class="w-12 h-12 bg-gray-400 rounded-xl flex items-center justify-center shadow-lg">
                                     <i class="fas fa-coins text-white text-lg"></i>
                                 </div>
-                                <i class="fas fa-chevron-right text-yellow-300 group-hover:text-yellow-500 transition-colors duration-300"></i>
+                                <i class="fas fa-clock text-gray-400 text-lg"></i>
                             </div>
-                            <h4 class="font-bold text-yellow-800 text-lg mb-2">Comprar Créditos</h4>
-                            <p class="text-yellow-600 text-sm">Adquira mais créditos para gerar recursos</p>
-                        </a>
+                            <h4 class="font-bold text-gray-600 text-lg mb-2">Comprar Créditos</h4>
+                            <p class="text-yellow-600 text-sm">Funcionalidade em desenvolvimento</p>
+                        </div>
                     
                     <a href="{{ route('profile.edit') }}" 
                        class="group bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 p-6 rounded-xl border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
