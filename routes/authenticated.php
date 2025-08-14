@@ -137,16 +137,15 @@ Route::prefix('cliente')->name('cliente.')->group(function () {
 Route::post('/api/vehicle/lookup', [App\Http\Controllers\Api\VehicleController::class, 'lookup']);
 
 // Rotas de administração
-// Rotas de administração desativadas temporariamente (controllers ausentes)
-// Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-//     Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
-//     Route::get('/users', [App\Http\Controllers\Admin\AdminController::class, 'users'])->name('users');
-//     Route::get('/tickets', [App\Http\Controllers\Admin\AdminController::class, 'tickets'])->name('tickets');
-//     Route::get('/appeals', [App\Http\Controllers\Admin\AdminController::class, 'appeals'])->name('appeals');
-//     
-//     // Gerenciamento de usuários
-//     Route::get('/users/{user}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
-//     Route::patch('/users/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
-//     Route::post('/users/{user}/toggle-block', [App\Http\Controllers\Admin\UserController::class, 'toggleBlock'])->name('users.toggle_block');
-//     Route::post('/users/{user}/credit', [App\Http\Controllers\Admin\UserController::class, 'credit'])->name('users.credit');
-// });
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
+    Route::get('/users', [App\Http\Controllers\Admin\AdminController::class, 'users'])->name('users');
+    Route::get('/tickets', [App\Http\Controllers\Admin\AdminController::class, 'tickets'])->name('tickets');
+    Route::get('/appeals', [App\Http\Controllers\Admin\AdminController::class, 'appeals'])->name('appeals');
+    
+    // Gerenciamento de usuários
+    Route::get('/users/{user}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+    Route::post('/users/{user}/toggle-block', [App\Http\Controllers\Admin\UserController::class, 'toggleBlock'])->name('users.toggle_block');
+    Route::post('/users/{user}/credit', [App\Http\Controllers\Admin\UserController::class, 'credit'])->name('users.credit');
+});

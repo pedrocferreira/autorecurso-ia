@@ -42,13 +42,26 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        // Estatísticas mensais de recursos gerados
+        // Estatísticas mensais de recursos gerados (compatível com SQLite e MySQL)
+        $driver = DB::getDriverName();
+        if ($driver === 'sqlite') {
+            $monthExpr = "CAST(strftime('%m', created_at) AS INTEGER)";
+            $yearExpr = "CAST(strftime('%Y', created_at) AS INTEGER)";
+            $yearWhereRaw = "strftime('%Y', created_at) = ?";
+            $bindings = [date('Y')];
+        } else {
+            $monthExpr = 'MONTH(created_at)';
+            $yearExpr = 'YEAR(created_at)';
+            $yearWhereRaw = 'YEAR(created_at) = ?';
+            $bindings = [date('Y')];
+        }
+
         $monthly_stats = Appeal::select(
-                DB::raw('MONTH(created_at) as month'),
-                DB::raw('YEAR(created_at) as year'),
+                DB::raw("{$monthExpr} as month"),
+                DB::raw("{$yearExpr} as year"),
                 DB::raw('COUNT(*) as total')
             )
-            ->whereYear('created_at', date('Y'))
+            ->whereRaw($yearWhereRaw, $bindings)
             ->groupBy('year', 'month')
             ->orderBy('year')
             ->orderBy('month')

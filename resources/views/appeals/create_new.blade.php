@@ -465,6 +465,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!document.getElementById('orgao_autuador').value.trim()) {
             document.getElementById('orgao_autuador').value = 'JARI Estadual';
         }
+
+        // Evitar submit padrão do formulário (Enter ou submit nativo)
+        const form = document.getElementById('appealForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+            });
+        }
         
         console.log('✅ Inicialização concluída');
     } catch (error) {
@@ -527,11 +535,17 @@ function updateNavigationButtons() {
         btnPrev.classList.add('hidden');
     }
     
-    if (currentStep === totalSteps - 1) {
+    // Somente permitir avançar com "Próximo" até a revisão (step 5)
+    if (currentStep < 5) {
+        btnNext.classList.remove('hidden');
+        btnSubmit.classList.add('hidden');
+    } else if (currentStep === 5) {
+        // Na revisão, ocultar "Próximo" e mostrar apenas o botão de gerar
         btnNext.classList.add('hidden');
         btnSubmit.classList.remove('hidden');
     } else {
-        btnNext.classList.remove('hidden');
+        // No step 6 (resultado), ocultar ambos
+        btnNext.classList.add('hidden');
         btnSubmit.classList.add('hidden');
     }
 }
