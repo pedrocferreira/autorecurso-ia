@@ -28,6 +28,8 @@ class UserController extends Controller
             'email' => 'sometimes|email',
             'is_admin' => 'nullable|boolean',
             'blocked' => 'nullable|boolean',
+            'subscription_active' => 'nullable|boolean',
+            'subscription_ends_at' => 'nullable|date',
         ]);
 
         if ($request->has('name')) {
@@ -38,6 +40,17 @@ class UserController extends Controller
         }
         $user->is_admin = (bool) $request->boolean('is_admin');
         $user->blocked = (bool) $request->boolean('blocked');
+        if ($request->has('subscription_active')) {
+            $user->subscription_active = (bool) $request->boolean('subscription_active');
+        } else {
+            // Se o checkbox não vier marcado, definir como false
+            $user->subscription_active = false;
+        }
+        if ($request->filled('subscription_ends_at')) {
+            $user->subscription_ends_at = $request->date('subscription_ends_at');
+        } else {
+            $user->subscription_ends_at = null;
+        }
         $user->save();
 
         return redirect()->route('admin.users')->with('success', 'Usuário atualizado com sucesso.');

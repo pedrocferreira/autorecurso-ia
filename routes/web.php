@@ -49,6 +49,10 @@ Route::get('/test-upload-simple', function () {
     return view('appeals.create_new_simple');
 })->name('test.upload_simple');
 
+Route::get('/vehicle-upload', function () {
+    return view('appeals.vehicle_upload');
+})->name('vehicle.upload');
+
 // Rotas de autenticação Google
 Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])
     ->name('auth.google');

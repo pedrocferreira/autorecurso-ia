@@ -46,13 +46,22 @@
             </div>
 
             <div class="bg-white shadow-sm sm:rounded-lg p-6 mt-6">
-                <h3 class="text-lg font-semibold mb-4">Ajustar Créditos</h3>
-                <form action="{{ route('admin.users.credit', $user) }}" method="POST" class="flex space-x-3">
+                <h3 class="text-lg font-semibold mb-4">Assinatura</h3>
+                <form action="{{ route('admin.users.update', $user) }}" method="POST" class="space-y-3">
                     @csrf
-                    <input type="number" name="amount" placeholder="Ex: 10 ou -5" class="border rounded px-3 py-2 w-full" required>
-                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Aplicar</button>
+                    @method('PATCH')
+                    <div class="flex items-center space-x-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="subscription_active" value="1" {{ $user->subscription_active ? 'checked' : '' }}>
+                            <span>Ativa</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Válida até</label>
+                        <input type="date" name="subscription_ends_at" value="{{ optional($user->subscription_ends_at)->format('Y-m-d') }}" class="border rounded px-3 py-2 w-full">
+                    </div>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Salvar Assinatura</button>
                 </form>
-                <p class="text-xs text-gray-500 mt-2">Use valor positivo para adicionar e negativo para remover créditos.</p>
             </div>
             </div>
         </div>

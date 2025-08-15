@@ -1,3 +1,4 @@
+@auth
 <nav x-data="{ open: false }" class="bg-white/90 backdrop-blur-sm border-r border-gray-200/50 w-64 min-h-screen flex flex-col fixed z-30 shadow-lg">
     <!-- Logo com design melhorado -->
     <div class="flex items-center h-16 px-6 border-b border-gray-100/50 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -39,11 +40,17 @@
             
             <!-- Link de créditos desativado temporariamente -->
             <li>
-                <div class="flex items-center px-3 py-2 text-sm text-gray-400 cursor-not-allowed">
+                <div class="flex items-center px-3 py-2 text-sm text-gray-600">
                     <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
-                        <i class="fas fa-coins text-gray-400"></i>
+                        <i class="fas fa-id-card-alt text-gray-500"></i>
                     </div>
-                    <span class="font-medium">{{ __('Créditos') }} (Em breve)</span>
+                    <span class="font-medium">Assinatura:
+                        @if(Auth::user()->hasActiveSubscription())
+                            <span class="text-green-600 font-semibold">Ativa</span>
+                        @else
+                            <span class="text-red-600 font-semibold">Inativa</span>
+                        @endif
+                    </span>
                 </div>
             </li>
             
@@ -136,19 +143,24 @@
                     </x-slot>
                 </x-dropdown>
                 
-                <!-- Créditos disponíveis -->
+                <!-- Status da assinatura -->
                 <div class="mt-3 p-3 bg-white rounded-lg border border-gray-200/50">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <i class="fas fa-coins text-yellow-500 mr-2"></i>
-                            <span class="text-sm font-medium text-gray-700">Créditos</span>
+                            <i class="fas fa-id-card-alt text-blue-500 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-700">Assinatura</span>
                         </div>
-                        <span class="text-lg font-bold text-blue-600">{{ Auth::user()->credits }}</span>
+                        <span class="text-sm font-semibold">
+                            @if(Auth::user()->hasActiveSubscription())
+                                <span class="text-green-600">Ativa</span>
+                            @else
+                                <span class="text-red-600">Inativa</span>
+                            @endif
+                        </span>
                     </div>
-                    <!-- Botão de compra desativado temporariamente -->
-                    <div class="mt-2 w-full bg-gray-400 text-white text-xs font-medium py-2 px-3 rounded-lg flex items-center justify-center cursor-not-allowed">
-                        <i class="fas fa-clock mr-1"></i> Em breve
-                    </div>
+                    @if(Auth::user()->subscription_ends_at)
+                        <div class="mt-1 text-xs text-gray-500">Válida até: {{ Auth::user()->subscription_ends_at->format('d/m/Y') }}</div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -157,3 +169,4 @@
 
 <!-- Espaço para o conteúdo ao lado da sidebar -->
 <div class="w-64 flex-shrink-0"></div> 
+@endauth

@@ -91,7 +91,7 @@
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Upload da CNH -->
                 <div class="bg-white rounded-2xl border-2 border-green-200 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <div class="text-center mb-6">
@@ -172,6 +172,48 @@
                         <div class="flex items-center justify-center space-x-2">
                             <i class="fas fa-spinner fa-spin text-blue-500"></i>
                             <span class="text-blue-600">Processando notificação...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload do Documento do Veículo (CRLV) -->
+                <div class="bg-white rounded-2xl border-2 border-indigo-200 p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="text-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                            <i class="fas fa-car-side text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">
+                            🚗 Documento do Veículo (CRLV)
+                        </h3>
+                        <p class="text-gray-600">PDF ou imagem do CRLV/CRLV-e</p>
+                    </div>
+
+                    <!-- Área de Drop do CRLV -->
+                    <div id="vehicleDropZone"
+                         class="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center hover:border-indigo-400 hover:bg-indigo-50 transition-all duration-300 cursor-pointer bg-indigo-50/50 group"
+                         onclick="document.getElementById('vehicleFileInput').click()">
+                        
+                        <input type="file" 
+                               id="vehicleFileInput" 
+                               accept="image/*,application/pdf" 
+                               style="display: none;">
+                        
+                        <div class="group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-4"></i>
+                            <p class="text-lg font-semibold text-gray-700 mb-2">Arraste o CRLV aqui</p>
+                            <p class="text-sm text-gray-500 mb-4">ou clique para selecionar</p>
+                            <div class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-lg text-sm">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Formatos: PDF, JPG, PNG
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status do Upload CRLV -->
+                    <div id="vehicle-status" class="mt-4 text-center hidden">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i class="fas fa-spinner fa-spin text-indigo-500"></i>
+                            <span class="text-indigo-600">Processando CRLV...</span>
                         </div>
                     </div>
                 </div>
@@ -613,6 +655,32 @@ function setupUploadListeners() {
             };
             notificationFileInput.addEventListener('change', notificationFileInput._changeHandler);
         }
+
+        // Configurar CRLV/Documento do veículo
+        const vehicleFileInput = document.getElementById('vehicleFileInput');
+        if (vehicleFileInput) {
+            vehicleFileInput.removeEventListener('change', vehicleFileInput._changeHandler);
+            vehicleFileInput._changeHandler = function(event) {
+                console.log('📄 CRLV selecionado:', event.target.files[0]);
+                if (event.target.files.length > 0) {
+                    processVehicleDocUpload(event.target.files[0]);
+                }
+            };
+            vehicleFileInput.addEventListener('change', vehicleFileInput._changeHandler);
+        }
+        const vehicleDropZone = document.getElementById('vehicleDropZone');
+        if (vehicleDropZone) {
+            vehicleDropZone.addEventListener('dragover', function(event) {
+                event.preventDefault();
+            });
+            vehicleDropZone.addEventListener('drop', function(event) {
+                event.preventDefault();
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    processVehicleDocUpload(files[0]);
+                }
+            });
+        }
         
         // Drag and drop
         if (cnhDropZone) {
@@ -721,6 +789,57 @@ async function processNotificationUpload(file) {
     }
 }
 
+async function processVehicleDocUpload(file) {
+    console.log('🚀 Processando CRLV/Documento do veículo:', file.name);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', 'vehicle');
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    document.getElementById('vehicle-status').classList.remove('hidden');
+
+    try {
+        const response = await fetch('/extract-document-data', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData
+        });
+        const result = await response.json();
+        console.log('📋 Resultado CRLV:', result);
+        if (result.success && result.data && result.data.vehicle) {
+            const v = result.data.vehicle;
+            // Preencher campos
+            if (v.plate) document.getElementById('plate').value = v.plate.replace(/[^A-Z0-9]/g, '').toUpperCase();
+            if (v.model) document.getElementById('vehicle_model').value = v.model;
+            if (v.year) document.getElementById('vehicle_year').value = v.year;
+            if (v.color) document.getElementById('vehicle_color').value = v.color;
+            if (v.renavam) {
+                // Guardar renavam em campo oculto para posterior uso se necessário
+                let hidden = document.getElementById('vehicle_renavam');
+                if (!hidden) {
+                    hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = 'vehicle_renavam';
+                    hidden.id = 'vehicle_renavam';
+                    document.getElementById('appealForm').appendChild(hidden);
+                }
+                hidden.value = v.renavam;
+            }
+            alert('✅ Dados do veículo extraídos com sucesso!');
+        } else {
+            alert('❌ Não foi possível extrair dados do documento do veículo.');
+        }
+    } catch (error) {
+        console.error('❌ Erro ao processar CRLV:', error);
+        alert('❌ Erro ao processar CRLV.');
+    } finally {
+        document.getElementById('vehicle-status').classList.add('hidden');
+    }
+}
+
 function fillFormWithExtractedData(data) {
     console.log('📝 Preenchendo formulário com dados:', data);
     
@@ -778,6 +897,27 @@ function fillFormWithExtractedData(data) {
         document.getElementById('location').value = notificationData.location;
     }
     
+    // Também preencher dados do veículo a partir da notificação (quando disponível)
+    try {
+        const plateEl = document.getElementById('plate');
+        const modelEl = document.getElementById('vehicle_model');
+        const yearEl = document.getElementById('vehicle_year');
+        const colorEl = document.getElementById('vehicle_color');
+
+        if (notificationData.plate && !plateEl.value) {
+            plateEl.value = notificationData.plate.toUpperCase();
+        }
+        if ((notificationData.vehicle_model || notificationData.model) && !modelEl.value) {
+            modelEl.value = (notificationData.vehicle_model || notificationData.model);
+        }
+        if ((notificationData.vehicle_year || notificationData.year) && !yearEl.value) {
+            yearEl.value = (notificationData.vehicle_year || notificationData.year);
+        }
+        if ((notificationData.vehicle_color || notificationData.color) && !colorEl.value) {
+            colorEl.value = (notificationData.vehicle_color || notificationData.color);
+        }
+    } catch (e) { console.warn('⚠️ Não foi possível preencher dados do veículo da notificação', e); }
+
     console.log('✅ Formulário preenchido com sucesso!');
 }
 
@@ -981,19 +1121,11 @@ function clearDetection() {
 
 // Funções para busca de dados do veículo
 function formatPlateSearch(input) {
+    // Mantém apenas letras e números, uppercase, e coloca hífen após 3 caracteres
     let value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-    
-    // Formatar baseado no comprimento
     if (value.length > 3) {
-        // Formato Mercosul: AAA0A00
-        if (value.length >= 7) {
-            value = value.substring(0, 3) + '-' + value.substring(3, 4) + value.substring(4, 5) + value.substring(5, 7);
-        } else {
-            // Formato antigo: AAA0000
-            value = value.substring(0, 3) + '-' + value.substring(3);
-        }
+        value = value.substring(0, 3) + '-' + value.substring(3);
     }
-    
     input.value = value;
 }
 
@@ -1006,7 +1138,9 @@ function searchVehicleData() {
     }
     
     // Validar formato da placa (aceita Mercosul e formato antigo)
-    const placaRegex = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$|^[A-Z]{3}[0-9]{4}$/;
+    // Mercosul: AAA0A00 (4º dígito, 5º letra)
+    // Antigo:   AAA0000
+    const placaRegex = /^([A-Z]{3}[0-9][A-Z][0-9]{2}|[A-Z]{3}[0-9]{4})$/;
     const plateClean = plate.replace(/[^A-Z0-9]/g, ''); // Remove hífens e outros caracteres
     
     if (!placaRegex.test(plateClean)) {

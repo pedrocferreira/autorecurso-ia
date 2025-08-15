@@ -113,6 +113,11 @@ return [
         'base_url' => env('BRASIL_API_URL', 'https://api.brasil.io/v1'),
     ],
 
+    'apibrasil' => [
+        'token' => env('APIBRASIL_BEARER_TOKEN'),
+        'base_url' => env('APIBRASIL_BASE_URL', 'https://api.apibrasil.io/v1'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Email Services

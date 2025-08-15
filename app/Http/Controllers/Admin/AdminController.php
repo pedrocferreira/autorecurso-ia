@@ -73,13 +73,58 @@ class AdminController extends Controller
     /**
      * Exibe a lista de usuários.
      */
-    public function users(): View
+    public function users(Request $request): View
     {
-        $users = User::withCount(['tickets', 'appeals'])
-            ->orderBy('name')
-            ->paginate(15);
+        $query = User::query()->withCount(['tickets', 'appeals']);
 
-        return view('admin.users', compact('users'));
+        // Busca textual (nome/email)
+        if ($request->filled('q')) {
+            $term = trim($request->input('q'));
+            $query->where(function ($q) use ($term) {
+                $q->where('name', 'like', "%{$term}%")
+                  ->orWhere('email', 'like', "%{$term}%");
+            });
+        }
+
+        // Filtro de bloqueio
+        if ($request->filled('blocked') && in_array($request->input('blocked'), ['yes', 'no'], true)) {
+            $blocked = $request->input('blocked') === 'yes';
+            $query->where('blocked', $blocked);
+        }
+
+        // Filtro de assinatura
+        if ($request->filled('subscription') && in_array($request->input('subscription'), ['active', 'inactive'], true)) {
+            if ($request->input('subscription') === 'active') {
+                $query->where(function ($q) {
+                    $q->where('subscription_active', true)
+                      ->orWhere(function ($qq) {
+                          $qq->whereNotNull('subscription_ends_at')
+                             ->where('subscription_ends_at', '>=', now());
+                      });
+                });
+            } else {
+                $query->where(function ($q) {
+                    $q->where('subscription_active', false)
+                      ->where(function ($qq) {
+                          $qq->whereNull('subscription_ends_at')
+                             ->orWhere('subscription_ends_at', '<', now());
+                      });
+                });
+            }
+        }
+
+        // Ordenação
+        $query->orderBy('name');
+
+        $users = $query->paginate(15)->appends($request->query());
+
+        $filters = [
+            'q' => $request->input('q'),
+            'subscription' => $request->input('subscription'),
+            'blocked' => $request->input('blocked'),
+        ];
+
+        return view('admin.users', compact('users', 'filters'));
     }
 
     /**

@@ -14,13 +14,31 @@
                 </div>
             @endif
 
+            <div class="bg-white overflow-x-auto shadow-sm sm:rounded-lg p-4 mb-4">
+                <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                    <input type="text" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Buscar por nome ou email" class="w-full px-3 py-2 border rounded">
+                    <select name="subscription" class="w-full px-3 py-2 border rounded">
+                        <option value="">Assinatura</option>
+                        <option value="active" @selected(($filters['subscription'] ?? '')==='active')>Ativa</option>
+                        <option value="inactive" @selected(($filters['subscription'] ?? '')==='inactive')>Inativa</option>
+                    </select>
+                    <select name="blocked" class="w-full px-3 py-2 border rounded">
+                        <option value="">Bloqueio</option>
+                        <option value="yes" @selected(($filters['blocked'] ?? '')==='yes')>Bloqueado</option>
+                        <option value="no" @selected(($filters['blocked'] ?? '')==='no')>Ativo</option>
+                    </select>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded">Filtrar</button>
+                    <a href="{{ route('admin.users') }}" class="px-4 py-2 bg-gray-200 rounded text-center">Limpar</a>
+                </form>
+            </div>
+
             <div class="bg-white overflow-x-auto shadow-sm sm:rounded-lg">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Créditos</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Assinatura</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                         </tr>
@@ -30,7 +48,16 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $user->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $user->email }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-center">{{ $user->credits }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
+                                    @if($user->subscription_active || ($user->subscription_ends_at && $user->subscription_ends_at->isFuture()))
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Ativa</span>
+                                        @if($user->subscription_ends_at)
+                                            <div class="text-xs text-gray-500 mt-1">até {{ $user->subscription_ends_at->format('d/m/Y') }}</div>
+                                        @endif
+                                    @else
+                                        <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Inativa</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                     @if($user->blocked)
                                         <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Bloqueado</span>
@@ -47,12 +74,7 @@
                                                 {{ $user->blocked ? 'Desbloquear' : 'Bloquear' }}
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.users.credit', $user) }}" method="POST" class="inline-flex items-center gap-2">
-                                            @csrf
-                                            <input type="number" name="amount" class="w-24 px-2 py-1 border rounded text-xs" placeholder="+/- créditos" required>
-                                            <input type="text" name="reason" class="w-40 px-2 py-1 border rounded text-xs" placeholder="Motivo" required>
-                                            <button type="submit" class="inline-flex items-center px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded hover:bg-green-700">Ajustar</button>
-                                        </form>
+                                        <a href="{{ route('admin.users.edit', $user) }}#subscription" class="inline-flex items-center px-3 py-1 bg-purple-600 text-white text-xs font-semibold rounded hover:bg-purple-700">Gerir Assinatura</a>
                                     </div>
                                 </td>
                             </tr>

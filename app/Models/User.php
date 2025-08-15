@@ -33,6 +33,8 @@ class User extends Authenticatable
         'premium',
         'onboarded',
         'blocked',
+        'subscription_active',
+        'subscription_ends_at',
     ];
 
     /**
@@ -55,7 +57,20 @@ class User extends Authenticatable
         'password' => 'hashed',
         'is_admin' => 'boolean',
         'credits' => 'integer',
+        'subscription_active' => 'boolean',
+        'subscription_ends_at' => 'datetime',
     ];
+
+    public function hasActiveSubscription(): bool
+    {
+        if ($this->subscription_active === true) {
+            return true;
+        }
+        if ($this->subscription_ends_at && now()->lte($this->subscription_ends_at)) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Get all tickets for the user.

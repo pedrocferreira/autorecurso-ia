@@ -116,6 +116,8 @@ class ImageExtractionService
                 return $this->buildCnhPrompt();
             case 'notification':
                 return $this->buildNotificationPrompt();
+            case 'vehicle':
+                return $this->buildVehiclePrompt();
             default:
                 return $this->buildGenericPrompt();
         }
@@ -410,6 +412,79 @@ Retorne apenas o JSON, sem texto adicional.";
             } elseif (preg_match('/Habilitação[:\s]*(\d{9,11})/i', $text, $matches)) {
                 $data['driver_cnh'] = $matches[1];
             }
+        } elseif ($documentType === 'vehicle') {
+            $normalized = str_replace("\r", "\n", $text);
+            $normalized = preg_replace('/[\t ]+/', ' ', $normalized);
+            $normalized = preg_replace('/\n{2,}/', "\n", $normalized);
+
+            // RENAVAM
+            if (preg_match('/RENAVAM\s*[:\-]?\s*([0-9]{9,13})/i', $normalized, $m) ||
+                preg_match('/\b([0-9]{11,13})\b.*RENAVAM/i', $normalized, $m)) {
+                $data['renavam'] = $m[1];
+            }
+
+            // Placa (antigo e Mercosul)
+            if (preg_match('/Placa\s*[:\-]?\s*([A-Z]{3}[\-\s]?[0-9]{4}|[A-Z]{3}[0-9][A-Z][0-9]{2})/i', $normalized, $m) ||
+                preg_match('/\b([A-Z]{3}[0-9][A-Z][0-9]{2})\b/', strtoupper($normalized), $m) ||
+                preg_match('/\b([A-Z]{3}[\- ]?[0-9]{4})\b/', strtoupper($normalized), $m)) {
+                $data['plate'] = strtoupper(str_replace([' ', '-'], '', $m[1]));
+            }
+
+            // Proprietário
+            if (preg_match('/Propriet[áa]rio\s*[:\-]?\s*([A-Za-zÀ-ÿ' . "'" . ' ]{5,})/i', $normalized, $m)) {
+                $data['owner_name'] = trim($m[1]);
+            }
+
+            // CPF/CNPJ do proprietário
+            if (preg_match('/CPF\s*[:\-]?\s*([0-9\.\-]{11,14})/i', $normalized, $m) ||
+                preg_match('/CPF\/?CNPJ\s*[:\-]?\s*([0-9\.\-\/]{11,18})/i', $normalized, $m)) {
+                $data['owner_cpf'] = trim($m[1]);
+            }
+
+            // Marca/Modelo
+            if (preg_match('/Marca\s*\/?\s*Modelo\s*[:\-]?\s*([A-Za-z0-9À-ÿ\-\/ ]{3,})/i', $normalized, $m) ||
+                preg_match('/Modelo\s*[:\-]?\s*([A-Za-z0-9À-ÿ\-\/ ]{3,})/i', $normalized, $m) ||
+                preg_match('/Marca\s*[:\-]?\s*([A-Za-z0-9À-ÿ\-\/ ]{3,})/i', $normalized, $m)) {
+                $data['model'] = trim($m[1]);
+            }
+
+            // Cor
+            if (preg_match('/Cor\s*[:\-]?\s*([A-Za-zÀ-ÿ ]{3,})/i', $normalized, $m)) {
+                $data['color'] = trim($m[1]);
+            }
+
+            // Ano
+            if (preg_match('/Ano\s*(Fab(rica[cç][aã]o)?|Fab)\s*\/?\s*Mod(elo)?\s*[:\-]?\s*([12][0-9]{3})\s*\/\s*([12][0-9]{3})/i', $normalized, $m)) {
+                $data['year'] = $m[5];
+            } elseif (preg_match('/Ano\s*Modelo\s*[:\-]?\s*([12][0-9]{3})/i', $normalized, $m) ||
+                      preg_match('/Ano\s*[:\-]?\s*([12][0-9]{3})/i', $normalized, $m) ||
+                      preg_match('/Modelo\s*[:\-]?\s*([12][0-9]{3})/i', $normalized, $m)) {
+                $data['year'] = $m[1];
+            }
+
+            // UF e Município
+            if (preg_match('/UF\s*[:\-]?\s*([A-Z]{2})/i', $normalized, $m)) {
+                $data['state'] = strtoupper($m[1]);
+            }
+            if (preg_match('/Munic[íi]pio\s*\/?\s*UF\s*[:\-]?\s*([A-Za-zÀ-ÿ \-]{2,})\s*\/?\s*([A-Z]{2})/i', $normalized, $m)) {
+                $data['municipality'] = trim($m[1]);
+                $data['state'] = strtoupper($m[2]);
+            } elseif (preg_match('/Munic[íi]pio\s*[:\-]?\s*([A-Za-zÀ-ÿ \-]{3,})/i', $normalized, $m)) {
+                $data['municipality'] = trim($m[1]);
+            }
+
+            // Endereço
+            if (preg_match('/Endere[cç]o\s*[:\-]?\s*([^\n]{10,120})/i', $normalized, $m)) {
+                $data['owner_address'] = trim($m[1]);
+            }
+
+            // Chassi e Combustível
+            if (preg_match('/Chassi\s*[:\-]?\s*([A-HJ-NPR-Z0-9]{8,17})/i', $normalized, $m)) {
+                $data['chassis'] = strtoupper($m[1]);
+            }
+            if (preg_match('/Combust[íi]vel\s*[:\-]?\s*([A-Za-zÀ-ÿ \/]{3,})/i', $normalized, $m)) {
+                $data['fuel'] = trim($m[1]);
+            }
         }
 
         return $data;
@@ -543,9 +618,75 @@ Retorne apenas o JSON, sem texto adicional.";
             if (isset($data['state']) && strlen($data['state']) == 2) {
                 $cleanData['state'] = strtoupper(trim($data['state']));
             }
+        } elseif ($documentType === 'vehicle') {
+            $vehicle = [];
+
+            // Placa
+            if (isset($data['plate']) && $this->isValidPlate($data['plate'])) {
+                $vehicle['plate'] = strtoupper(str_replace([' ', '-'], '', $data['plate']));
+            }
+
+            // RENAVAM
+            if (isset($data['renavam'])) {
+                $renavam = preg_replace('/[^0-9]/', '', (string)$data['renavam']);
+                if (strlen($renavam) >= 9 && strlen($renavam) <= 13) {
+                    $vehicle['renavam'] = $renavam;
+                }
+            }
+
+            // Modelo/Cor/Ano
+            if (!empty($data['model'])) $vehicle['model'] = trim($data['model']);
+            if (!empty($data['color'])) $vehicle['color'] = trim($data['color']);
+            if (!empty($data['year']) && preg_match('/^[12][0-9]{3}$/', (string)$data['year'])) $vehicle['year'] = (string)$data['year'];
+
+            // UF/Município
+            if (!empty($data['state']) && preg_match('/^[A-Z]{2}$/', strtoupper($data['state']))) $vehicle['uf'] = strtoupper($data['state']);
+            if (!empty($data['municipality'])) $vehicle['municipality'] = trim($data['municipality']);
+
+            // Proprietário
+            if (!empty($data['owner_name'])) $vehicle['owner_name'] = trim($data['owner_name']);
+            if (!empty($data['owner_cpf'])) $vehicle['owner_cpf'] = $data['owner_cpf'];
+            if (!empty($data['owner_address'])) $vehicle['owner_address'] = trim($data['owner_address']);
+
+            // Chassi / Combustível
+            if (!empty($data['chassis'])) $vehicle['chassis'] = strtoupper($data['chassis']);
+            if (!empty($data['fuel'])) $vehicle['fuel'] = trim($data['fuel']);
+
+            return $vehicle;
         }
 
         return $cleanData;
+    }
+
+    /**
+     * Prompt específico para CRLV/Documento de veículo
+     */
+    private function buildVehiclePrompt(): string
+    {
+        return "Analise esta imagem do CRLV/CRLV-e (documento do veículo) e extraia os seguintes dados em JSON:
+
+Dados obrigatórios:
+- plate: Placa do veículo (AAA-0000 ou AAA0A00)
+- renavam: Número do RENAVAM (apenas dígitos)
+
+Dados opcionais:
+- model: Marca/Modelo
+- color: Cor
+- year: Ano do modelo (YYYY)
+- uf: UF do registro (sigla)
+- municipality: Município do registro
+- owner_name: Nome completo do proprietário
+- owner_cpf: CPF do proprietário (XXX.XXX.XXX-XX)
+- owner_address: Endereço do proprietário
+- chassis: Número do chassi (VIN)
+- fuel: Tipo de combustível
+
+Regras:
+1. Retorne apenas JSON válido, sem texto extra.
+2. Use somente caracteres válidos para cada campo (placa no formato BR, renavam só dígitos, ano YYYY).
+3. Se algum campo não estiver visível, omita-o.
+4. Não invente dados: extraia apenas o que estiver legível.
+";
     }
 
     /**

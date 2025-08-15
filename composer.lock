@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b421cd1d1e1f2dc89a736b7a0c39d595",
+    "content-hash": "9ab6028c49861f3c34c258ea6758b826",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -1748,6 +1748,64 @@
                 "source": "https://github.com/Jean85/pretty-package-versions/tree/2.1.1"
             },
             "time": "2025-03-19T14:43:43+00:00"
+        },
+        {
+            "name": "khanamiryan/qrcode-detector-decoder",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/khanamiryan/php-qrcode-detector-decoder.git",
+                "reference": "17c570bb39f641cc1c4c41a46177ac491393a01d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/khanamiryan/php-qrcode-detector-decoder/zipball/17c570bb39f641cc1c4c41a46177ac491393a01d",
+                "reference": "17c570bb39f641cc1c4c41a46177ac491393a01d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5 | ^8.0 | ^9.0",
+                "rector/rector": "^1.0.4",
+                "symplify/easy-coding-standard": "^11.0",
+                "vimeo/psalm": "^4.24"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/Common/customFunctions.php"
+                ],
+                "psr-4": {
+                    "Zxing\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ashot Khanamiryan",
+                    "email": "a.khanamiryan@gmail.com",
+                    "homepage": "https://github.com/khanamiryan",
+                    "role": "Developer"
+                }
+            ],
+            "description": "QR code decoder / reader",
+            "homepage": "https://github.com/khanamiryan/php-qrcode-detector-decoder/",
+            "keywords": [
+                "barcode",
+                "qr",
+                "zxing"
+            ],
+            "support": {
+                "issues": "https://github.com/khanamiryan/php-qrcode-detector-decoder/issues",
+                "source": "https://github.com/khanamiryan/php-qrcode-detector-decoder/tree/2.0.3"
+            },
+            "time": "2025-06-10T08:44:02+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5149,6 +5207,57 @@
                 }
             ],
             "time": "2025-06-24T12:39:03+00:00"
+        },
+        {
+            "name": "smalot/pdfparser",
+            "version": "v2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/smalot/pdfparser.git",
+                "reference": "8440edbf58c8596074e78ada38dcb0bd041a5948"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/8440edbf58c8596074e78ada38dcb0bd041a5948",
+                "reference": "8440edbf58c8596074e78ada38dcb0bd041a5948",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "ext-zlib": "*",
+                "php": ">=7.1",
+                "symfony/polyfill-mbstring": "^1.18"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Smalot\\PdfParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastien MALOT",
+                    "email": "sebastien@malot.fr"
+                }
+            ],
+            "description": "Pdf parser library. Can read and extract information from pdf file.",
+            "homepage": "https://www.pdfparser.org",
+            "keywords": [
+                "extract",
+                "parse",
+                "parser",
+                "pdf",
+                "text"
+            ],
+            "support": {
+                "issues": "https://github.com/smalot/pdfparser/issues",
+                "source": "https://github.com/smalot/pdfparser/tree/v2.12.0"
+            },
+            "time": "2025-03-31T13:16:09+00:00"
         },
         {
             "name": "symfony/console",

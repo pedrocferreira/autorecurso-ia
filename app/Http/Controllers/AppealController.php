@@ -194,10 +194,13 @@ class AppealController extends Controller
             // Busca a multa
             $ticket = Ticket::findOrFail($request->ticket_id);
 
-            // Verifica se o usuário tem créditos suficientes
+            // Verifica assinatura/bloqueio
             $user = auth()->user();
-            if ($user->credits < 1) {
-                return back()->with('error', 'Você não possui créditos suficientes para gerar um recurso.');
+            if ($user->blocked) {
+                return back()->with('error', 'Sua conta está bloqueada. Entre em contato com o suporte.');
+            }
+            if (!$user->hasActiveSubscription() && !$user->is_admin) {
+                return back()->with('error', 'Sua assinatura está inativa. Renove para gerar recursos.');
             }
 
             // Simula um processo que demora um tempo para ser concluído
@@ -227,20 +230,7 @@ class AppealController extends Controller
                 'user_id' => $user->id
             ]);
 
-            // Deduz os créditos do usuário
-            $user->decrement('credits');
-
-            // Registra a transação de créditos
-            DB::table('credit_transactions')->insert([
-                'user_id' => $user->id,
-                'type' => 'consumption',
-                'amount' => -1,
-                'balance_after' => $user->fresh()->credits,
-                'description' => 'Geração de recurso para multa #' . $ticket->id,
-                'appeal_id' => $appeal->id,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            // Sem débito de créditos (assinatura mensal)
 
             // Envio de e-mail desativado temporariamente (configurable)
             try {
@@ -346,12 +336,13 @@ class AppealController extends Controller
                 return back()->with('error', $e->getMessage())->withInput();
             }
 
-            // Verifica se o usuário tem créditos suficientes (sempre 3 para Inteligência Híbrida)
+            // Verifica assinatura/bloqueio
             $user = auth()->user();
-            $creditsNeeded = 3; // Sempre usa Inteligência Híbrida
-            
-            if ($user->credits < $creditsNeeded) {
-                return back()->with('error', "Você precisa de {$creditsNeeded} créditos para gerar um recurso com Inteligência Híbrida. Você tem apenas {$user->credits} crédito(s).");
+            if ($user->blocked) {
+                return back()->with('error', 'Sua conta está bloqueada. Entre em contato com o suporte.');
+            }
+            if (!$user->hasActiveSubscription() && !$user->is_admin) {
+                return back()->with('error', 'Sua assinatura está inativa. Renove para gerar recursos.');
             }
 
             // Processa justificativas selecionadas pela IA
@@ -434,20 +425,7 @@ class AppealController extends Controller
                 ])
             ]);
 
-            // Deduz os créditos do usuário (sempre 3)
-            $user->decrement('credits', $creditsNeeded);
-
-            // Registra a transação de créditos
-            DB::table('credit_transactions')->insert([
-                'user_id' => $user->id,
-                'type' => 'consumption',
-                'amount' => -$creditsNeeded,
-                'balance_after' => $user->fresh()->credits,
-                'description' => 'Geração de recurso com INTELIGÊNCIA HÍBRIDA para autuação #' . $request->citation_number,
-                'appeal_id' => $appeal->id,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            // Sem débito de créditos (assinatura mensal)
 
             // Envio de e-mail desativado temporariamente (configurable)
             try {

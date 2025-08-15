@@ -1,0 +1,16 @@
+{
+  "name": "AutoRecurso",
+  "short_name": "AutoRecurso",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4361ee",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+
