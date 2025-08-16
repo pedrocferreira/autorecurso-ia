@@ -41,7 +41,6 @@ class GoogleController extends Controller
                     'google_id' => $googleUser->getId(),
                     'avatar' => $googleUser->getAvatar(),
                     'email_verified_at' => now(), // Google já verifica o email
-                    'credits' => 1000, // Créditos iniciais
                     'password' => Hash::make(uniqid()), // Senha aleatória
                 ]);
 

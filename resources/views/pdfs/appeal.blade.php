@@ -103,7 +103,7 @@
 </head>
 <body>
     <div class="page-number">Página <span class="pagenum"></span></div>
-
+    
     <div class="header">
         <h1>Recurso Administrativo de Trânsito</h1>
         <h2>Contra Autuação de Infração</h2>
@@ -179,6 +179,35 @@
             <li>O deferimento do presente recurso administrativo.</li>
         </ol>
     </div>
+
+    @php
+        $attachments = [];
+        if (isset($appeal) && $appeal->metadata) {
+            $meta = is_array($appeal->metadata) ? $appeal->metadata : json_decode($appeal->metadata, true);
+            if (isset($meta['attachments']) && is_array($meta['attachments'])) {
+                $attachments = $meta['attachments'];
+            }
+        }
+    @endphp
+
+    @if(!empty($attachments))
+        <div class="content">
+            <h3>Anexos</h3>
+            <p class="legal-indent">Segue, para fins de prova, a reprodução dos documentos anexados pelo recorrente.</p>
+            @foreach($attachments as $idx => $att)
+                @php
+                    $publicPath = storage_path('app/public/' . ($att['path'] ?? ''));
+                    $mime = $att['mime'] ?? '';
+                @endphp
+                @if(is_file($publicPath) && preg_match('/^image\//', $mime))
+                    <div style="page-break-inside: avoid; margin-bottom: 16px;">
+                        <div style="font-size: 10pt; color: #666; margin-bottom: 6px;">Anexo {{ $idx + 1 }} - {{ $att['name'] ?? 'Documento' }}</div>
+                        <img src="{{ $publicPath }}" style="width: 100%; max-height: 900px; object-fit: contain; border: 1px solid #ddd; padding: 4px;" />
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    @endif
 
     <div class="date-location">
         {{ $ticket->location ?? 'Local' }}, {{ now()->format('d') }} de {{ strftime('%B', strtotime(now())) }} de {{ now()->format('Y') }}

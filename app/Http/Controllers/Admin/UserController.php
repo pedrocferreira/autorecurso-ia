@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\CreditService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -63,21 +62,6 @@ class UserController extends Controller
         return back()->with('success', $user->blocked ? 'Usuário bloqueado.' : 'Usuário desbloqueado.');
     }
 
-    public function credit(Request $request, User $user, CreditService $creditService): RedirectResponse
-    {
-        $data = $request->validate([
-            'amount' => 'required|integer|not_in:0',
-            'reason' => 'required|string|max:255',
-        ]);
-
-        try {
-            $creditService->adjustCredits($user, (int) $data['amount'], $data['reason']);
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }
-
-        return back()->with('success', 'Créditos ajustados com sucesso.');
-    }
 }
 
 

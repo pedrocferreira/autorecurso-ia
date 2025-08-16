@@ -181,7 +181,7 @@
                     <div class="text-center mb-6">
                         <div class="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
                             <i class="fas fa-car-side text-white text-xl"></i>
-                        </div>
+            </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">
                             🚗 Documento do Veículo (CRLV)
                         </h3>
@@ -740,6 +740,10 @@ async function processCnhUpload(file) {
         
         if (result.success) {
             fillFormWithExtractedData(result.data);
+            // Guardar anexo
+            if (result.data && result.data.uploaded_file) {
+                appendAppealAttachment(result.data.uploaded_file);
+            }
             alert('✅ CNH processada com sucesso!');
         } else {
             alert('❌ Erro ao processar CNH: ' + result.message);
@@ -777,6 +781,9 @@ async function processNotificationUpload(file) {
         
         if (result.success) {
             fillFormWithExtractedData(result.data);
+            if (result.data && result.data.uploaded_file) {
+                appendAppealAttachment(result.data.uploaded_file);
+            }
             alert('✅ Notificação processada com sucesso!');
         } else {
             alert('❌ Erro ao processar notificação: ' + result.message);
@@ -827,6 +834,10 @@ async function processVehicleDocUpload(file) {
                     document.getElementById('appealForm').appendChild(hidden);
                 }
                 hidden.value = v.renavam;
+            }
+            // Guardar anexo
+            if (result.data && result.data.uploaded_file) {
+                appendAppealAttachment(result.data.uploaded_file);
             }
             alert('✅ Dados do veículo extraídos com sucesso!');
         } else {
@@ -917,8 +928,27 @@ function fillFormWithExtractedData(data) {
             colorEl.value = (notificationData.vehicle_color || notificationData.color);
         }
     } catch (e) { console.warn('⚠️ Não foi possível preencher dados do veículo da notificação', e); }
-
+    
     console.log('✅ Formulário preenchido com sucesso!');
+}
+
+// Armazena anexos a serem enviados no form
+const appealAttachments = [];
+function appendAppealAttachment(fileMeta) {
+    try {
+        if (!fileMeta || !fileMeta.path) return;
+        appealAttachments.push(fileMeta);
+        // garantir campo hidden no form
+        let hidden = document.getElementById('appeal_attachments');
+        if (!hidden) {
+            hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'appeal_attachments';
+            hidden.id = 'appeal_attachments';
+            document.getElementById('appealForm').appendChild(hidden);
+        }
+        hidden.value = JSON.stringify(appealAttachments);
+    } catch(e) { console.warn('Não foi possível anexar arquivo ao recurso', e); }
 }
 
 // Funções de formatação
@@ -1124,8 +1154,8 @@ function formatPlateSearch(input) {
     // Mantém apenas letras e números, uppercase, e coloca hífen após 3 caracteres
     let value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
     if (value.length > 3) {
-        value = value.substring(0, 3) + '-' + value.substring(3);
-    }
+            value = value.substring(0, 3) + '-' + value.substring(3);
+        }
     input.value = value;
 }
 
@@ -1354,6 +1384,18 @@ function displayJustifications(justifications, infraction) {
             <p class="text-blue-700"><strong>${infraction.code}</strong> - ${infraction.description}</p>
             <p class="text-blue-600 text-sm">Artigo: ${infraction.article} | Pontos: ${infraction.points} | Valor: R$ ${infraction.amount}</p>
         </div>
+        
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+            <label class="flex items-start space-x-3">
+                <input type="checkbox" id="useCustomDefense" class="mt-1 h-4 w-4 text-amber-600 border-amber-300 rounded">
+                <div>
+                    <span class="font-semibold text-amber-900">Usar minha própria descrição do ocorrido na defesa</span>
+                    <p class="text-amber-700 text-sm">Marque para escrever com suas palavras o que aconteceu. Vamos usar seu texto no lugar dos argumentos sugeridos pela IA.</p>
+                </div>
+            </label>
+            <textarea id="customDefenseText" class="mt-3 w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50" rows="6" placeholder="Descreva aqui, com detalhes, o que aconteceu (ex.: contexto, sinalização, condições da via, erro no auto, testemunhas, etc.)" disabled></textarea>
+            <p class="mt-2 text-xs text-amber-600">Dica: Seja objetivo e inclua fatos verificáveis. Evite informações que não possa comprovar.</p>
+        </div>
     `;
     
     // Verificar se há estratégias de defesa
@@ -1495,7 +1537,31 @@ function displayJustifications(justifications, infraction) {
         `;
     }
     
+    // Anexar bloco de estratégias (IA)
     step4Content.innerHTML = html;
+    
+    // Ativar toggle do campo de defesa personalizada
+    const chk = document.getElementById('useCustomDefense');
+    const txt = document.getElementById('customDefenseText');
+    if (chk && txt) {
+        chk.addEventListener('change', () => {
+            txt.disabled = !chk.checked;
+            if (!chk.checked) txt.value = '';
+        });
+        // garantir campo hidden no form
+        let hidden = document.getElementById('custom_defense_text');
+        if (!hidden) {
+            hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'custom_defense_text';
+            hidden.id = 'custom_defense_text';
+            document.getElementById('appealForm').appendChild(hidden);
+        }
+        // sincronizar ao digitar
+        txt.addEventListener('input', () => {
+            hidden.value = chk.checked ? txt.value : '';
+        });
+    }
 }
 
 function selectJustification(index) {

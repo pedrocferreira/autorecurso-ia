@@ -141,10 +141,10 @@ class AppealController extends Controller
     public function createNew(): View|RedirectResponse
     {
         $user = Auth::user();
-        // Verificar se o usuário tem créditos suficientes
-        if (!$user->hasEnoughCredits(1)) {
-            return redirect()->route('credits.packages')
-                ->with('warning', 'Você precisa ter pelo menos 1 crédito para gerar um recurso. Por favor, adquira créditos para continuar.');
+        // Verificar assinatura ativa ao invés de créditos
+        if (!$user->hasActiveSubscription() && !$user->is_admin) {
+            return redirect()->route('subscription.index')
+                ->with('warning', 'Assinatura inativa. Assine um plano para gerar recursos.');
         }
 
         $infractionTypes = \App\Models\InfractionType::where('active', true)
@@ -281,6 +281,7 @@ class AppealController extends Controller
                 'reason' => 'required|string|max:1000',
                 'orgao_autuador' => 'required|string|max:255',
                 'custom_details' => 'nullable|string|max:2000',
+                'custom_defense_text' => 'nullable|string|max:5000',
                 'selected_justifications' => 'nullable|string' // JSON das justificativas selecionadas
             ], [
                 'custom_details.max' => 'Os detalhes específicos devem ter no máximo 2000 caracteres.',
@@ -391,6 +392,12 @@ class AppealController extends Controller
             
             // Usa APENAS o texto limpo da melhor versão
             $appealText = $analysisData['best_text'];
+
+            // Se o usuário forneceu defesa personalizada, priorizar inserindo-a na seção DOS FATOS
+            $customDefense = trim((string)$request->input('custom_defense_text', ''));
+            if ($customDefense !== '') {
+                $appealText = $this->injectCustomDefenseIntoText($appealText, $customDefense);
+            }
             
             // Pequena pausa para simular o processamento do PDF
             if (app()->environment('production')) {
@@ -403,12 +410,22 @@ class AppealController extends Controller
             // Cria o registro do recurso
             $appeal = Appeal::create([
                 'ticket_id' => $ticket->id,
-                'text' => $appealText, // Texto limpo
+                'text' => $appealText, // Texto limpo (com defesa personalizada se houver)
                 'generated_text' => $appealText, // Texto limpo
                 'pdf_path' => $pdfPath,
                 'status' => 'pending',
                 'user_id' => $user->id
             ]);
+
+            // Coletar anexos do formulário (caminhos já persistidos pelo extrator)
+            $attachments = [];
+            if ($request->filled('appeal_attachments')) {
+                try {
+                    $attachments = json_decode($request->input('appeal_attachments'), true) ?: [];
+                } catch (\Throwable $e) {
+                    Log::warning('Anexos inválidos no formulário: ' . $e->getMessage());
+                }
+            }
 
             // Salva a análise completa nos metadados (separadamente)
             $appeal->update([
@@ -421,6 +438,8 @@ class AppealController extends Controller
                     'model_used' => 'hybrid_intelligence',
                     'selected_justifications' => $selectedJustifications,
                     'justifications_count' => count($selectedJustifications),
+                    'custom_defense_used' => $customDefense !== '',
+                    'attachments' => $attachments,
                     'generated_at' => now()->toISOString()
                 ])
             ]);
@@ -2154,5 +2173,24 @@ OBRIGATÓRIO: Documento profissional pronto para protocolo imediato no formato t
         }
 
         return true;
+    }
+
+    private function injectCustomDefenseIntoText(string $fullText, string $customDefense): string
+    {
+        $customBlock = "DOS FATOS (VERSÃO DO CONDUTOR):\n\n" . trim($customDefense) . "\n\n";
+        // Inserir após "DADOS DA AUTUAÇÃO" se existir
+        $pos = stripos($fullText, 'DADOS DA AUTUAÇÃO:');
+        if ($pos !== false) {
+            // Procurar o próximo bloco para inserir antes dos fundamentos gerais
+            $insertPos = stripos($fullText, 'DOS FUNDAMENTOS', $pos);
+            if ($insertPos === false) {
+                // Senão, após os dados da autuação
+                $afterAutuacao = $pos + strlen('DADOS DA AUTUAÇÃO:');
+                return substr($fullText, 0, $afterAutuacao) . "\n\n" . $customBlock . substr($fullText, $afterAutuacao);
+            }
+            return substr($fullText, 0, $insertPos) . $customBlock . substr($fullText, $insertPos);
+        }
+        // Fallback: inserir no início após o cabeçalho
+        return $customBlock . $fullText;
     }
 }

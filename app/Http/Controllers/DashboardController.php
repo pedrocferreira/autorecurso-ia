@@ -27,7 +27,8 @@ class DashboardController extends Controller
         \Log::info('🔍 Dashboard - Usuário logado', [
             'user_id' => $user->id,
             'user_name' => $user->name,
-            'credits' => $user->credits
+            'subscription_active' => $user->subscription_active,
+            'subscription_ends_at' => optional($user->subscription_ends_at)->toDateString(),
         ]);
 
         try {

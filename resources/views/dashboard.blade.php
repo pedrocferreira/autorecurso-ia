@@ -16,10 +16,13 @@
                 </p>
             </div>
             <div class="flex items-center space-x-3">
-                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl shadow-lg flex items-center space-x-2 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-coins text-yellow-300"></i>
-                    <span class="font-bold text-lg">{{ Auth::user()->credits }}</span>
-                    <span class="text-blue-100">créditos</span>
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    @if(Auth::user()->hasActiveSubscription())
+                        <div class="font-bold">Assinatura Ativa</div>
+                        <div class="text-blue-100 text-sm">Até {{ Auth::user()->subscription_ends_at?->format('d/m/Y') }}</div>
+                    @else
+                        <a href="{{ route('subscription.index') }}" class="font-bold underline">Assinar por R$ 150/mês</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -47,14 +50,13 @@
                                 <i class="fas fa-rocket mr-3 text-blue-500 group-hover:rotate-12 transition-transform duration-300"></i>
                                 <div class="text-left">
                                     <div class="uppercase font-bold">Gerar Recurso</div>
-                                    <div class="text-xs text-blue-400">3 créditos • IA Híbrida</div>
+                                    <div class="text-xs text-blue-400">Assinatura ativa necessária</div>
                                 </div>
                             </a>
-                            <!-- Botão de compra de créditos desativado temporariamente -->
-                            <div class="inline-flex items-center px-6 py-3 bg-gray-400/50 backdrop-blur-sm text-white rounded-xl font-medium shadow-lg border border-white/20 cursor-not-allowed">
-                                <i class="fas fa-coins mr-2 text-gray-300"></i>
-                                Comprar Créditos (Em breve)
-                            </div>
+                            <a href="{{ route('subscription.index') }}" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl font-medium shadow-lg border border-white/20 hover:bg-blue-700">
+                                <i class="fas fa-id-card-alt mr-2"></i>
+                                Assinar Plano
+                            </a>
                         </div>
                     </div>
                     <div class="hidden md:block md:w-1/3 relative">
@@ -126,8 +128,8 @@
                                     <i class="fas fa-arrow-up text-sm"></i>
                                 </div>
                             </div>
-                            <div class="text-3xl font-bold text-yellow-600 mb-1">{{ Auth::user()->credits }}</div>
-                            <div class="text-sm text-yellow-700 font-medium">Créditos Disponíveis</div>
+                            <div class="text-3xl font-bold text-yellow-600 mb-1">{{ Auth::user()->hasActiveSubscription() ? 'Ativa' : 'Inativa' }}</div>
+                            <div class="text-sm text-yellow-700 font-medium">Assinatura</div>
                         </div>
                     </div>
                 </div>
@@ -153,21 +155,19 @@
                                 <i class="fas fa-chevron-right text-green-400 group-hover:text-green-600 transition-colors duration-300"></i>
                             </div>
                             <h4 class="font-bold text-green-800 text-lg mb-2">Gerar Novo Recurso</h4>
-                            <p class="text-green-600 text-sm">Custa 3 créditos • Máxima qualidade</p>
+                            <p class="text-green-600 text-sm">Incluso no plano</p>
                         </a>
                         
-                        <!-- Card de compra de créditos desativado temporariamente
-                        <!-- Card de compra de créditos desativado temporariamente -->
-                        <div class="group bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl border-2 border-gray-200 transition-all duration-300 cursor-not-allowed">
+                        <a href="{{ route('subscription.index') }}" class="group bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-xl border-2 border-gray-200 transition-all duration-300 hover:shadow-lg">
                             <div class="flex items-center justify-between mb-4">
-                                <div class="w-12 h-12 bg-gray-400 rounded-xl flex items-center justify-center shadow-lg">
-                                    <i class="fas fa-coins text-white text-lg"></i>
+                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                                    <i class="fas fa-id-card-alt text-white text-lg"></i>
                                 </div>
-                                <i class="fas fa-clock text-gray-400 text-lg"></i>
+                                <i class="fas fa-chevron-right text-gray-400 text-lg"></i>
                             </div>
-                            <h4 class="font-bold text-gray-600 text-lg mb-2">Comprar Créditos</h4>
-                            <p class="text-yellow-600 text-sm">Funcionalidade em desenvolvimento</p>
-                        </div>
+                            <h4 class="font-bold text-gray-700 text-lg mb-2">Assinar Plano</h4>
+                            <p class="text-gray-500 text-sm">A partir de R$ 150/mês (descontos para mais meses)</p>
+                        </a>
                     
                     <a href="{{ route('profile.edit') }}" 
                        class="group bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 p-6 rounded-xl border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Efeito hover nos botões principais
-    const mainButtons = document.querySelectorAll('#btn-generate-appeal, #btn-buy-credits');
+    const mainButtons = document.querySelectorAll('#btn-generate-appeal');
     mainButtons.forEach(button => {
         button.addEventListener('mouseenter', function() {
             this.style.transform = 'scale(1.05)';
@@ -352,22 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Contador animado para créditos
-    const creditsElement = document.querySelector('.text-3xl.font-bold.text-yellow-600');
-    if (creditsElement) {
-        const finalValue = parseInt(creditsElement.textContent);
-        let currentValue = 0;
-        const increment = finalValue / 50;
-        
-        const counter = setInterval(() => {
-            currentValue += increment;
-            if (currentValue >= finalValue) {
-                currentValue = finalValue;
-                clearInterval(counter);
-            }
-            creditsElement.textContent = Math.floor(currentValue);
-        }, 20);
-    }
+    // Removido contador de créditos
 });
 </script>
 

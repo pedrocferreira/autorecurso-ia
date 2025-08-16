@@ -23,7 +23,6 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
-        'credits',
         'google_id',
         'avatar',
         'cpf',
@@ -56,7 +55,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
-        'credits' => 'integer',
         'subscription_active' => 'boolean',
         'subscription_ends_at' => 'datetime',
     ];
@@ -88,51 +86,5 @@ class User extends Authenticatable
         return $this->hasMany(Appeal::class);
     }
 
-    /**
-     * Get all credit transactions for the user.
-     */
-    public function creditTransactions(): HasMany
-    {
-        return $this->hasMany(CreditTransaction::class);
-    }
-
-    /**
-     * Adiciona créditos ao usuário
-     *
-     * @param int $amount Quantidade de créditos a adicionar
-     * @return bool
-     */
-    public function addCredits(int $amount): bool
-    {
-        $this->credits += $amount;
-        return $this->save();
-    }
-
-    /**
-     * Remove créditos do usuário
-     *
-     * @param int $amount Quantidade de créditos a remover
-     * @return bool
-     * @throws \Exception Se o usuário não tiver créditos suficientes
-     */
-    public function removeCredits(int $amount): bool
-    {
-        if ($this->credits < $amount) {
-            throw new \Exception('Créditos insuficientes');
-        }
-
-        $this->credits -= $amount;
-        return $this->save();
-    }
-
-    /**
-     * Verifica se o usuário tem créditos suficientes
-     *
-     * @param int $amount Quantidade de créditos necessários
-     * @return bool
-     */
-    public function hasEnoughCredits(int $amount): bool
-    {
-        return $this->credits >= $amount;
-    }
+    // Métodos e relações de créditos removidos (modelo de assinatura)
 }

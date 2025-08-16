@@ -6,7 +6,7 @@
             </h2>
             <div class="flex items-center space-x-4">
                 <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full">
-                    <strong>Créditos:</strong> {{ Auth::user()->credits }}
+                    <strong>Assinatura:</strong> {{ Auth::user()->hasActiveSubscription() ? 'Ativa' : 'Inativa' }}
                 </span>
                 <a href="{{ route('appeals.create_new') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                     <i class="fas fa-rocket mr-2"></i> Gerar Recurso

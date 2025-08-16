@@ -142,9 +142,9 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('credits.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center group">
-                                            <i class="fas fa-coins mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>
-                                            Comprar Créditos
+                                        <a href="{{ route('subscription.index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center group">
+                                            <i class="fas fa-id-card-alt mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>
+                                            Assinar Plano
                                         </a>
                                     </li>
                                     <li>

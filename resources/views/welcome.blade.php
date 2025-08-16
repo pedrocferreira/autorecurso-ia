@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>AutoRecurso - Automatize seus Recursos de Multas</title>
+        <title>AutoRecurso para Despachantes - Recursos de Multas com IA</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -111,7 +111,7 @@
                 .stats-section .grid {
                     grid-template-columns: 1fr;
                     gap: 1rem;
-                    margin-top: 70%;
+                    margin-top: 1.5rem;
                 }
 
                 .stats-card {
@@ -356,7 +356,7 @@
             }
 
             .hero-title {
-                font-size: 5rem;
+                font-size: 3rem;
                 font-weight: 800;
                 line-height: 1.1;
                 margin-bottom: 2.5rem;
@@ -369,7 +369,7 @@
             }
 
             .hero-subtitle {
-                font-size: 2rem;
+                font-size: 1.25rem;
                 line-height: 1.4;
                 color: rgba(255,255,255,0.95);
                 max-width: 900px;
@@ -390,10 +390,12 @@
 
             .hero-cta {
                 display: flex;
-                gap: 2rem;
+                gap: 1rem;
                 justify-content: center;
-                margin-top: 4rem;
-                margin-bottom: 5rem;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-top: 2rem;
+                margin-bottom: 3rem;
             }
 
             .hero-badges {
@@ -406,17 +408,18 @@
             }
 
             .hero-badge {
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.85);
+                border: 1px solid rgba(0, 0, 0, 0.05);
                 padding: 1rem 2rem;
                 border-radius: 9999px;
                 transition: all 0.3s ease;
                 font-size: 1.125rem;
-                backdrop-filter: blur(10px);
+                backdrop-filter: blur(6px);
                 display: flex;
                 align-items: center;
                 gap: 0.75rem;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                color: #0f172a; /* texto escuro para garantir contraste */
             }
 
             .hero-badge i {
@@ -425,9 +428,9 @@
             }
 
             .hero-badge:hover {
-                background: rgba(255, 255, 255, 0.15);
+                background: rgba(255, 255, 255, 0.95);
                 transform: translateY(-2px);
-                border-color: rgba(255, 255, 255, 0.3);
+                border-color: rgba(0, 0, 0, 0.08);
                 box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
             }
 
@@ -441,7 +444,7 @@
             .stats-card {
                 background: white;
                 border-radius: 1.5rem;
-                padding: 4rem;
+                padding: 2.5rem;
                 box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
                 position: relative;
                 overflow: hidden;
@@ -449,6 +452,7 @@
                 border: 1px solid rgba(0, 0, 0, 0.05);
                 margin: 0 1rem;
                 text-align: center;
+                color: #0f172a; /* texto escuro */
             }
 
             .stats-number {
@@ -468,13 +472,11 @@
             }
 
             .section-title {
-                font-size: 3.5rem;
+                font-size: 2.25rem;
                 font-weight: 800;
-                line-height: 2.2;
+                line-height: 1.2;
                 margin-bottom: 1rem;
-                background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
+                color: #0f172a; /* texto escuro para fundos claros */
                 position: relative;
                 display: inline-block;
             }
@@ -492,7 +494,7 @@
 
             .section-subtitle {
                 font-size: 1.25rem;
-                color: #ffffffd1;
+                color: #475569; /* texto escuro para fundo claro */
                 max-width: 600px;
                 margin: 0 auto 3rem;
                 line-height: 1.6;
@@ -501,12 +503,13 @@
             .feature-card {
                 background: white;
                 border-radius: 1.5rem;
-                padding: 3rem;
+                padding: 2rem;
                 transition: all 0.3s ease;
                 position: relative;
                 overflow: hidden;
                 border: 1px solid rgba(0, 0, 0, 0.05);
                 margin: 0 1rem;
+                color: #0f172a; /* texto escuro */
             }
 
             .feature-card::before {
@@ -546,13 +549,14 @@
 
             .step-card {
                 position: relative;
-                padding: 3rem;
+                padding: 2rem;
                 background: white;
                 border-radius: 1.5rem;
                 transition: all 0.3s ease;
                 border: 1px solid rgba(0, 0, 0, 0.05);
                 text-align: center;
                 margin: 0 1rem;
+                color: #0f172a; /* texto escuro */
             }
 
             .step-number {
@@ -579,17 +583,18 @@
             .price-card {
                 background: white;
                 border-radius: 1.5rem;
-                padding: 3rem;
+                padding: 2rem;
                 transition: all 0.3s ease;
                 position: relative;
                 overflow: hidden;
                 border: 1px solid rgba(0, 0, 0, 0.05);
                 margin: 0 1rem;
+                color: #0f172a; /* texto escuro */
             }
 
             .price-card.popular {
                 border: 2px solid #3b82f6;
-                transform: scale(1.05);
+                transform: none;
                 box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
             }
 
@@ -612,19 +617,18 @@
                 box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             }
 
-            .price-card.popular:hover {
-                transform: scale(1.05) translateY(-5px);
-            }
+            .price-card.popular:hover { transform: translateY(-5px); }
 
             .testimonial-card {
                 background: white;
                 border-radius: 1.5rem;
-                padding: 3rem;
+                padding: 2rem;
                 transition: all 0.3s ease;
                 position: relative;
                 border: 1px solid rgba(0, 0, 0, 0.05);
                 margin: 0 1rem;
                 height: 100%;
+                color: #0f172a; /* texto escuro */
             }
 
             .testimonial-card::before {
@@ -644,8 +648,8 @@
             }
 
             .testimonial-avatar {
-                width: 4rem;
-                height: 4rem;
+                width: 3.25rem;
+                height: 3.25rem;
                 border-radius: 50%;
                 background: linear-gradient(135deg, #3b82f6, #1e40af);
                 display: flex;
@@ -653,7 +657,7 @@
                 justify-content: center;
                 color: white;
                 font-weight: bold;
-                font-size: 1.5rem;
+                font-size: 1.125rem;
                 box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
             }
 
@@ -716,6 +720,47 @@
                     display: none;
                 }
             }
+            /* CTA Buttons */
+            .cta-button { display:inline-flex; align-items:center; gap:0.5rem; padding:0.9rem 1.5rem; border-radius:0.75rem; font-weight:700; border:1px solid transparent; transition:all .2s ease; }
+            .cta-button.primary { background: linear-gradient(135deg, #1e40af, #3b82f6); color:#fff; box-shadow: 0 10px 20px -10px rgba(59,130,246,0.6); }
+            .cta-button.primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
+            .cta-button.secondary { background:#fff; color:#1e40af; border-color:#93c5fd; }
+            .cta-button.secondary:hover { background:#eff6ff; }
+
+            /* Sticky CTA */
+            .sticky-cta { position:fixed; left:0; right:0; bottom:0; background:#ffffff; border-top:1px solid rgba(0,0,0,0.06); box-shadow:0 -10px 20px -15px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform .3s ease; z-index: 999; }
+            .sticky-cta.show { transform: translateY(0); }
+            .sticky-cta .inner { max-width: 80rem; margin: 0 auto; padding: 0.75rem 1rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+            .sticky-cta .title { font-weight:700; color:#0f172a; }
+            .sticky-cta .actions { display:flex; gap:0.75rem; }
+            @media (max-width: 640px) { .sticky-cta .inner { flex-direction:column; align-items:stretch; } .sticky-cta .actions { width:100%; } .sticky-cta .actions a { width:100%; justify-content:center; } }
+
+            /* Step icons */
+            .step-icon { font-size:2rem; color:#1e40af; margin-bottom:0.75rem; }
+
+            /* FAQ */
+            .faq { max-width: 60rem; margin: 0 auto; }
+            .faq-item { background:#fff; border:1px solid rgba(0,0,0,0.06); border-radius:1rem; margin-bottom:0.75rem; overflow:hidden; }
+            .faq-question { width:100%; text-align:left; background:#fff; padding:1rem 1.25rem; font-weight:700; color:#0f172a; display:flex; align-items:center; justify-content:space-between; }
+            .faq-answer { display:none; padding:0 1.25rem 1rem; color:#475569; }
+            .faq-item.active .faq-answer { display:block; }
+
+            /* Compare */
+            .compare-wrap { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; align-items:start; }
+            .compare-card { background:#fff; border:1px solid rgba(0,0,0,0.06); border-radius:1rem; padding:1.5rem; }
+            .compare-card h3 { font-size:1.25rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem; }
+            .compare-item { display:flex; align-items:center; gap:0.75rem; color:#475569; margin:0.5rem 0; }
+            .compare-item i { width:1.25rem; text-align:center; }
+            .compare-yes { color:#16a34a; }
+            .compare-no { color:#ef4444; }
+            @media (max-width:768px){ .compare-wrap { grid-template-columns: 1fr; } }
+
+            /* Chat widget */
+            .chat-button { position: fixed; right: 1rem; bottom: 5rem; background: linear-gradient(135deg, #1e40af, #3b82f6); color:#fff; width:3.25rem; height:3.25rem; border-radius:9999px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 25px -10px rgba(59,130,246,0.8); z-index:999; }
+            .chat-box { position: fixed; right: 1rem; bottom: 9.75rem; width: 20rem; background:#fff; border:1px solid rgba(0,0,0,0.06); border-radius:1rem; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3); display:none; z-index:999; overflow:hidden; }
+            .chat-box header { background: linear-gradient(135deg, #1e40af, #3b82f6); color:#fff; padding:0.75rem 1rem; font-weight:700; }
+            .chat-box .content { padding:1rem; color:#475569; display:flex; flex-direction:column; gap:0.5rem; }
+            .chat-box .content a { display:flex; align-items:center; gap:0.5rem; color:#1e40af; font-weight:700; }
         </style>
     </head>
     <body class="antialiased">
@@ -745,38 +790,36 @@
                             </div>
                         </div>
 
-                        <h1 class="hero-title">Recursos de Multas com IA: Economize até 90% e Ganhe Tempo</h1>
-                        <p class="hero-subtitle">Gere recursos personalizados em minutos com nossa inteligência artificial. Mais rápido e econômico que contratar um advogado. Comece agora e economize!</p>
+                        <h1 class="hero-title">A plataforma de recursos para Despachantes</h1>
+                        <p class="hero-subtitle">Centralize clientes, gere recursos em massa com IA, inclua anexos automaticamente (CNH, Notificação, CRLV) e aumente a produtividade do seu escritório. Planos a partir de R$ 150/mês.</p>
 
                         <div class="hero-cta">
-                            @if (Route::has('register'))
-                                <a href="{{ url('/register') }}" class="cta-button primary">
-                                    <i class="fas fa-rocket"></i>
-                                    <span>Comece Agora - É Grátis!</span>
-                                </a>
-                                <a href="#como-funciona" class="cta-button secondary">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span>Veja Como Funciona</span>
-                                </a>
-                            @endif
+                            <a href="{{ route('subscription.index') }}" class="cta-button primary">
+                                <i class="fas fa-rocket"></i>
+                                <span>Assinar Plano</span>
+                            </a>
+                            <a href="#planos" class="cta-button secondary">
+                                <i class="fas fa-tags"></i>
+                                <span>Ver Planos</span>
+                            </a>
                         </div>
 
                         <div class="hero-badges">
                             <div class="hero-badge">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Sem compromisso</span>
+                                <i class="fas fa-briefcase"></i>
+                                <span>Feito para Despachantes</span>
                             </div>
                             <div class="hero-badge">
-                                <i class="fas fa-bolt"></i>
-                                <span>Cancelamento em 1 clique</span>
+                                <i class="fas fa-layer-group"></i>
+                                <span>Geração em Lote</span>
+                            </div>
+                            <div class="hero-badge">
+                                <i class="fas fa-plug"></i>
+                                <span>API Brasil + OCR</span>
                             </div>
                             <div class="hero-badge">
                                 <i class="fas fa-headset"></i>
-                                <span>Suporte 24/7</span>
-                            </div>
-                            <div class="hero-badge">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>Garantia de Satisfação</span>
+                                <span>Suporte Prioritário</span>
                             </div>
                         </div>
 
@@ -795,16 +838,16 @@
                 <div class="max-w-7xl mx-auto">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-20">
                         <div class="stats-card">
-                            <div class="stats-number">+50.000</div>
-                            <div class="stats-label">Recursos Gerados</div>
+                            <div class="stats-number" data-target="300">300+</div>
+                            <div class="stats-label">Despachantes Atendidos</div>
                         </div>
                         <div class="stats-card">
-                            <div class="stats-number">90%</div>
-                            <div class="stats-label">Taxa de Sucesso</div>
+                            <div class="stats-number" data-target="10">10x</div>
+                            <div class="stats-label">Mais Produtividade</div>
                         </div>
                         <div class="stats-card">
-                            <div class="stats-number">R$ 2.000.000+</div>
-                            <div class="stats-label">Economia Total</div>
+                            <div class="stats-number" data-target="999">99,9%</div>
+                            <div class="stats-label">Disponibilidade</div>
                         </div>
                     </div>
                 </div>
@@ -813,41 +856,35 @@
             <div class="max-w-7xl mx-auto p-6 lg:p-8">
                 <!-- Value Proposition -->
                 <div class="mt-16 text-center">
-                    <h2 class="section-title">Por que escolher o AutoRecurso?</h2>
-                    <p class="section-subtitle">Descubra como nossa solução pode ajudar você a economizar tempo e dinheiro.</p>
+                    <h2 class="section-title">Feito para Despachantes</h2>
+                    <p class="section-subtitle">Automatize seu fluxo de recursos, escale sua operação e aumente sua margem com uma plataforma criada para escritórios.</p>
                 </div>
 
                 <!-- Features Section -->
                 <div class="mt-16">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="feature-card">
                             <div class="feature-icon">
-                                <i class="fas fa-robot"></i>
+                                <i class="fas fa-qrcode"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">IA Avançada</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Nossa tecnologia de inteligência artificial analisa sua multa e gera um recurso personalizado com alta taxa de sucesso.
-                            </p>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Leitura Automática (OCR/QR)</h3>
+                            <p class="text-gray-600 leading-relaxed">CNH, Notificação e CRLV lidos automaticamente. Campos do cliente e do veículo preenchidos em segundos.</p>
                         </div>
 
                         <div class="feature-card">
                             <div class="feature-icon">
-                                <i class="fas fa-file-pdf"></i>
+                                <i class="fas fa-layer-group"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Documentos Prontos</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Receba seu recurso em formato PDF, pronto para impressão e protocolo junto ao órgão de trânsito.
-                            </p>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Gestão e Padronização</h3>
+                            <p class="text-gray-600 leading-relaxed">Organize casos por cliente, padronize modelos e acompanhe status. Ideal para operação com equipe.</p>
                         </div>
 
                         <div class="feature-card">
                             <div class="feature-icon">
-                                <i class="fas fa-coins"></i>
+                                <i class="fas fa-bolt"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Economia</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                Muito mais barato que contratar um advogado. Pague apenas pelos recursos que gerar, sem mensalidades ou taxas ocultas.
-                            </p>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Produção em Lote</h3>
+                            <p class="text-gray-600 leading-relaxed">Gere múltiplos recursos com agilidade, mantendo qualidade e consistência nas peças.</p>
                         </div>
                     </div>
                 </div>
@@ -855,121 +892,99 @@
                 <!-- How It Works -->
                 <div id="como-funciona" class="mt-24">
                     <h2 class="section-title">Como Funciona</h2>
-                    <p class="section-subtitle">Três passos simples para resolver suas multas</p>
-                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-16">
+                    <p class="section-subtitle">Três passos para escalar o seu escritório</p>
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="step-card">
                             <div class="step-number">1</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">Cadastre sua multa</h3>
-                            <p class="text-gray-600">Informe os dados básicos da sua infração de trânsito.</p>
+                            <div class="step-icon"><i class="fas fa-building"></i></div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Cadastre sua empresa</h3>
+                            <p class="text-gray-600">Convide sua equipe e organize os clientes em um só lugar.</p>
                         </div>
 
                         <div class="step-card">
                             <div class="step-number">2</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">IA gera o recurso</h3>
-                            <p class="text-gray-600">Nossa inteligência artificial cria um documento personalizado para seu caso.</p>
+                            <div class="step-icon"><i class="fas fa-id-card"></i></div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Adicione clientes e multas</h3>
+                            <p class="text-gray-600">Use consulta por placa (API Brasil) ou envio de documentos com OCR para preencher tudo.</p>
                         </div>
 
                         <div class="step-card">
                             <div class="step-number">3</div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">Baixe seu PDF</h3>
-                            <p class="text-gray-600">Receba seu recurso pronto para protocolar no órgão de trânsito.</p>
+                            <div class="step-icon"><i class="fas fa-file-pdf"></i></div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Gere PDFs em lote</h3>
+                            <p class="text-gray-600">Crie vários recursos com IA e baixe os PDFs finais com anexos incluídos.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Pricing Section -->
-                <div class="mt-24">
-                    <h2 class="section-title">Planos e Preços</h2>
-                    <p class="section-subtitle">Escolha o plano ideal para suas necessidades</p>
+                <div id="planos" class="mt-24">
+                    <h2 class="section-title">Planos para Despachantes</h2>
+                    <p class="section-subtitle">Base de R$ 150/mês com descontos por período</p>
 
-                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-16">
-                        <div class="price-card">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Básico</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 29</span>
-                                <span class="text-gray-600">/recurso</span>
+                    @php
+                        $base = config('subscription.base_price_per_month', 150);
+                        $tiers = config('subscription.discount_tiers', []);
+                        $durations = [1,3,6,12,18,24];
+                        $fmt = fn($v) => 'R$ '.number_format($v,2,',','.');
+                    @endphp
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                        @foreach($durations as $months)
+                            @php
+                                $discount = $tiers[$months] ?? 0;
+                                $monthValue = round($base * (1 - $discount), 2);
+                                $totalValue = round($monthValue * $months, 2);
+                                $saving = round(($base * $months) - $totalValue, 2);
+                                $popular = $months === 12;
+                            @endphp
+                            <div class="price-card {{ $popular ? 'popular' : '' }}">
+                                <h3 class="text-2xl font-bold text-gray-900 text-center mb-2">{{ $months }} {{ $months>1 ? 'meses' : 'mês' }}</h3>
+                                @if($discount>0)
+                                    <p class="text-center text-blue-600 font-semibold mb-2">{{ (int)($discount*100) }}% OFF</p>
+                                @endif
+                                <div class="text-center mb-6">
+                                    <span class="text-5xl font-bold text-gray-900">{{ $fmt($monthValue) }}</span>
+                                    <span class="text-gray-600">/mês</span>
+                                </div>
+                                <ul class="space-y-4 mb-8">
+                                    <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i><span>Geração de recursos com IA</span></li>
+                                    <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i><span>Integração API Brasil + OCR</span></li>
+                                    <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i><span>PDF com anexos (CNH, Notificação, CRLV)</span></li>
+                                    <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i><span>Equipe multiusuário</span></li>
+                                    <li class="flex items-center text-gray-600"><i class="fas fa-check text-green-500 mr-3"></i><span>Dashboard e relatórios</span></li>
+                                </ul>
+                                <div class="text-center text-gray-600 mb-4">
+                                    <div>Total: <strong>{{ $fmt($totalValue) }}</strong></div>
+                                    @if($saving>0)
+                                        <div>Economia: <strong>{{ $fmt($saving) }}</strong></div>
+                                    @endif
+                                </div>
+                                <form action="{{ route('subscription.subscribe') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="months" value="{{ $months }}">
+                                    <button class="cta-button primary w-full">Assinar</button>
+                                </form>
                             </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>1 recurso por vez</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte por email</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
-
-                        <div class="price-card popular">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Pro</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 24</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>5 recursos por vez</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte prioritário</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
-
-                        <div class="price-card">
-                            <h3 class="text-2xl font-bold text-gray-900 text-center mb-6">Enterprise</h3>
-                            <div class="text-center mb-8">
-                                <span class="text-5xl font-bold text-gray-900">R$ 19</span>
-                                <span class="text-gray-600">/recurso</span>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Recursos ilimitados</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>Suporte VIP 24/7</span>
-                                </li>
-                                <li class="flex items-center text-gray-600">
-                                    <i class="fas fa-check text-green-500 mr-3"></i>
-                                    <span>PDF personalizado</span>
-                                </li>
-                            </ul>
-                            <a href="{{ url('/register') }}" class="cta-button primary w-full">Começar Agora</a>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
 
                 <!-- Testimonials -->
                 <div class="mt-24">
-                    <h2 class="section-title">O que nossos clientes dizem</h2>
-                    <p class="section-subtitle">Depoimentos reais de quem já economizou com o AutoRecurso</p>
+                    <h2 class="section-title">O que os despachantes dizem</h2>
+                    <p class="section-subtitle">Resultados reais de escritórios que escalaram com o AutoRecurso</p>
                     
                     <!-- Swiper -->
                     <div class="swiper testimonial-swiper mt-12">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
                                 <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Consegui cancelar 3 multas usando o AutoRecurso. O sistema é muito fácil de usar e o documento gerado tinha todos os argumentos legais necessários. Recomendo!"</p>
+                                    <p class="text-lg text-gray-600 mb-6">"Reduzimos em 80% o tempo de preparação dos recursos. A extração automática dos documentos mudou nosso jogo."</p>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">JS</div>
                                         <div class="ml-4">
-                                            <p class="font-bold text-gray-900">João Silva</p>
-                                            <p class="text-gray-600">São Paulo</p>
+                                            <p class="font-bold text-gray-900">Carlos Andrade</p>
+                                            <p class="text-gray-600">Despachante, RJ</p>
                                         </div>
                                     </div>
                                 </div>
@@ -977,12 +992,12 @@
 
                             <div class="swiper-slide">
                                 <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Economizei mais de R$ 1.000 em multas usando o AutoRecurso. O suporte é excelente e o processo é muito simples. Vale muito a pena!"</p>
+                                    <p class="text-lg text-gray-600 mb-6">"A geração em lote com IA nos permite atender mais clientes sem aumentar o time. Suporte rápido e eficiente."</p>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">MS</div>
                                         <div class="ml-4">
-                                            <p class="font-bold text-gray-900">Maria Santos</p>
-                                            <p class="text-gray-600">Rio de Janeiro</p>
+                                            <p class="font-bold text-gray-900">Fernanda Alves</p>
+                                            <p class="text-gray-600">Escritório Alfa, SP</p>
                                         </div>
                                     </div>
                                 </div>
@@ -990,12 +1005,12 @@
 
                             <div class="swiper-slide">
                                 <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Excelente ferramenta! Consegui cancelar uma multa de R$ 293,47 em menos de 5 minutos. O recurso foi bem fundamentado e o processo todo foi muito simples."</p>
+                                    <p class="text-lg text-gray-600 mb-6">"Integração com API Brasil e OCR confiável: paramos de digitar dados. PDFs saem prontos com anexos."</p>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">PC</div>
                                         <div class="ml-4">
                                             <p class="font-bold text-gray-900">Pedro Costa</p>
-                                            <p class="text-gray-600">Curitiba</p>
+                                            <p class="text-gray-600">Despachante Costa, PR</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1003,7 +1018,7 @@
 
                             <div class="swiper-slide">
                                 <div class="testimonial-card">
-                                    <p class="text-lg text-gray-600 mb-6">"Já usei várias vezes e sempre tive sucesso! O sistema é intuitivo e o suporte é muito atencioso. Recomendo para todos que precisam recorrer de multas."</p>
+                                    <p class="text-lg text-gray-600 mb-6">"Mais clientes atendidos, menos retrabalho e visão clara dos processos no dashboard."</p>
                                     <div class="flex items-center">
                                         <div class="testimonial-avatar">AL</div>
                                         <div class="ml-4">
@@ -1033,18 +1048,75 @@
                     </div>
                 </div>
 
+                <!-- Compare Section -->
+                <div class="mt-24">
+                    <h2 class="section-title">AutoRecurso vs. Advogado tradicional</h2>
+                    <p class="section-subtitle">Menor preço, mais velocidade e simplicidade para o seu escritório</p>
+                    <div class="mt-12 compare-wrap">
+                        <div class="compare-card">
+                            <h3>AutoRecurso</h3>
+                            <div class="compare-item compare-yes"><i class="fas fa-check"></i> Geração em minutos com IA</div>
+                            <div class="compare-item compare-yes"><i class="fas fa-check"></i> Integração com API Brasil e OCR</div>
+                            <div class="compare-item compare-yes"><i class="fas fa-check"></i> PDF final com anexos incluídos</div>
+                            <div class="compare-item compare-yes"><i class="fas fa-check"></i> Assinatura com desconto por período</div>
+                            <div class="compare-item compare-yes"><i class="fas fa-check"></i> Dashboard e relatórios</div>
+                        </div>
+                        <div class="compare-card">
+                            <h3>Advogado tradicional</h3>
+                            <div class="compare-item compare-no"><i class="fas fa-times"></i> Prazo de dias para entrega</div>
+                            <div class="compare-item compare-no"><i class="fas fa-times"></i> Sem automação de leitura</div>
+                            <div class="compare-item compare-no"><i class="fas fa-times"></i> Anexos organizados manualmente</div>
+                            <div class="compare-item compare-no"><i class="fas fa-times"></i> Cobrança por peça (alto custo)</div>
+                            <div class="compare-item compare-no"><i class="fas fa-times"></i> Sem gestão centralizada</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ -->
+                <div class="mt-24 faq">
+                    <h2 class="section-title">Perguntas frequentes</h2>
+                    <p class="section-subtitle">Tire suas dúvidas rapidamente</p>
+                    <div class="mt-8">
+                        <div class="faq-item">
+                            <button class="faq-question" type="button">
+                                Como funcionam os descontos por período?
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">Os planos aplicam desconto conforme a duração escolhida. Quanto maior o número de meses, maior o desconto mensal efetivo.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" type="button">
+                                Posso usar com minha equipe?
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">Sim. Você pode convidar usuários e compartilhar o fluxo de trabalho do escritório.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" type="button">
+                                O sistema lê CNH, Notificação e CRLV?
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">Sim. Utilizamos OCR/IA e, quando possível, leitura de QRCode para preencher automaticamente os campos.</div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question" type="button">
+                                É possível cancelar?
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="faq-answer">Sim. Você pode cancelar a qualquer momento e manterá o acesso até o fim do período contratado.</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Final CTA -->
                 <div class="mt-24 text-center">
-                    <h2 class="section-title">Pronto para economizar nas suas multas?</h2>
-                    <p class="section-subtitle">Comece agora mesmo a gerar recursos de alta qualidade.</p>
+                    <h2 class="section-title">Pronto para escalar seu escritório?</h2>
+                    <p class="section-subtitle">Assine um plano e transforme a produtividade do seu time.</p>
 
                     <div class="mt-8">
-                        @if (Route::has('register'))
-                            <a href="{{ url('/register') }}" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-xl font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                                
-                                Criar Conta Gratuita
-                            </a>
-                        @endif
+                        <a href="{{ route('subscription.index') }}" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-xl font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                            Assinar Plano
+                        </a>
                     </div>
                 </div>
 
@@ -1058,6 +1130,28 @@
                         Desenvolvido com <i class="fas fa-heart text-red-500"></i> no Brasil
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Sticky CTA -->
+        <div id="stickyCta" class="sticky-cta" aria-hidden="true">
+            <div class="inner">
+                <div class="title">Pronto para escalar seu escritório?</div>
+                <div class="actions">
+                    <a href="#planos" class="cta-button secondary"><i class="fas fa-tags"></i> Ver Planos</a>
+                    <a href="{{ route('subscription.index') }}" class="cta-button primary"><i class="fas fa-rocket"></i> Assinar Plano</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Widget (simples) -->
+        <button id="chatButton" class="chat-button" aria-label="Abrir chat"><i class="fas fa-comments"></i></button>
+        <div id="chatBox" class="chat-box" role="dialog" aria-modal="true" aria-labelledby="chatTitle">
+            <header id="chatTitle">Atendimento</header>
+            <div class="content">
+                <span>Como podemos ajudar?</span>
+                <a href="mailto:suporte@autorecurso.com"><i class="fas fa-envelope"></i> suporte@autorecurso.com</a>
+                <a href="https://wa.me/5551981281898" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Falar no WhatsApp</a>
             </div>
         </div>
 
@@ -1092,6 +1186,36 @@
                         slidesPerView: 2,
                     },
                 }
+            });
+
+            // Sticky CTA logic
+            const sticky = document.getElementById('stickyCta');
+            const showAfter = 500; // px
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > showAfter) {
+                    sticky.classList.add('show');
+                    sticky.setAttribute('aria-hidden', 'false');
+                } else {
+                    sticky.classList.remove('show');
+                    sticky.setAttribute('aria-hidden', 'true');
+                }
+            });
+
+            // FAQ accordion
+            document.querySelectorAll('.faq-question').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const item = btn.closest('.faq-item');
+                    item.classList.toggle('active');
+                });
+            });
+
+            // Chat widget
+            const chatBtn = document.getElementById('chatButton');
+            const chatBox = document.getElementById('chatBox');
+            let chatOpen = false;
+            chatBtn.addEventListener('click', () => {
+                chatOpen = !chatOpen;
+                chatBox.style.display = chatOpen ? 'block' : 'none';
             });
         </script>
     </body>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AppealController;
-use App\Http\Controllers\CreditController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MultaImageController;
@@ -58,14 +58,9 @@ Route::post('/appeals/create-new', [AppealController::class, 'storeNew'])->name(
     Route::patch('/appeals/{appeal}', [AppealController::class, 'update'])->name('appeals.update');
     Route::delete('/appeals/{appeal}', [AppealController::class, 'destroy'])->name('appeals.destroy');
     
-    // Credits (Créditos)
-    Route::get('/credits', [CreditController::class, 'index'])->name('credits.index');
-    // Pagamentos desativados temporariamente
-    // Route::get('/credits/packages', [CreditController::class, 'packages'])->name('credits.packages');
-    // Route::get('/credits/payment-form', [CreditController::class, 'paymentForm'])->name('credits.payment.form');
-    // Route::post('/credits/checkout', [CreditController::class, 'checkout'])->name('credits.checkout');
-    // Route::post('/credits/pix/payment', [CreditController::class, 'pixPayment'])->name('credits.pix.payment');
-    // Route::get('/credits/pix/status', [CreditController::class, 'pixStatus'])->name('credits.pix.status');
+    // Assinatura (Planos)
+    Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+    Route::post('/subscription/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -147,5 +142,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users/{user}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
     Route::post('/users/{user}/toggle-block', [App\Http\Controllers\Admin\UserController::class, 'toggleBlock'])->name('users.toggle_block');
-    Route::post('/users/{user}/credit', [App\Http\Controllers\Admin\UserController::class, 'credit'])->name('users.credit');
+    // Removido fluxo de créditos
 });

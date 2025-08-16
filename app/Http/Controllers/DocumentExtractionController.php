@@ -73,6 +73,15 @@ class DocumentExtractionController extends Controller
                 'arquivo_existe' => file_exists($fullPath)
             ]);
 
+            // Copiar o arquivo original para um diretório persistente de uploads do recurso
+            $userId = auth()->id() ?: 'guest';
+            $safeName = preg_replace('/[^A-Za-z0-9_\.-]/', '_', $file->getClientOriginalName());
+            $persistDir = 'appeals_uploads/' . $userId;
+            Storage::disk('public')->makeDirectory($persistDir);
+            $persistFilename = time() . '_' . $safeName;
+            $persistPath = $persistDir . '/' . $persistFilename;
+            Storage::disk('public')->put($persistPath, file_get_contents($fullPath));
+
             // Extrair dados baseado no tipo
             $extractedData = [];
             
@@ -87,6 +96,14 @@ class DocumentExtractionController extends Controller
             // Remover arquivo temporário
             Storage::disk('public')->delete($filepath);
             Log::info('🗑️ Arquivo temporário removido');
+
+            // Anexar metadados do arquivo enviado para uso posterior (anexos do recurso)
+            $extractedData['uploaded_file'] = [
+                'path' => $persistPath,
+                'mime' => $file->getMimeType(),
+                'name' => $file->getClientOriginalName(),
+                'type' => $type
+            ];
 
             Log::info('✅ Extração concluída com sucesso', $extractedData);
 
@@ -1166,7 +1183,7 @@ class DocumentExtractionController extends Controller
 
                 // 1) Tentar parser de texto embutido do PDF
                 if (empty($extractedData)) {
-                    $extractedData = $this->extractVehicleDataFromPDF($filepath, $filename);
+                $extractedData = $this->extractVehicleDataFromPDF($filepath, $filename);
                 }
 
                 // 2) Tentar ler QR code da primeira página como dado auxiliar
