@@ -64,3 +64,12 @@ require __DIR__.'/auth.php';
 
 // Incluir rotas da área autenticada
 require __DIR__.'/authenticated.php'; 
+
+// Geração de PDF de Indicação de Condutor (público para teste; ajuste middleware conforme necessidade)
+Route::post('/indicacao-condutor/gerar', [App\Http\Controllers\DriverIndicationController::class, 'generate'])
+    ->name('indicacao_condutor.generate');
+
+// Página para geração (UI)
+Route::get('/indicacao-condutor', function () {
+    return view('traffic-tickets.indicacao_create');
+})->name('indicacao_condutor.create');

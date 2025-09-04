@@ -86,6 +86,15 @@
                     <span>Buscar Multas</span>
                 </a>
             </li>
+
+            <li>
+                <a href="{{ route('indicacao_condutor.create') }}" class="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 group">
+                    <div class="w-6 h-6 bg-gray-100 rounded-md flex items-center justify-center mr-3 group-hover:bg-indigo-100 transition-colors duration-200">
+                        <i class="fas fa-user-check text-gray-500 group-hover:text-indigo-600 transition-colors duration-200 text-xs"></i>
+                    </div>
+                    <span>Indicar Condutor</span>
+                </a>
+            </li>
             
             @if(Auth::user()->is_admin)
             <li>

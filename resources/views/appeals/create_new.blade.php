@@ -48,45 +48,17 @@
         <div class="bg-white rounded-2xl shadow-lg p-8">
             <h3 class="text-2xl font-bold text-gray-900 mb-6">📤 Upload de Documentos</h3>
             
-            <!-- Busca de Placa -->
+            <!-- Informação sobre extração automática -->
             <div class="mb-8">
-                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
-                    <h4 class="text-lg font-semibold text-gray-900 mb-4">🚗 Buscar Dados do Veículo</h4>
-                    
-                    <div class="flex space-x-4">
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Placa do Veículo</label>
-                            <input type="text" id="plateSearch" placeholder="Digite a placa (ex: ABC-1234)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" oninput="formatPlateSearch(this)">
-                        </div>
-                        <div class="flex items-end">
-                            <button onclick="searchVehicleData()" id="btnSearchVehicle" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                                🔍 Buscar
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Status da busca -->
-                    <div id="vehicle-search-status" class="mt-4 hidden"></div>
-                    
-                    <!-- Resultado da busca -->
-                    <div id="vehicle-data-result" class="mt-4 hidden">
-                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                            <h5 class="font-semibold text-green-900 mb-2">✅ Dados do Veículo Encontrados</h5>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                <div>
-                                    <span class="font-medium">Modelo:</span> <span id="vehicle-model-result"></span>
-                                </div>
-                                <div>
-                                    <span class="font-medium">Ano:</span> <span id="vehicle-year-result"></span>
-                                </div>
-                                <div>
-                                    <span class="font-medium">Cor:</span> <span id="vehicle-color-result"></span>
-                                </div>
-                                <div>
-                                    <span class="font-medium">Marca:</span> <span id="vehicle-brand-result"></span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">🤖 Extração Automática de Dados</h4>
+                    <p class="text-gray-700 mb-4">
+                        Todos os dados necessários serão extraídos automaticamente da notificação/multa que você enviar. 
+                        Não é necessário preencher manualmente os dados do veículo.
+                    </p>
+                    <div class="flex items-center text-green-700">
+                        <i class="fas fa-magic mr-2"></i>
+                        <span class="text-sm font-medium">IA irá extrair: placa, modelo, ano, cor, dados da multa e mais</span>
                     </div>
                 </div>
             </div>
@@ -259,26 +231,51 @@
             <div class="bg-white rounded-2xl shadow-lg p-8">
                 <h3 class="text-2xl font-bold text-gray-900 mb-6">🚗 Dados do Veículo</h3>
                 
+                <!-- Informação sobre preenchimento automático -->
+                <div class="mb-6">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-robot text-blue-500 mr-3 text-xl"></i>
+                            <div>
+                                <h4 class="font-semibold text-blue-900">Preenchimento Automático</h4>
+                                <p class="text-sm text-blue-700">Estes dados foram extraídos automaticamente da notificação. Você pode editá-los se necessário.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Placa</label>
-                        <input type="text" name="plate" id="plate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" oninput="formatPlate(this)">
+                        <input type="text" name="plate" id="plate" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50" oninput="formatPlate(this)" readonly>
+                        <p class="text-xs text-gray-500 mt-1">Extraída automaticamente da notificação</p>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Modelo</label>
-                        <input type="text" name="vehicle_model" id="vehicle_model" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="vehicle_model" id="vehicle_model" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50" readonly>
+                        <p class="text-xs text-gray-500 mt-1">Extraído automaticamente da notificação</p>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Ano</label>
-                        <input type="text" name="vehicle_year" id="vehicle_year" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="vehicle_year" id="vehicle_year" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50" readonly>
+                        <p class="text-xs text-gray-500 mt-1">Extraído automaticamente da notificação</p>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Cor</label>
-                        <input type="text" name="vehicle_color" id="vehicle_color" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" name="vehicle_color" id="vehicle_color" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50" readonly>
+                        <p class="text-xs text-gray-500 mt-1">Extraída automaticamente da notificação</p>
                     </div>
+                </div>
+                
+                <!-- Botão para habilitar edição manual se necessário -->
+                <div class="mt-6 text-center">
+                    <button type="button" onclick="enableVehicleDataEditing()" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        <i class="fas fa-edit mr-1"></i>
+                        Editar dados manualmente (se necessário)
+                    </button>
                 </div>
             </div>
         </div>
@@ -908,28 +905,57 @@ function fillFormWithExtractedData(data) {
         document.getElementById('location').value = notificationData.location;
     }
     
-    // Também preencher dados do veículo a partir da notificação (quando disponível)
+    // Preencher dados do veículo a partir da notificação (prioridade principal)
     try {
         const plateEl = document.getElementById('plate');
         const modelEl = document.getElementById('vehicle_model');
         const yearEl = document.getElementById('vehicle_year');
         const colorEl = document.getElementById('vehicle_color');
 
-        if (notificationData.plate && !plateEl.value) {
+        // Sempre preencher com dados da notificação (sobrescrever qualquer valor existente)
+        if (notificationData.plate) {
             plateEl.value = notificationData.plate.toUpperCase();
         }
-        if ((notificationData.vehicle_model || notificationData.model) && !modelEl.value) {
+        if (notificationData.vehicle_model || notificationData.model) {
             modelEl.value = (notificationData.vehicle_model || notificationData.model);
         }
-        if ((notificationData.vehicle_year || notificationData.year) && !yearEl.value) {
+        if (notificationData.vehicle_year || notificationData.year) {
             yearEl.value = (notificationData.vehicle_year || notificationData.year);
         }
-        if ((notificationData.vehicle_color || notificationData.color) && !colorEl.value) {
+        if (notificationData.vehicle_color || notificationData.color) {
             colorEl.value = (notificationData.vehicle_color || notificationData.color);
+        }
+        
+        // Aplicar formatação na placa
+        if (plateEl.value) {
+            formatPlate(plateEl);
         }
     } catch (e) { console.warn('⚠️ Não foi possível preencher dados do veículo da notificação', e); }
     
     console.log('✅ Formulário preenchido com sucesso!');
+}
+
+// Função para habilitar edição manual dos dados do veículo
+function enableVehicleDataEditing() {
+    const vehicleInputs = ['plate', 'vehicle_model', 'vehicle_year', 'vehicle_color'];
+    
+    vehicleInputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.removeAttribute('readonly');
+            input.classList.remove('bg-gray-50');
+            input.classList.add('bg-white');
+        }
+    });
+    
+    // Mostrar mensagem de confirmação
+    const button = event.target;
+    button.innerHTML = '<i class="fas fa-check mr-1"></i>Edição habilitada';
+    button.classList.remove('text-blue-600', 'hover:text-blue-800');
+    button.classList.add('text-green-600');
+    button.disabled = true;
+    
+    console.log('✅ Edição manual dos dados do veículo habilitada');
 }
 
 // Armazena anexos a serem enviados no form
@@ -1149,145 +1175,7 @@ function clearDetection() {
     if (badge) badge.classList.add('hidden');
 }
 
-// Funções para busca de dados do veículo
-function formatPlateSearch(input) {
-    // Mantém apenas letras e números, uppercase, e coloca hífen após 3 caracteres
-    let value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-    if (value.length > 3) {
-            value = value.substring(0, 3) + '-' + value.substring(3);
-        }
-    input.value = value;
-}
-
-function searchVehicleData() {
-    const plate = document.getElementById('plateSearch').value.trim().toUpperCase();
-    
-    if (!plate) {
-        alert('Por favor, digite a placa do veículo.');
-        return;
-    }
-    
-    // Validar formato da placa (aceita Mercosul e formato antigo)
-    // Mercosul: AAA0A00 (4º dígito, 5º letra)
-    // Antigo:   AAA0000
-    const placaRegex = /^([A-Z]{3}[0-9][A-Z][0-9]{2}|[A-Z]{3}[0-9]{4})$/;
-    const plateClean = plate.replace(/[^A-Z0-9]/g, ''); // Remove hífens e outros caracteres
-    
-    if (!placaRegex.test(plateClean)) {
-        alert('Formato de placa inválido. Use AAA0000 (antigo) ou AAA0A00 (Mercosul).');
-        return;
-    }
-    
-    // Mostrar loading
-    const btnSearch = document.getElementById('btnSearchVehicle');
-    const originalText = btnSearch.innerHTML;
-    btnSearch.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando...';
-    btnSearch.disabled = true;
-    
-    const statusDiv = document.getElementById('vehicle-search-status');
-    statusDiv.classList.remove('hidden');
-    statusDiv.innerHTML = `
-        <div class="flex items-center text-blue-600">
-            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
-            <span>Buscando dados do veículo...</span>
-        </div>
-    `;
-    
-    // Verificar CSRF token
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    if (!csrfToken) {
-        alert('❌ CSRF token não encontrado');
-        return;
-    }
-    
-    // Fazer requisição para a API
-    fetch('/api/vehicle-data', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify({
-            placa: plate.replace(/[^A-Z0-9]/g, '') // Remove hífens e outros caracteres
-        })
-    })
-    .then(response => {
-        console.log('📡 Status da resposta:', response.status);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('📋 Dados do veículo:', data);
-        
-        if (data.success && data.data) {
-            // Preencher os campos do formulário
-            fillVehicleData(data.data);
-            
-            // Mostrar resultado
-            showVehicleDataResult(data.data);
-            
-            // Preencher a placa no campo do formulário
-            document.getElementById('plate').value = plate;
-            
-            alert('✅ Dados do veículo encontrados e preenchidos!');
-        } else {
-            throw new Error(data.message || 'Erro ao buscar dados do veículo');
-        }
-    })
-    .catch(error => {
-        console.error('❌ Erro na busca:', error);
-        statusDiv.innerHTML = `
-            <div class="text-red-600">
-                <i class="fas fa-exclamation-triangle mr-1"></i>
-                Erro ao buscar dados: ${error.message}
-            </div>
-        `;
-    })
-    .finally(() => {
-        btnSearch.innerHTML = originalText;
-        btnSearch.disabled = false;
-    });
-}
-
-function fillVehicleData(data) {
-    console.log('📝 Preenchendo dados do veículo:', data);
-    
-    if (data.modelo) {
-        document.getElementById('vehicle_model').value = data.modelo;
-    }
-    if (data.ano) {
-        document.getElementById('vehicle_year').value = data.ano;
-    }
-    if (data.cor) {
-        document.getElementById('vehicle_color').value = data.cor;
-    }
-    if (data.marca) {
-        // Se não houver campo marca, adicionar ao modelo
-        const modelo = document.getElementById('vehicle_model').value;
-        if (modelo && data.marca) {
-            document.getElementById('vehicle_model').value = `${data.marca} ${modelo}`;
-        }
-    }
-    
-    console.log('✅ Dados do veículo preenchidos');
-}
-
-function showVehicleDataResult(data) {
-    const resultDiv = document.getElementById('vehicle-data-result');
-    const modelResult = document.getElementById('vehicle-model-result');
-    const yearResult = document.getElementById('vehicle-year-result');
-    const colorResult = document.getElementById('vehicle-color-result');
-    const brandResult = document.getElementById('vehicle-brand-result');
-    
-    modelResult.textContent = data.modelo || 'N/A';
-    yearResult.textContent = data.ano || 'N/A';
-    colorResult.textContent = data.cor || 'N/A';
-    brandResult.textContent = data.marca || 'N/A';
-    
-    resultDiv.classList.remove('hidden');
-}
+// Funções de busca de dados do veículo removidas - agora todos os dados são extraídos da notificação
 
 // Função para carregar justificativas
 function loadJustifications(infractionTypeId) {
