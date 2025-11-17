@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AppealController;
+use App\Http\Controllers\TicketOcrController;
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Multas (Tickets)
     Route::resource('tickets', TicketController::class);
+    Route::post('tickets/ocr', [TicketOcrController::class, 'store'])->name('tickets.ocr');
 
     // Recursos (Appeals)
     Route::get('/appeals/new/create', [AppealController::class, 'createNew'])->name('appeals.create_new');

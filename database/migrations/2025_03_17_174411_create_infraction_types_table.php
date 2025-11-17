@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('law_article');                // Artigo da lei/regulamento
             $table->decimal('base_amount', 10, 2);      // Valor padrão da multa
             $table->integer('points')->default(0);      // Pontos na carteira
-            $table->enum('severity', ['light', 'medium', 'severe', 'very_severe']); // Gravidade
+            $table->enum('severity', ['light', 'medium', 'severe', 'very_severe'])->default('medium'); // Gravidade
             $table->boolean('active')->default(true);   // Se a infração está ativa no catálogo
             $table->timestamps();
         });

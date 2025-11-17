@@ -31,4 +31,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
+    ],
+
+    'ocr' => [
+        'driver' => env('OCR_DRIVER', 'gemini'),
+        'olmocr' => [
+            'python_path' => env('OLMOCR_PYTHON_PATH', base_path('.venv/bin/python')),
+            'script_path' => env('OLMOCR_SCRIPT_PATH', base_path('scripts/olmocr_extract.py')),
+        ],
+    ],
+
 ];

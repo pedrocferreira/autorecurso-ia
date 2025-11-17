@@ -5,6 +5,12 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+// Aumenta os limites de upload para permitir arquivos maiores
+ini_set('upload_max_filesize', '10M');
+ini_set('post_max_size', '12M');
+ini_set('memory_limit', '256M');
+ini_set('max_execution_time', '300');
+
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance

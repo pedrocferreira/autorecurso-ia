@@ -65,6 +65,32 @@ php artisan migrate
 npm run dev
 ```
 
+## OCR de Multas (Gemini + olmOCR)
+
+O projeto disponibiliza um endpoint para ler a foto da multa e preencher automaticamente os campos conhecidos.
+
+1. Configure o `.env` com a chave do Gemini:
+   ```env
+   GEMINI_API_KEY=AIzaSyD67Krgy_1vNiXsFAWI_R3CMB17TGM03oc
+   GEMINI_MODEL=gemini-1.5-flash-latest
+   OCR_DRIVER=gemini
+   ```
+2. (Opcional) Para habilitar o olmOCR local:
+   ```bash
+   python3 -m venv .venv
+   .venv/bin/pip install --upgrade pip
+   .venv/bin/pip install olmocr pillow
+   sudo apt-get install -y poppler-utils
+   ```
+   ```env
+   OCR_DRIVER=olmocr
+   OLMOCR_PYTHON_PATH=/caminho/para/.venv/bin/python
+   OLMOCR_SCRIPT_PATH=/caminho/para/scripts/olmocr_extract.py
+   ```
+   > O pipeline local do olmOCR demanda GPU compatível ou um endpoint OpenAI-compatible configurado (ex.: Parasail/DeepInfra). Caso contrário, use o driver `gemini`.
+
+3. Com usuário autenticado, faça um `POST` para `tickets/ocr` enviando `document` (imagem ou PDF) e, opcionalmente, `ticket_id` para atualizar uma multa existente.
+
 ## Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.

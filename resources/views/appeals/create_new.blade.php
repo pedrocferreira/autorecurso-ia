@@ -53,6 +53,46 @@
                             </div>
                         </div>
 
+                        <!-- Importação via IA -->
+                        <div class="border-b pb-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">Importar dados da multa (opcional)</h3>
+                            <p class="text-sm text-gray-600">
+                                Use a inteligência artificial para reconhecer automaticamente os dados da autuação.
+                            </p>
+
+                            <div class="mt-4">
+                                <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-6 text-center bg-gray-50 hover:border-indigo-400 transition group">
+                                    <input type="file" id="ocr-document" accept="image/*,application/pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" aria-describedby="ocr-help">
+                                    <div class="flex flex-col items-center justify-center pointer-events-none space-y-3">
+                                        <div class="flex items-center justify-center w-14 h-14 rounded-full bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200 transition">
+                                            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 12 3.5-3.5M12 16 8.5 12.5M6 20h12a2 2 0 0 0 2-2v-4.586a1 1 0 0 0-.293-.707l-6.414-6.414a1 1 0 0 0-1.414 0L4.293 12.707A1 1 0 0 0 4 13.414V18a2 2 0 0 0 2 2Z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition">
+                                                Arraste e solte ou clique para selecionar
+                                            </p>
+                                            <p class="text-xs text-gray-500 mt-1">
+                                                Formatos aceitos: JPG, PNG, PDF · Máx. 8MB
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p id="ocr-help" class="text-xs text-gray-500 mt-2">
+                                    Dica: prefira imagens legíveis, capturadas em boa iluminação.
+                                </p>
+                                <div id="ocr-loading" class="hidden mt-3 p-3 rounded-lg bg-indigo-50 border border-indigo-200 text-sm text-indigo-700 flex items-center">
+                                    <svg class="animate-spin h-5 w-5 mr-2 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                    </svg>
+                                    Processando com IA... aguarde alguns segundos.
+                                </div>
+                                <div id="ocr-feedback" class="mt-3 text-sm text-gray-500"></div>
+                            </div>
+                        </div>
+
                         <!-- Dados Pessoais -->
                         <div class="border-b pb-6">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Dados Pessoais</h3>
@@ -96,29 +136,7 @@
                                     @enderror
                                 </div>
 
-                                <div>
-                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                                    <input type="text" id="phone" name="phone" value="{{ old('phone') }}" placeholder="(00) 00000-0000" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('phone')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                                    <input type="email" id="email" name="email" value="{{ old('email', Auth::user()->email) }}" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('email')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div class="md:col-span-2">
-                                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Endereço Completo</label>
-                                    <input type="text" id="address" name="address" value="{{ old('address') }}" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('address')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                {{-- Campos removidos: telefone, email, endereço --}}
                             </div>
                         </div>
 
@@ -142,21 +160,7 @@
                                     @enderror
                                 </div>
 
-                                <div>
-                                    <label for="vehicle_year" class="block text-sm font-medium text-gray-700 mb-1">Ano do Veículo</label>
-                                    <input type="number" id="vehicle_year" name="vehicle_year" value="{{ old('vehicle_year') }}" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('vehicle_year')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div>
-                                    <label for="vehicle_color" class="block text-sm font-medium text-gray-700 mb-1">Cor do Veículo</label>
-                                    <input type="text" id="vehicle_color" name="vehicle_color" value="{{ old('vehicle_color') }}" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                    @error('vehicle_color')
-                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                {{-- Campos removidos: ano e cor do veículo --}}
 
                                 <div>
                                     <label for="vehicle_chassi" class="block text-sm font-medium text-gray-700 mb-1">Chassi do Veículo</label>
@@ -322,6 +326,12 @@
                     },
                 @endforeach
             };
+            const infractionByCode = {};
+            Object.entries(infractionData).forEach(([id, data]) => {
+                if (data.code) {
+                    infractionByCode[data.code.replace(/[^A-Z0-9]/gi, '').toUpperCase()] = id;
+                }
+            });
 
             // Elementos do formulário
             const infractionTypeSelect = document.getElementById('infraction_type');
@@ -397,6 +407,275 @@
                 statusMessage.textContent = messages[currentStep];
                 const progress = Math.min(100, Math.round((currentStep + 1) / messages.length * 100));
                 progressBar.style.width = progress + '%';
+            }
+
+            // Integração com OCR/Gemini
+            const ocrInput = document.getElementById('ocr-document');
+            const ocrFeedback = document.getElementById('ocr-feedback');
+            const ocrLoading = document.getElementById('ocr-loading');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+            const fieldMap = {
+                name: 'name',
+                cpf: 'cpf',
+                driver_license: 'driver_license',
+                driver_license_category: 'driver_license_category',
+                address: 'address',
+                phone: 'phone',
+                email: 'email',
+                plate: 'plate',
+                vehicle_model: 'vehicle_model',
+                vehicle_year: 'vehicle_year',
+                vehicle_color: 'vehicle_color',
+                vehicle_chassi: 'vehicle_chassi',
+                vehicle_renavam: 'vehicle_renavam',
+                citation_number: 'citation_number',
+                date: 'date',
+                time: 'time',
+                location: 'location',
+                amount: 'amount',
+                points: 'points',
+                reason: 'reason'
+            };
+
+            const clearOcrStatus = () => {
+                ocrFeedback.textContent = '';
+                ocrFeedback.classList.remove('text-red-600', 'text-green-600');
+                ocrFeedback.classList.add('text-gray-500');
+            };
+
+            const setOcrStatus = (message, type = 'info') => {
+                ocrFeedback.textContent = message;
+                ocrFeedback.classList.remove('text-gray-500', 'text-red-600', 'text-green-600');
+                if (type === 'error') {
+                    ocrFeedback.classList.add('text-red-600');
+                } else if (type === 'success') {
+                    ocrFeedback.classList.add('text-green-600');
+                } else {
+                    ocrFeedback.classList.add('text-gray-500');
+                }
+            };
+
+            const toggleOcrLoading = (show) => {
+                if (show) {
+                    ocrLoading.classList.remove('hidden');
+                    ocrLoading.classList.add('flex');
+                } else {
+                    ocrLoading.classList.add('hidden');
+                    ocrLoading.classList.remove('flex');
+                }
+            };
+
+            function normalizeDate(value) {
+                if (!value) return null;
+                if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                    return value;
+                }
+                if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+                    const [dia, mes, ano] = value.split('/');
+                    return `${ano}-${mes}-${dia}`;
+                }
+                const parsed = new Date(value);
+                if (!Number.isNaN(parsed.getTime())) {
+                    return parsed.toISOString().slice(0, 10);
+                }
+                return null;
+            }
+
+            function normalizeTime(value) {
+                if (!value) return null;
+                if (/^\d{2}:\d{2}$/.test(value)) return value;
+                const parsed = value.match(/(\d{1,2})[:h](\d{2})/);
+                if (parsed) {
+                    const hours = String(parsed[1]).padStart(2, '0');
+                    const minutes = String(parsed[2]).padStart(2, '0');
+                    return `${hours}:${minutes}`;
+                }
+                return null;
+            }
+
+            function applyOcrFields(fields, driver) {
+                if (!fields || typeof fields !== 'object') {
+                    setOcrStatus('Nenhum dado estruturado foi retornado pela IA.', 'error');
+                    return;
+                }
+
+                Object.entries(fieldMap).forEach(([ocrKey, inputId]) => {
+                    const value = fields[ocrKey];
+                    if (value === undefined || value === null || value === '') {
+                        return;
+                    }
+
+                    const element = document.getElementById(inputId);
+                    if (!element) return;
+
+                    let formattedValue = value;
+
+                    if (ocrKey === 'driver_license_category') {
+                        formattedValue = String(value).trim().toUpperCase();
+                    }
+
+                    if (ocrKey === 'vehicle_year') {
+                        const numericValue = parseInt(value, 10);
+                        if (!Number.isNaN(numericValue)) {
+                            formattedValue = numericValue;
+                        }
+                    }
+
+                    if (ocrKey === 'amount') {
+                        const numericValue = parseFloat(String(value).replace(',', '.'));
+                        if (!Number.isNaN(numericValue)) {
+                            formattedValue = numericValue.toFixed(2);
+                        }
+                    }
+
+                    if (ocrKey === 'points') {
+                        const numericValue = parseInt(value, 10);
+                        if (!Number.isNaN(numericValue)) {
+                            formattedValue = numericValue;
+                        }
+                    }
+
+                    if (ocrKey === 'date') {
+                        const normalized = normalizeDate(value);
+                        if (normalized) {
+                            formattedValue = normalized;
+                        } else {
+                            return;
+                        }
+                    }
+
+                    if (ocrKey === 'time') {
+                        const normalized = normalizeTime(value);
+                        if (normalized) {
+                            formattedValue = normalized;
+                        } else {
+                            return;
+                        }
+                    }
+
+                    if (ocrKey === 'reason' && element.value) {
+                        // Concatena observações pré-existentes
+                        element.value = `${element.value}\n${formattedValue}`.trim();
+                    } else {
+                        element.value = formattedValue;
+                    }
+
+                    element.dispatchEvent(new Event('change'));
+                });
+
+                if (fields.infraction_code) {
+                    const normalizedCode = String(fields.infraction_code).replace(/[^A-Z0-9]/gi, '').toUpperCase();
+                    const matchedId = infractionByCode[normalizedCode];
+                    if (matchedId && infractionTypeSelect) {
+                        infractionTypeSelect.value = matchedId;
+                        infractionTypeSelect.dispatchEvent(new Event('change'));
+                    }
+                }
+
+                if (fields.infraction_article && !infractionTypeSelect.value) {
+                    const article = String(fields.infraction_article).toLowerCase();
+                    const matchedId = Object.entries(infractionData).find(([, data]) =>
+                        data.article && data.article.toLowerCase().includes(article)
+                    );
+                    if (matchedId) {
+                        infractionTypeSelect.value = matchedId[0];
+                        infractionTypeSelect.dispatchEvent(new Event('change'));
+                    }
+                }
+
+                const appliedKeys = Object.keys(fieldMap).filter((key) => fields[key]);
+                setOcrStatus(`Campos atualizados com sucesso (${appliedKeys.length}). Fonte: ${driver.toUpperCase()}.`, 'success');
+            }
+
+            async function handleOcrUpload(file) {
+                if (!file) return;
+                if (!csrfToken) {
+                    setOcrStatus('Token CSRF não encontrado. Atualize a página e tente novamente.', 'error');
+                    return;
+                }
+
+                // Validação do arquivo antes de enviar
+                const maxSize = 8 * 1024 * 1024; // 8MB
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+                
+                if (file.size > maxSize) {
+                    setOcrStatus('O arquivo é muito grande. O tamanho máximo é 8MB.', 'error');
+                    return;
+                }
+                
+                if (!allowedTypes.includes(file.type)) {
+                    setOcrStatus('Tipo de arquivo não suportado. Use JPEG, PNG, WEBP ou PDF.', 'error');
+                    return;
+                }
+
+                clearOcrStatus();
+                toggleOcrLoading(true);
+                setOcrStatus('Enviando arquivo para análise...', 'info');
+
+                const formData = new FormData();
+                formData.append('document', file);
+
+                // Log para debug
+                console.log('Enviando arquivo:', {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    lastModified: file.lastModified
+                });
+
+                try {
+                    const response = await fetch('{{ route('tickets.ocr') }}', {
+                        method: 'POST',
+                        headers: { 
+                            'X-CSRF-TOKEN': csrfToken,
+                            // Não definir Content-Type - deixar o browser definir automaticamente para FormData
+                        },
+                        body: formData,
+                    });
+
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        const text = await response.text();
+                        console.error('Resposta não-JSON recebida:', text.substring(0, 200));
+                        throw new Error('Erro no servidor. Por favor, verifique se o arquivo é válido e tente novamente.');
+                    }
+
+                    const payload = await response.json();
+                    if (!response.ok || !payload.success) {
+                        // Se houver erros de validação, mostra o primeiro erro
+                        if (payload.errors && Object.keys(payload.errors).length > 0) {
+                            const firstErrorKey = Object.keys(payload.errors)[0];
+                            const firstError = payload.errors[firstErrorKey];
+                            const message = Array.isArray(firstError) ? firstError[0] : firstError;
+                            throw new Error(message || payload.message);
+                        }
+                        const message = payload.message || payload.error || 'Falha ao executar o reconhecimento. Verifique o arquivo e tente novamente.';
+                        throw new Error(message);
+                    }
+
+                    const data = payload.data || {};
+                    if (!data.fields || typeof data.fields !== 'object') {
+                        throw new Error('Nenhum dado foi extraído da imagem. Tente com uma foto mais nítida.');
+                    }
+
+                    applyOcrFields(data.fields, data.driver || 'gemini');
+                } catch (error) {
+                    console.error('Erro no OCR:', error);
+                    setOcrStatus(error.message || 'Erro inesperado ao processar o arquivo.', 'error');
+                } finally {
+                    toggleOcrLoading(false);
+                    if (ocrInput) {
+                        ocrInput.value = '';
+                    }
+                }
+            }
+
+            if (ocrInput) {
+                ocrInput.addEventListener('change', (event) => {
+                    const [file] = event.target.files || [];
+                    handleOcrUpload(file);
+                });
             }
         });
     </script>

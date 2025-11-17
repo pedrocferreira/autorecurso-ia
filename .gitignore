@@ -14,3 +14,16 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode 
+/venv
+.venv/
+*.log
+*.JPG
+*.jpg
+*.png
+*.pdf
+!public/build/**/*.png
+!public/build/**/*.jpg
+sample.pdf
+IMG_*.JPG
+IMG_*.jpg
+olmocr-pipeline-debug.log
