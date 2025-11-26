@@ -17,3 +17,4 @@ yarn-error.log
 node_modules
 /.venv
 ~/.cursor
+/.cursor

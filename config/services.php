@@ -56,6 +56,9 @@ return [
         'url' => env('GEMINI_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'),
         'max_tokens' => env('GEMINI_MAX_TOKENS', 2500),
         'temperature' => env('GEMINI_TEMPERATURE', 0.4),
+        // Modelo específico para análise jurídica e justificativas (mais robusto que o flash)
+        'justification_model' => env('GEMINI_JUSTIFICATION_MODEL', 'gemini-1.5-pro'),
+        'justification_url' => env('GEMINI_JUSTIFICATION_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent'),
     ],
 
     // Hugging Face - Para RoBERTaLexPT e outros modelos

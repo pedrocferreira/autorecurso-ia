@@ -86,14 +86,41 @@ class ImageExtractionService
             ])->post($this->geminiApiUrl . '?key=' . $this->geminiApiKey, $requestData);
 
             if (!$response->successful()) {
-                Log::error('❌ Erro na API do Gemini', [
-                    'status' => $response->status(),
-                    'response' => $response->body()
+                $status = $response->status();
+                $body = $response->body();
+                
+                Log::error('❌ Erro na API do Gemini (Extração)', [
+                    'status' => $status,
+                    'response' => $body
                 ]);
-                throw new \Exception('Erro na API do Gemini: ' . $response->status());
+                
+                // Tentar fallback para modelo alternativo se for erro 404 ou 429
+                if ($status === 404 || $status === 429) {
+                    Log::warning('⚠️ Tentando fallback para modelo alternativo do Gemini...');
+                    
+                    // Tenta modelo flash experimental como fallback
+                    $fallbackUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+                    
+                    $fallbackResponse = Http::withHeaders([
+                        'Content-Type' => 'application/json',
+                    ])->post($fallbackUrl . '?key=' . $this->geminiApiKey, $requestData);
+                    
+                    if (!$fallbackResponse->successful()) {
+                        Log::error('❌ Fallback também falhou na extração', [
+                            'status' => $fallbackResponse->status(),
+                            'response' => $fallbackResponse->body()
+                        ]);
+                        throw new \Exception('Erro na API do Gemini: ' . $fallbackResponse->status());
+                    }
+                    
+                    Log::info('✅ Fallback bem-sucedido para extração de imagem');
+                    $responseData = $fallbackResponse->json();
+                } else {
+                    throw new \Exception('Erro na API do Gemini: ' . $status);
+                }
+            } else {
+                $responseData = $response->json();
             }
-
-            $responseData = $response->json();
             
             // Extrair o texto da resposta
             $extractedText = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? '';
