@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\InfractionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
@@ -85,6 +84,7 @@ class InfractionJustificationController extends Controller
             ]);
 
             // Gera as justificativas contextualizadas usando Gemini
+            // Se falhar, usa fallback automaticamente
             $justifications = $this->generateContextualizedWithGemini($infractionType, $multaData);
 
             return response()->json([
@@ -116,39 +116,144 @@ class InfractionJustificationController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            return response()->json([
-                'success' => false,
-                'error' => 'Erro ao gerar justificativas contextualizadas. Tente novamente.',
-                'message' => $e->getMessage(),
-                'debug' => app()->environment('local') ? $e->getMessage() : null
-            ], 500);
+            // Tenta retornar fallback mesmo em caso de erro crítico
+            try {
+                $infractionType = InfractionType::findOrFail($request->infraction_type_id);
+                $multaData = $request->input('multa_data', []);
+                $justifications = $this->getFallbackJustifications($infractionType, $multaData);
+                
+                return response()->json([
+                    'success' => true,
+                    'infraction' => [
+                        'id' => $infractionType->id,
+                        'code' => $infractionType->code,
+                        'description' => $infractionType->description,
+                        'article' => $infractionType->law_article,
+                        'points' => $infractionType->points,
+                        'amount' => $infractionType->base_amount
+                    ],
+                    'multa_context' => $multaData,
+                    'justifications' => $justifications,
+                    'fallback' => true
+                ]);
+            } catch (\Exception $fallbackError) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Erro ao gerar justificativas contextualizadas. Tente novamente.',
+                    'debug' => app()->environment('local') ? $e->getMessage() : null
+                ], 500);
+            }
         }
-        }
+    }
 
     /**
      * Gera justificativas usando Gemini AI
      */
     private function generateWithGemini(InfractionType $infractionType)
     {
-        $prompt = $this->buildJustificationPrompt($infractionType);
+        try {
+            $prompt = $this->buildJustificationPrompt($infractionType);
 
-        // Loga o prompt enviado para a IA
-        Log::info('📝 Prompt enviado para IA', [
-            'infraction_id' => $infractionType->id,
-            'code' => $infractionType->code,
-            'description' => $infractionType->description
-        ]);
+            // Loga o prompt enviado para a IA
+            Log::info('📝 Prompt enviado para Gemini', [
+                'infraction_id' => $infractionType->id,
+                'code' => $infractionType->code,
+                'description' => $infractionType->description,
+                'prompt' => $prompt
+            ]);
 
-        // Tenta múltiplos modelos de IA
-        $text = $this->tryMultipleAIModels($prompt, $infractionType, [], false);
+            $client = new Client();
+            $apiKey = config('services.gemini.api_key');
+            
+            if (!$apiKey) {
+                throw new \Exception('Chave da API do Gemini não configurada');
+            }
+            
+            $response = $client->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'query' => [
+                    'key' => $apiKey
+                ],
+                'json' => [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                [
+                                    'text' => $prompt
+                                ]
+                            ]
+                        ]
+                    ],
+                    'systemInstruction' => [
+                        'parts' => [
+                            [
+                                'text' => 'Você é um advogado especialista em direito de trânsito brasileiro com profundo conhecimento do CTB, resoluções do CONTRAN e jurisprudência. Sua tarefa é analisar tipos específicos de infrações e sugerir argumentos jurídicos válidos para contestação.'
+                            ]
+                        ]
+                    ],
+                    'generationConfig' => [
+                        'temperature' => 0.6,
+                        'topK' => 40,
+                        'topP' => 0.95,
+                        'maxOutputTokens' => 1500,
+                    ]
+                ],
+                'timeout' => 30
+            ]);
 
-        // Loga a resposta bruta recebida da IA
-        Log::info('📩 Resposta recebida', [
-            'infraction_id' => $infractionType->id,
-            'response_length' => strlen($text)
-        ]);
+            $result = json_decode($response->getBody(), true);
+            
+            // Verifica se a resposta contém erro
+            if (isset($result['error'])) {
+                throw new \Exception('Erro na API do Gemini: ' . ($result['error']['message'] ?? 'Erro desconhecido'));
+            }
+            
+            $text = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+            
+            if (empty($text)) {
+                throw new \Exception('Resposta vazia da API do Gemini');
+            }
 
-        return $this->parseJustifications($text, $infractionType);
+            // Loga a resposta bruta recebida da IA
+            Log::info('📩 Resposta bruta da Gemini', [
+                'infraction_id' => $infractionType->id,
+                'response_text' => substr($text, 0, 500) // Limita o log para não ficar muito grande
+            ]);
+
+            return $this->parseJustifications($text, $infractionType);
+        } catch (ClientException $e) {
+            $statusCode = $e->getResponse() ? $e->getResponse()->getStatusCode() : 'unknown';
+            $errorBody = $e->getResponse() ? $e->getResponse()->getBody()->getContents() : 'no response body';
+            
+            Log::warning('⚠️ Erro HTTP ao chamar API do Gemini, usando fallback', [
+                'infraction_id' => $infractionType->id,
+                'status_code' => $statusCode,
+                'error' => $e->getMessage(),
+                'response_body' => substr($errorBody, 0, 500)
+            ]);
+            
+            // Retorna justificativas de fallback em caso de erro
+            return $this->getFallbackJustifications($infractionType);
+        } catch (RequestException $e) {
+            Log::warning('⚠️ Erro de requisição ao chamar API do Gemini, usando fallback', [
+                'infraction_id' => $infractionType->id,
+                'error' => $e->getMessage()
+            ]);
+            
+            // Retorna justificativas de fallback em caso de erro
+            return $this->getFallbackJustifications($infractionType);
+        } catch (\Exception $e) {
+            Log::warning('⚠️ Erro ao chamar API do Gemini, usando fallback', [
+                'infraction_id' => $infractionType->id,
+                'error' => $e->getMessage(),
+                'trace' => substr($e->getTraceAsString(), 0, 500)
+            ]);
+            
+            // Retorna justificativas de fallback em caso de erro
+            return $this->getFallbackJustifications($infractionType);
+        }
     }
 
     /**
@@ -251,7 +356,7 @@ RESPONDA APENAS COM O JSON:";
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 Log::error('❌ Erro no parse JSON', ['error' => json_last_error_msg()]);
-                throw new \Exception("Erro ao fazer parse da resposta do Gemini: " . json_last_error_msg());
+                return $this->getFallbackJustifications($infractionType, $multaData);
             }
             
             // Valida estrutura esperada (suporta tanto formato antigo quanto novo)
@@ -269,7 +374,7 @@ RESPONDA APENAS COM O JSON:";
             
             if (!$hasValidStructure) {
                 Log::warning('⚠️ Estrutura de justificativas inválida');
-                throw new \Exception("A resposta do Gemini não contém a estrutura esperada de justificativas");
+                return $this->getFallbackJustifications($infractionType, $multaData);
             }
             
             // Enriquece os dados se for contextualizado
@@ -318,7 +423,7 @@ RESPONDA APENAS COM O JSON:";
 
         } catch (\Exception $e) {
             Log::error('❌ Erro ao fazer parse das justificativas: ' . $e->getMessage());
-            throw $e;
+            return $this->getFallbackJustifications($infractionType, $multaData);
         }
     }
 
@@ -514,26 +619,110 @@ RESPONDA APENAS COM O JSON:";
      */
     private function generateContextualizedWithGemini(InfractionType $infractionType, array $multaData)
     {
-        $prompt = $this->buildContextualizedPrompt($infractionType, $multaData);
+        try {
+            $prompt = $this->buildContextualizedPrompt($infractionType, $multaData);
 
-        // Loga o prompt enviado para a IA
-        Log::info('📝 Prompt contextualizado enviado para IA', [
-            'infraction_id' => $infractionType->id,
-            'code' => $infractionType->code,
-            'description' => $infractionType->description,
-            'multa_data' => $multaData
-        ]);
+            // Loga o prompt enviado para a IA
+            Log::info('📝 Prompt contextualizado enviado para Gemini', [
+                'infraction_id' => $infractionType->id,
+                'code' => $infractionType->code,
+                'description' => $infractionType->description,
+                'multa_data' => $multaData,
+                'prompt' => $prompt
+            ]);
 
-        // Tenta múltiplos modelos de IA
-        $text = $this->tryMultipleAIModels($prompt, $infractionType, $multaData, true);
+            $client = new Client();
+            $apiKey = config('services.gemini.api_key');
+            
+            if (!$apiKey) {
+                throw new \Exception('Chave da API do Gemini não configurada');
+            }
+            
+            $response = $client->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'query' => [
+                    'key' => $apiKey
+                ],
+                'json' => [
+                    'contents' => [
+                        [
+                            'parts' => [
+                                [
+                                    'text' => $prompt
+                                ]
+                            ]
+                        ]
+                    ],
+                    'systemInstruction' => [
+                        'parts' => [
+                            [
+                                'text' => 'Você é um advogado especialista em direito de trânsito brasileiro com foco em argumentações técnicas e contextualizadas. Analise ESPECIFICAMENTE os dados da multa fornecidos e gere justificativas que se aplicam ao caso concreto, considerando local, data, hora e circunstâncias específicas. Retorne APENAS JSON válido sem texto adicional.'
+                            ]
+                        ]
+                    ],
+                    'generationConfig' => [
+                        'temperature' => 0.3,
+                        'topK' => 20,
+                        'topP' => 0.8,
+                        'maxOutputTokens' => 2000,
+                    ]
+                ],
+                'timeout' => 30
+            ]);
 
-        // Loga a resposta bruta recebida da IA
-        Log::info('📩 Resposta contextualizada recebida', [
-            'infraction_id' => $infractionType->id,
-            'response_length' => strlen($text)
-        ]);
+            $result = json_decode($response->getBody(), true);
+            
+            // Verifica se a resposta contém erro
+            if (isset($result['error'])) {
+                throw new \Exception('Erro na API do Gemini: ' . ($result['error']['message'] ?? 'Erro desconhecido'));
+            }
+            
+            $text = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+            
+            if (empty($text)) {
+                throw new \Exception('Resposta vazia da API do Gemini');
+            }
 
-        return $this->parseJustifications($text, $infractionType, $multaData);
+            // Loga a resposta bruta recebida da IA
+            Log::info('📩 Resposta contextualizada da Gemini', [
+                'infraction_id' => $infractionType->id,
+                'response_text' => substr($text, 0, 500) // Limita o log para não ficar muito grande
+            ]);
+
+            return $this->parseJustifications($text, $infractionType, $multaData);
+        } catch (ClientException $e) {
+            $statusCode = $e->getResponse() ? $e->getResponse()->getStatusCode() : 'unknown';
+            $errorBody = $e->getResponse() ? $e->getResponse()->getBody()->getContents() : 'no response body';
+            
+            Log::warning('⚠️ Erro HTTP ao chamar API do Gemini, usando fallback', [
+                'infraction_id' => $infractionType->id,
+                'status_code' => $statusCode,
+                'error' => $e->getMessage(),
+                'response_body' => substr($errorBody, 0, 500)
+            ]);
+            
+            // Retorna justificativas de fallback em caso de erro
+            return $this->getFallbackJustifications($infractionType, $multaData);
+        } catch (RequestException $e) {
+            Log::warning('⚠️ Erro de requisição ao chamar API do Gemini, usando fallback', [
+                'infraction_id' => $infractionType->id,
+                'error' => $e->getMessage()
+            ]);
+            
+            // Retorna justificativas de fallback em caso de erro
+            return $this->getFallbackJustifications($infractionType, $multaData);
+        } catch (\Exception $e) {
+            Log::warning('⚠️ Erro ao chamar API do Gemini, usando fallback', [
+                'infraction_id' => $infractionType->id,
+                'error' => $e->getMessage(),
+                'trace' => substr($e->getTraceAsString(), 0, 500)
+            ]);
+            
+            // Retorna justificativas de fallback em caso de erro
+            return $this->getFallbackJustifications($infractionType, $multaData);
+        }
     }
 
     /**
@@ -648,62 +837,4 @@ DIRETRIZES IMPORTANTES:
 7. Priorize argumentos com maior aplicabilidade ao caso concreto
 8. Considere vícios formais específicos que podem ocorrer neste tipo de situação";
     }
-
-    /**
-     * Tenta gerar conteúdo usando múltiplos modelos de IA (fallback)
-     * Atualmente implementado apenas para Gemini
-     */
-    private function tryMultipleAIModels(string $prompt, InfractionType $infractionType, array $multaData = [], bool $isContextualized = false)
-    {
-        $apiKey = config('services.gemini.api_key');
-        $apiUrl = config('services.gemini.url');
-        
-        // Fallback URL if not in config
-        if (empty($apiUrl)) {
-            $apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
-        }
-
-        try {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])->post($apiUrl . '?key=' . $apiKey, [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => $prompt]
-                        ]
-                    ]
-                ],
-                'generationConfig' => [
-                    'temperature' => 0.4,
-                    'topK' => 32,
-                    'topP' => 1,
-                    'maxOutputTokens' => 4096,
-                    'responseMimeType' => 'application/json'
-                ]
-            ]);
-
-            if (!$response->successful()) {
-                Log::error('❌ Erro na API do Gemini', [
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ]);
-                throw new \Exception('Erro na API do Gemini: ' . $response->status());
-            }
-
-            $responseData = $response->json();
-            $text = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? '';
-            
-            if (empty($text)) {
-                throw new \Exception('Resposta vazia da IA');
-            }
-
-            return $text;
-
-        } catch (\Exception $e) {
-            Log::error('Erro ao chamar API Gemini: ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
 } 

@@ -14,3 +14,6 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode 
+node_modules
+/.venv
+~/.cursor

@@ -1,0 +1,1 @@
+2025-11-13 15:40:21,095 - __main__ - INFO - If you run out of GPU memory during start-up or get 'KV cache is larger than available memory' errors, retry with lower values, e.g. --gpu_memory_utilization 0.80  --max_model_len 16384

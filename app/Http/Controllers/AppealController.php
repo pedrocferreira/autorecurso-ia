@@ -261,6 +261,15 @@ class AppealController extends Controller
         try {
             // Log para debug
             Log::info('Dados recebidos na requisição:', $request->all());
+
+            // Sanitização do ano do veículo (ex: "2013/2014" -> "2013")
+            if ($request->has('vehicle_year')) {
+                $year = $request->input('vehicle_year');
+                if (strpos($year, '/') !== false) {
+                    $parts = explode('/', $year);
+                    $request->merge(['vehicle_year' => trim($parts[0])]);
+                }
+            }
             
             // Validação dos dados para o novo formulário
             $validator = Validator::make($request->all(), [
@@ -733,7 +742,8 @@ class AppealController extends Controller
     private function analyzeWithGemini($prompt)
     {
         $client = new \GuzzleHttp\Client();
-        $response = $client->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent', [
+        $apiUrl = config('services.gemini.url', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent');
+        $response = $client->post($apiUrl, [
             'headers' => [
                 'Content-Type' => 'application/json',
             ],
@@ -1043,7 +1053,8 @@ class AppealController extends Controller
         $prompt = $this->buildCleanLegalPrompt($data);
         
         $client = new \GuzzleHttp\Client();
-        $response = $client->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent', [
+        $apiUrl = config('services.gemini.url', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent');
+        $response = $client->post($apiUrl, [
             'headers' => [
                 'Content-Type' => 'application/json',
             ],
